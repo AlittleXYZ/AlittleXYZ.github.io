@@ -43,7 +43,7 @@
     
     <title>
         
-            timeline | 
+            0x06 bugku-代码审计 | 
         
         张Mini
     </title>
@@ -54,7 +54,7 @@
 
     <meta name="format-detection" content="telephone=no"/>
     <meta name="description" itemprop="description" content="">
-    <meta name="keywords" content="张Mini">
+    <meta name="keywords" content="张Mini,ctf">
     <meta name="theme-color" content="#555555">
 
     <!-- Disable Fucking Bloody Baidu Tranformation -->
@@ -81,6 +81,9 @@
         <style id="style_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("style_css","/css/style.min.css?MKetZV3cUTfDxvMffaOezg==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
 
         
+            
+                <style id="prettify_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("prettify_css","/css/prettify.min.css?zp8STOU9v89XWFEnN+6YmQ==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+                <style id="prettify_theme"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("prettify_theme","/css/prettify/github-v2.min.css?AfzKxt++K+/lhZBlSjnxwg==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
             
         
 
@@ -217,7 +220,7 @@
     <!-- WebAPP Icons -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="张Mini">
-    <meta name="msapplication-starturl" content="http://alittlexyz.com/timeline/">
+    <meta name="msapplication-starturl" content="http://alittlexyz.com/2018/05/26/6/">
     <meta name="msapplication-navbutton-color" content="#555555">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="张Mini">
@@ -232,13 +235,16 @@
     
 
     <!-- The Open Graph protocol -->
-    <meta property="og:url" content="http://alittlexyz.com/timeline/">
+    <meta property="og:url" content="http://alittlexyz.com/2018/05/26/6/">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="timeline | 张Mini">
+    <meta property="og:title" content="0x06 bugku-代码审计 | 张Mini">
     <meta property="og:image" content="/img/favicon.png">
     <meta property="og:description" content="">
-    
+    <meta property="og:article:tag" content="ctf"> 
 
+    
+        <meta property="article:published_time" content="Sat May 26 2018 15:58:49 GMT+0800">
+        <meta property="article:modified_time" content="Sat May 26 2018 16:10:24 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -246,13 +252,43 @@
 
     <!-- Add canonical link for SEO -->
     
-        <link rel="canonical" href="http://alittlexyz.com/timeline/index.html" />
+        <link rel="canonical" href="http://alittlexyz.com/2018/05/26/6/index.html" />
     
 
     <!-- Structured-data for SEO -->
     
         
 
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": "http://alittlexyz.com/2018/05/26/6/index.html",
+    "headline": "0x06 bugku-代码审计",
+    "datePublished": "Sat May 26 2018 15:58:49 GMT+0800",
+    "dateModified": "Sat May 26 2018 16:10:24 GMT+0800",
+    "author": {
+        "@type": "Person",
+        "name": "张Mini",
+        "image": {
+            "@type": "ImageObject",
+            "url": "/img/avatar.png"
+        },
+        "description": "SELECT * FROM World,WHERE "Someone",LIKE '%You%'"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "张Mini",
+        "logo": {
+            "@type":"ImageObject",
+            "url": "/img/favicon.png"
+        }
+    },
+    "keywords": ",ctf张Mini",
+    "description": "",
+}
+</script>
 
 
     
@@ -288,564 +324,434 @@
 
                     <!-- Post TOC -->
 
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+
+    <!-- Left aligned menu below button -->
+    
+    
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#BUGKU代码审计"><span class="post-toc-number">1.</span> <span class="post-toc-text">BUGKU代码审计</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#extract变量覆盖"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">extract变量覆盖</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#strcmp-比较字符串"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">strcmp()比较字符串</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#urldecode二次编码绕过"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">urldecode二次编码绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#md5-函数"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">md5()函数</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#数组返回NULL绕过"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">数组返回NULL绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#sha-函数比较绕过"><span class="post-toc-number">1.6.</span> <span class="post-toc-text">sha()函数比较绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#md5-加密相等绕过"><span class="post-toc-number">1.7.</span> <span class="post-toc-text">md5()加密相等绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#十六进制与数字比较"><span class="post-toc-number">1.8.</span> <span class="post-toc-text">十六进制与数字比较</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ereg正则-00截断"><span class="post-toc-number">1.9.</span> <span class="post-toc-text">ereg正则%00截断</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#strpos数组绕过"><span class="post-toc-number">1.10.</span> <span class="post-toc-text">strpos数组绕过</span></a></li></ol></li></ol>
+    </ul>
+    
+
+
+
 
 <!-- Layouts -->
 
-    <!-- Single Timeline Page -->
-    <style>
-	.md-container {
-		width: 90%;
-		max-width: 1170px;
-		margin: 0 auto;
-	}
-	.md-container::after {
-		content: '';
-		display: table;
-		clear: both;
-	}
-	#md-timeline {
-		position: relative;
-		padding: 2em 0;
-		margin-top: 2em;
-		margin-bottom: 2em;
-	}
-	@media screen and (max-device-width:480px){
-		#md-timeline {
-			margin-top: 6em;
-		}
-	}
-	#md-timeline::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 18px;
-		height: 100%;
-		width: 2px;
-		background: #d7e4ed;
-	}
-	.md-timeline-title {
-		font-size: 20px;
-		line-height: 24px;
-	}
-	.md-timeline-content a {
-		text-decoration: none;
-	}
-	.md-timeline-info {
-		height: 20px;
-		width: 100%;
-		margin: 10px 0px;
-	}
-	.md-timeline-info-span {
-		float: right;
-		margin-right: 10px;
-		text-align: right;
-	}
-	.md-timeline-excerpt {
-	    	clear: right; 
-	}
-	@media only screen and (min-width: 1170px) {
-		#md-timeline {
-			margin-top: 3em;
-			margin-bottom: 3em;
-		}
-		#md-timeline::before {
-			left: 50%;
-			margin-left: -2px;
-		}
-	}
-	.md-timeline-block {
-		position: relative;
-		margin: 2em 0;
-	}
-	.md-timeline-block:after {
-		content: "";
-		display: table;
-		clear: both;
-	}
-	.md-timeline-block:first-child {
-		margin-top: 0;
-	}
-	.md-timeline-block:last-child {
-		margin-bottom: 0;
-	}
-	@media only screen and (min-width: 1170px) {
-		.md-timeline-block {
-			margin: 4em 0;
-		}
-		.md-timeline-block:first-child {
-			margin-top: 0;
-		}
-		.md-timeline-block:last-child {
-			margin-bottom: 0;
-		}
-	}
-	.md-timeline-date {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 60px;
-		height: 40px;
-		border-radius: box-shadow: 0 0 0 4px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
-	}
-	.md-timeline-date.blue {
-		background: #0D395F;
-		-webkit-box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.75);
-		-moz-box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.75);
-		box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.75);
-	}
-	@media only screen and (min-width: 1170px) {
-		.md-timeline-date {
-			width: 60px;
-			height: 60px;
-			left: 50%;
-			margin-left: -30px;
-			/* Force Hardware Acceleration in WebKit */
-			-webkit-transform: translateZ(0);
-			-webkit-backface-visibility: hidden;
-		}
-		.cssanimations .md-timeline-date.is-hidden {
-			visibility: hidden;
-		}
-		.cssanimations .md-timeline-date.bounce-in {
-			visibility: visible;
-			-webkit-animation: md-bounce-1 0.6s;
-			-moz-animation: md-bounce-1 0.6s;
-			animation: md-bounce-1 0.6s;
-		}
-	}
-	@-webkit-keyframes md-bounce-1 {
-		0% {
-			opacity: 0;
-			-webkit-transform: scale(0.5);
-		}
-		60% {
-			opacity: 1;
-			-webkit-transform: scale(1.2);
-		}
-		100% {
-			-webkit-transform: scale(1);
-		}
-	}
-	@-moz-keyframes md-bounce-1 {
-		0% {
-			opacity: 0;
-			-moz-transform: scale(0.5);
-		}
-		60% {
-			opacity: 1;
-			-moz-transform: scale(1.2);
-		}
-		100% {
-			-moz-transform: scale(1);
-		}
-	}
-	@keyframes md-bounce-1 {
-		0% {
-			opacity: 0;
-			-webkit-transform: scale(0.5);
-			-moz-transform: scale(0.5);
-			-ms-transform: scale(0.5);
-			-o-transform: scale(0.5);
-			transform: scale(0.5);
-		}
-		60% {
-			opacity: 1;
-			-webkit-transform: scale(1.2);
-			-moz-transform: scale(1.2);
-			-ms-transform: scale(1.2);
-			-o-transform: scale(1.2);
-			transform: scale(1.2);
-		}
-		100% {
-			-webkit-transform: scale(1);
-			-moz-transform: scale(1);
-			-ms-transform: scale(1);
-			-o-transform: scale(1);
-			transform: scale(1);
-		}
-	}
-	.md-timeline-content {
-		position: relative;
-		margin-left: 60px;
-		background: white;
-		padding: 1em;
-		-webkit-box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.75);
-		-moz-box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.75);
-		box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.75);
-	}
-	.md-timeline-content:after {
-		content: "";
-		display: table;
-		clear: both;
-	}
-	.md-timeline-content h2 {
-		color: #303e49;
-	}
-	.md-timeline-content p, .md-timeline-content .md-read-more, .md-timeline-content .md-date {
-		font-size: 13px;
-		font-size: 0.8125rem;
-	}
-	.md-timeline-content .md-read-more, .md-timeline-content .md-date {
-		display: inline-block;
-	}
-	.md-timeline-content p {
-		margin: 1em 0;
-		line-height: 1.6;
-	}
-	.md-timeline-content .md-read-more {
-		float: right;
-		padding: .8em 1em;
-		background: #acb7c0;
-		color: white;
-		border-radius: 0.25em;
-	}
-	.md-date {
-		color: white;
-		text-align: center;
-	}
-	.no-touch .md-timeline-content .md-read-more:hover {
-		background-color: #bac4cb;
-	}
-	.md-timeline-content::before {
-		content: '';
-		position: absolute;
-		top: 16px;
-		right: 100%;
-		height: 0;
-		width: 0;
-		border: 7px solid transparent;
-		border-right: 7px solid white;
-	}
-	@media only screen and (min-width: 768px) {
-		.md-timeline-content h2 {
-			font-size: 20px;
-			font-size: 1.25rem;
-		}
-		.md-timeline-content p {
-			font-size: 16px;
-			font-size: 1rem;
-		}
-		.md-timeline-content .md-read-more {
-			font-size: 14px;
-			font-size: 0.875rem;
-		}
-	}
-	@media only screen and (min-width: 1170px) {
-		.md-date {
-			text-align: center;
-			margin-top: 10px;
-			line-height: 20px;
-		}
-		.md-timeline-content {
-			margin-left: 0;
-			padding: 1.6em;
-			width: 45%;
-		}
-		.md-timeline-content::before {
-			top: 24px;
-			left: 100%;
-			border-color: transparent;
-			border-left-color: white;
-		}
-		.md-timeline-content .md-read-more {
-			float: left;
-		}
-		.md-timeline-block:nth-child(even) .md-timeline-content {
-			float: right;
-		}
-		.md-timeline-block:nth-child(even) .md-timeline-content::before {
-			top: 24px;
-			left: auto;
-			right: 100%;
-			border-color: transparent;
-			border-right-color: white;
-		}
-		.md-timeline-block:nth-child(even) .md-timeline-content .md-read-more {
-			float: right;
-		}
-		.cssanimations .md-timeline-content.is-hidden {
-			visibility: hidden;
-		}
-		.cssanimations .md-timeline-content.bounce-in {
-			visibility: visible;
-			-webkit-animation: md-bounce-2 0.6s;
-			-moz-animation: md-bounce-2 0.6s;
-			animation: md-bounce-2 0.6s;
-		}
-	}
-	@media only screen and (min-width: 1170px) {
-		/* inverse bounce effect on even content blocks */
-		.cssanimations .md-timeline-block:nth-child(even) .md-timeline-content.bounce-in {
-			-webkit-animation: md-bounce-2-inverse 0.6s;
-			-moz-animation: md-bounce-2-inverse 0.6s;
-			animation: md-bounce-2-inverse 0.6s;
-		}
-	}
-	@-webkit-keyframes md-bounce-2 {
-		0% {
-			opacity: 0;
-			-webkit-transform: translateX(-100px);
-		}
-		60% {
-			opacity: 1;
-			-webkit-transform: translateX(20px);
-		}
-		100% {
-			-webkit-transform: translateX(0);
-		}
-	}
-	@-moz-keyframes md-bounce-2 {
-		0% {
-			opacity: 0;
-			-moz-transform: translateX(-100px);
-		}
-		60% {
-			opacity: 1;
-			-moz-transform: translateX(20px);
-		}
-		100% {
-			-moz-transform: translateX(0);
-		}
-	}
-	@keyframes md-bounce-2 {
-		0% {
-			opacity: 0;
-			-webkit-transform: translateX(-100px);
-			-moz-transform: translateX(-100px);
-			-ms-transform: translateX(-100px);
-			-o-transform: translateX(-100px);
-			transform: translateX(-100px);
-		}
-		60% {
-			opacity: 1;
-			-webkit-transform: translateX(20px);
-			-moz-transform: translateX(20px);
-			-ms-transform: translateX(20px);
-			-o-transform: translateX(20px);
-			transform: translateX(20px);
-		}
-		100% {
-			-webkit-transform: translateX(0);
-			-moz-transform: translateX(0);
-			-ms-transform: translateX(0);
-			-o-transform: translateX(0);
-			transform: translateX(0);
-		}
-	}
-	@-webkit-keyframes md-bounce-2-inverse {
-		0% {
-			opacity: 0;
-			-webkit-transform: translateX(100px);
-		}
-		60% {
-			opacity: 1;
-			-webkit-transform: translateX(-20px);
-		}
-		100% {
-			-webkit-transform: translateX(0);
-		}
-	}
-	@-moz-keyframes md-bounce-2-inverse {
-		0% {
-			opacity: 0;
-			-moz-transform: translateX(100px);
-		}
-		60% {
-			opacity: 1;
-			-moz-transform: translateX(-20px);
-		}
-		100% {
-			-moz-transform: translateX(0);
-		}
-	}
-	@keyframes md-bounce-2-inverse {
-		0% {
-			opacity: 0;
-			-webkit-transform: translateX(100px);
-			-moz-transform: translateX(100px);
-			-ms-transform: translateX(100px);
-			-o-transform: translateX(100px);
-			transform: translateX(100px);
-		}
-		60% {
-			opacity: 1;
-			-webkit-transform: translateX(-20px);
-			-moz-transform: translateX(-20px);
-			-ms-transform: translateX(-20px);
-			-o-transform: translateX(-20px);
-			transform: translateX(-20px);
-		}
-		100% {
-			-webkit-transform: translateX(0);
-			-moz-transform: translateX(0);
-			-ms-transform: translateX(0);
-			-o-transform: translateX(0);
-			transform: translateX(0);
-		}
-	}
-</style>
+    <!-- Post Module -->
+    <div class="material-post_container">
 
-<section id="md-timeline" class="md-container">
-   	   		
-			<div class="md-timeline-block">
-                		<div class="md-timeline-date blue">
-                   			<div class="md-date">May 26 2018</div>
-                		</div>
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
 
-                		<div class="md-timeline-content">
-                    			<div class="md-timeline-title"><a href="/2018/05/26/6/">0x06 bugku-代码审计</a></div>
-					<div class="md-timeline-info">
-						<span class="md-timeline-info-span">Categories:
-							<a class="category-link" href="/categories/ctf/">ctf</a>
-						</span>
-						<span class="md-timeline-info-span">Tags:
-							<a class="tag-link" href="/tags/ctf/">ctf</a>
-						</span>
-						
-					</div>
-					<p class="md-timeline-excerpt">
-						
-							...
-						...
-					</p>
-                    		</div>
-			</div>	
-   		
-			<div class="md-timeline-block">
-                		<div class="md-timeline-date blue">
-                   			<div class="md-date">May 25 2018</div>
-                		</div>
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script type="text/ls-javascript" id="post-thumbnail-script">
+    var randomNum = Math.floor(Math.random() * 19 + 1);
 
-                		<div class="md-timeline-content">
-                    			<div class="md-timeline-title"><a href="/2018/05/25/5/">python创建简单的客户端和服务器</a></div>
-					<div class="md-timeline-info">
-						<span class="md-timeline-info-span">Categories:
-							<a class="category-link" href="/categories/Web/">Web</a>
-						</span>
-						<span class="md-timeline-info-span">Tags:
-							<a class="tag-link" href="/tags/Web/">Web</a>
-						</span>
-						
-					</div>
-					<p class="md-timeline-excerpt">
-						
-							
-						...
-					</p>
-                    		</div>
-			</div>	
-   		
-			<div class="md-timeline-block">
-                		<div class="md-timeline-date blue">
-                   			<div class="md-date">May 24 2018</div>
-                		</div>
-
-                		<div class="md-timeline-content">
-                    			<div class="md-timeline-title"><a href="/2018/05/24/4/">0x04 指纹识别</a></div>
-					<div class="md-timeline-info">
-						<span class="md-timeline-info-span">Categories:
-							<a class="category-link" href="/categories/Web/">Web</a>
-						</span>
-						<span class="md-timeline-info-span">Tags:
-							<a class="tag-link" href="/tags/Web/">Web</a>
-						</span>
-						
-					</div>
-					<p class="md-timeline-excerpt">
-						
-							初识指纹识...
-						...
-					</p>
-                    		</div>
-			</div>	
-   		
-			<div class="md-timeline-block">
-                		<div class="md-timeline-date blue">
-                   			<div class="md-date">May 24 2018</div>
-                		</div>
-
-                		<div class="md-timeline-content">
-                    			<div class="md-timeline-title"><a href="/2018/05/24/3/">0x03 Google Hack</a></div>
-					<div class="md-timeline-info">
-						<span class="md-timeline-info-span">Categories:
-							<a class="category-link" href="/categories/Web/">Web</a>
-						</span>
-						<span class="md-timeline-info-span">Tags:
-							<a class="tag-link" href="/tags/Google-hack/">Google hack</a>
-						</span>
-						
-					</div>
-					<p class="md-timeline-excerpt">
-						
-							
-						...
-					</p>
-                    		</div>
-			</div>	
-   		
-			<div class="md-timeline-block">
-                		<div class="md-timeline-date blue">
-                   			<div class="md-date">May 24 2018</div>
-                		</div>
-
-                		<div class="md-timeline-content">
-                    			<div class="md-timeline-title"><a href="/2018/05/24/2/">0x02 SQL注入绕过</a></div>
-					<div class="md-timeline-info">
-						<span class="md-timeline-info-span">Categories:
-							<a class="category-link" href="/categories/Web/">Web</a>
-						</span>
-						<span class="md-timeline-info-span">Tags:
-							<a class="tag-link" href="/tags/SQL/">SQL</a>
-						</span>
-						
-					</div>
-					<p class="md-timeline-excerpt">
-						
-							SQ...
-						...
-					</p>
-                    		</div>
-			</div>	
-   		
-			<div class="md-timeline-block">
-                		<div class="md-timeline-date blue">
-                   			<div class="md-date">May 24 2018</div>
-                		</div>
-
-                		<div class="md-timeline-content">
-                    			<div class="md-timeline-title"><a href="/2018/05/24/1/">0x01 SQL注入篇</a></div>
-					<div class="md-timeline-info">
-						<span class="md-timeline-info-span">Categories:
-							<a class="category-link" href="/categories/Web/">Web</a>
-						</span>
-						<span class="md-timeline-info-span">Tags:
-							<a class="tag-link" href="/tags/SQL/">SQL</a>
-						</span>
-						
-					</div>
-					<p class="md-timeline-excerpt">
-						
-							SQL注入...
-						...
-					</p>
-                    		</div>
-			</div>	
-   			   	  		
-   	</section>
-
-<script type="text/ls-javascript" id="page-timeline-script">
-    var adjustFooter = function() {
-        if( ($('#bottom').offset().top + $('#bottom').outerHeight() )<$(window).height() ) {
-            var footerBottom = $(window).height() - $('#bottom').outerHeight() - $('#bottom').offset().top;
-            $('#bottom').css('bottom', '-' + footerBottom + 'px');
-        }
-    };
-    $(document).ready(function() {
-        adjustFooter();
-    });
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').addClass('lazy');
 </script>
 
+        
+    
+            <p class="article-headline-p">
+                0x06 bugku-代码审计
+            </p>
+        </div>
 
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/img/avatar.png" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>张Mini</strong>
+        <span>May 26, 2018</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+        <button id="article-functions-qrcode-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">devices other</i>
+    <span class="visuallyhidden">devices other</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-qrcode-button">
+    <li class="mdl-menu__item">Read this article on other devices</li>
+    
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACYUlEQVR42u3aMXLDMAwEQP//00mbImbuCIuWM6vK43EkrgoSOeDx9a+vBx4eHh4eHh4e3s14j/j6+ftfbvrk+2fPSu7Qrg0PDw/vJC9Z1rNH5r9v2e3a8PDw8M7z8sNgvaA1e33/9edobXh4eHg3402K7Mmd8fDw8D6Xl2/3640+L9/x8PDw7swr/uEvwUkkMX8deHh4eCd5ew2wM5/f1t/Dw8PDe8Jrr3y7LxZUHh5/rBAPDw/vYl4SpLbDUnlxnLTZ2qEEPDw8vPO8PCZot/7kJeYtNDw8PLz78PKW/168mxTTey8ODw8P7128NaltibUBRDt8gIeHh3ee1xbQOT6H7QUiowYYHh4e3ot4eUPrtbFC8pQiPsbDw8O7mNe29ifDATmgLazx8PDwzvP2YoJJrLC36ePh4eHdjdeGDpOlPOIrCTjw8PDwzvOSsriNMPZaaHvxLh4eHt4dePl2PBk+yEOHS7IWPDw8vHHOeXXLv32JmwcVHh4e3sW8vFzOG2N7YwSTe+Lh4eGd5LUl75y3V14X3+Dh4eFdzMuHACatskkMUZf+eHh4eEd4bbsrHwtoRwomAS4eHh7eGV6yfeelcx4B5+MLbRSCh4eHdzWvvdrFrRe0LsSTvx2l1Hh4eHhbvHZTnmzf7RhWHk/g4eHhneftBRB7B8BkECFi4+Hh4R3kJdt3+83k8MiPEzw8PLw78/LgYD4E0I444OHh4X0Kry2s21I+KeLx8PDw3sXbG5CK2vlxmb6+Q9SQw8PDwzvCe1kQECwuP4pyEh4eHt5J3v+78PDw8PDw8PDwbnB9AwxtxHDFh46aAAAAAElFTkSuQmCC">
+    
+</ul>
+
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/ctf/">ctf</a>
+    </ul>
+    
+
+    <!-- Share -->
+    
+        <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=0x06 bugku-代码审计&url=http://alittlexyz.com/2018/05/26/6/index.html&pic=http://alittlexyz.com/img/favicon.png&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Weibo
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+
+    <!-- Share Facebook -->
+    
+
+    <!-- Share Google+ -->
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+        <a class="post_share-link" href="http://connect.qq.com/widget/shareqq/index.html?site=张Mini&title=0x06 bugku-代码审计&summary=&pics=http://alittlexyz.com/img/favicon.png&url=http://alittlexyz.com/2018/05/26/6/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to QQ
+            </li>
+        </a>
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+    
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <h1 id="BUGKU代码审计"><a href="#BUGKU代码审计" class="headerlink" title="BUGKU代码审计"></a>BUGKU代码审计</h1><hr>
+<h2 id="extract变量覆盖"><a href="#extract变量覆盖" class="headerlink" title="extract变量覆盖"></a>extract变量覆盖</h2><pre><code class="php">&lt;?php
+$flag=&#39;xxx&#39;;
+extract($_GET);
+if(isset($shiyan))
+{
+$content=trim(file_get_contents($flag));
+if($shiyan==$content)
+{
+echo&#39;flag{xxx}&#39;;
+}
+else
+{
+echo&#39;Oh.no&#39;;
+}
+}
+?&gt;
+</code></pre>
+<p>extract()函数，从数组中将变量导入到当前的符号表，使用数组键名作为变量名，使用数组键值作为变量值。</p>
+<p>构造payload：?shiyan=&amp;flag=</p>
+<p>由于不知道flag里的内容，设置为空，再把$shiyan设置为空</p>
+<h2 id="strcmp-比较字符串"><a href="#strcmp-比较字符串" class="headerlink" title="strcmp()比较字符串"></a>strcmp()比较字符串</h2><pre><code class="php">&lt;?php
+$flag = &quot;flag{xxxxx}&quot;;
+if (isset($_GET[&#39;a&#39;])) {
+if (strcmp($_GET[&#39;a&#39;], $flag) == 0) //如果 str1 小于 str2 返回 &lt; 0； 如果 str1大于 str2返回 &gt; 0；如果两者相等，返回 0。
+//比较两个字符串（区分大小写）
+die(&#39;Flag: &#39;.$flag);
+else
+print &#39;No&#39;;
+}
+?&gt;
+</code></pre>
+<p>strcmp()函数有一个漏洞，只要提交一个数组a[]进去，就可以绕过</p>
+<p>payload：?a[]=</p>
+<h2 id="urldecode二次编码绕过"><a href="#urldecode二次编码绕过" class="headerlink" title="urldecode二次编码绕过"></a>urldecode二次编码绕过</h2><pre><code class="php">&lt;?php
+if(eregi(&quot;hackerDJ&quot;,$_GET[id])) {
+echo(&quot;
+
+not allowed!
+
+&quot;);
+exit();
+}
+$_GET[id] = urldecode($_GET[id]);
+if($_GET[id] == &quot;hackerDJ&quot;)
+{
+echo &quot;
+Access granted!
+
+&quot;;
+echo &quot;
+flag
+
+&quot;;
+}
+?&gt;
+</code></pre>
+<p>这题只要将hackerDJ进行二次URL加密即可</p>
+<p>payload：?id=hacker%2544J</p>
+<h2 id="md5-函数"><a href="#md5-函数" class="headerlink" title="md5()函数"></a>md5()函数</h2><pre><code class="php">&lt;?php
+error_reporting(0);
+$flag = &#39;flag{test}&#39;;
+if (isset($_GET[&#39;username&#39;]) and isset($_GET[&#39;password&#39;])) {
+if ($_GET[&#39;username&#39;] == $_GET[&#39;password&#39;])
+print &#39;Your password can not be your username.&#39;;
+else if (md5($_GET[&#39;username&#39;]) === md5($_GET[&#39;password&#39;]))
+die(&#39;Flag: &#39;.$flag);
+else
+print &#39;Invalid password&#39;;
+}
+?&gt;
+</code></pre>
+<p>md5()函数无法处理数组类型，md5(数组)会返回NULL，所以可以用数组绕过(注意这里是”===”)</p>
+<p>payload：?username[]=1&amp;password[]=2</p>
+<h2 id="数组返回NULL绕过"><a href="#数组返回NULL绕过" class="headerlink" title="数组返回NULL绕过"></a>数组返回NULL绕过</h2><pre><code class="php">&lt;?php
+$flag = &quot;flag&quot;;
+
+if (isset ($_GET[&#39;password&#39;])) {
+if (ereg (&quot;^[a-zA-Z0-9]+$&quot;, $_GET[&#39;password&#39;]) === FALSE)
+echo &#39;You password must be alphanumeric&#39;;
+else if (strpos ($_GET[&#39;password&#39;], &#39;--&#39;) !== FALSE)          //strpos() 函数查找字符串在另一字符串中第一次出现的位置
+die(&#39;Flag: &#39; . $flag);
+else
+echo &#39;Invalid password&#39;;
+}
+?&gt;
+</code></pre>
+<p>ereg()正则限制了password判断，可以使用%00截断，构造数组返回NULL</p>
+<p>strpos()处理数组返回NULL</p>
+<p>payload：?password[]=1</p>
+<h2 id="sha-函数比较绕过"><a href="#sha-函数比较绕过" class="headerlink" title="sha()函数比较绕过"></a>sha()函数比较绕过</h2><pre><code class="php">&lt;?php
+$flag = &quot;flag&quot;;
+if (isset($_GET[&#39;name&#39;]) and isset($_GET[&#39;password&#39;]))
+{
+var_dump($_GET[&#39;name&#39;]);
+echo &quot;
+&quot;;
+var_dump($_GET[&#39;password&#39;]);
+var_dump(sha1($_GET[&#39;name&#39;]));
+var_dump(sha1($_GET[&#39;password&#39;]));
+if ($_GET[&#39;name&#39;] == $_GET[&#39;password&#39;])
+echo &#39;
+
+Your password can not be your name!
+
+&#39;;
+else if (sha1($_GET[&#39;name&#39;]) === sha1($_GET[&#39;password&#39;]))
+die(&#39;Flag: &#39;.$flag);
+else
+echo &#39;
+Invalid password.
+
+&#39;;
+}
+else
+echo &#39;
+Login first!
+
+&#39;;
+?&gt;
+</code></pre>
+<p>同样sha1()无法处理数组</p>
+<p>payload：?name[]=1&amp;password[]=2</p>
+<h2 id="md5-加密相等绕过"><a href="#md5-加密相等绕过" class="headerlink" title="md5()加密相等绕过"></a>md5()加密相等绕过</h2><pre><code class="php">&lt;?php
+$md51 = md5(&#39;QNKCDZO&#39;);
+$a = @$_GET[&#39;a&#39;];
+$md52 = @md5($a);
+if(isset($a)){
+if ($a != &#39;QNKCDZO&#39; &amp;&amp; $md51 == $md52) {
+echo &quot;flag{*}&quot;;
+} else {
+echo &quot;false!!!&quot;;
+}}
+else{echo &quot;please input a&quot;;}
+?&gt;
+</code></pre>
+<p>这一题是”==”</p>
+<p>所以可以让a=240610708即可</p>
+<p>payload：?a=240610708</p>
+<h2 id="十六进制与数字比较"><a href="#十六进制与数字比较" class="headerlink" title="十六进制与数字比较"></a>十六进制与数字比较</h2><pre><code class="php">&lt;?php
+error_reporting(0);
+function noother_says_correct($temp)
+{
+$flag = &#39;flag{test}&#39;;
+$one = ord(&#39;1&#39;); //ord — 返回字符的 ASCII 码值
+$nine = ord(&#39;9&#39;); //ord — 返回字符的 ASCII 码值
+$number = &#39;3735929054&#39;;
+// Check all the input characters!
+for ($i = 0; $i &lt; strlen($number); $i++)
+{
+// Disallow all the digits!
+$digit = ord($temp{$i});
+if ( ($digit &gt;= $one) &amp;&amp; ($digit &lt;= $nine) )
+{
+// Aha, digit not allowed!
+return &quot;flase&quot;;
+}
+}
+if($number == $temp)
+return $flag;
+}
+$temp = $_GET[&#39;password&#39;];
+echo noother_says_correct($temp);
+?&gt;
+</code></pre>
+<p>直接讲number的值改为十六进制就可以</p>
+<p>payload：?password=0xdeadc0de</p>
+<h2 id="ereg正则-00截断"><a href="#ereg正则-00截断" class="headerlink" title="ereg正则%00截断"></a>ereg正则%00截断</h2><pre><code class="php">&lt;?php
+$flag = &quot;xxx&quot;;
+if (isset ($_GET[&#39;password&#39;]))
+{
+if (ereg (&quot;^[a-zA-Z0-9]+$&quot;, $_GET[&#39;password&#39;]) === FALSE)
+{
+echo &#39;
+
+You password must be alphanumeric
+
+&#39;;
+}
+else if (strlen($_GET[&#39;password&#39;]) &lt; 8 &amp;&amp; $_GET[&#39;password&#39;] &gt; 9999999)
+{
+if (strpos ($_GET[&#39;password&#39;], &#39;-&#39;) !== FALSE) //strpos — 查找字符串首次出现的位置
+{
+die(&#39;Flag: &#39; . $flag);
+}
+else
+{
+echo(&#39;
+- have not been found
+
+&#39;);
+}
+}
+else
+{
+echo &#39;
+Invalid password
+
+&#39;;
+}
+}
+?&gt;
+</code></pre>
+<p>同样ereg()用%00阶段</p>
+<p>payload：?password=1e9%00<em>-</em></p>
+<h2 id="strpos数组绕过"><a href="#strpos数组绕过" class="headerlink" title="strpos数组绕过"></a>strpos数组绕过</h2><pre><code class="php">&lt;?php
+$flag = &quot;flag&quot;;
+if (isset ($_GET[&#39;ctf&#39;])) {
+if (@ereg (&quot;^[1-9]+$&quot;, $_GET[&#39;ctf&#39;]) === FALSE)
+echo &#39;必须输入数字才行&#39;;
+else if (strpos ($_GET[&#39;ctf&#39;], &#39;#biubiubiu&#39;) !== FALSE)
+die(&#39;Flag: &#39;.$flag);
+else
+echo &#39;骚年，继续努力吧啊~&#39;;
+}
+?&gt;
+</code></pre>
+<p>同样的题型</p>
+<p>payload：?ctf[]=1</p>
+
+        
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2018/05/25/5/" id="post_nav-older" class="next-content">
+            Older
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
 
 
 
@@ -1044,6 +950,14 @@ It will not impact the appearance and can give developers a lot of support :)
                     
 
                     
+                        <!-- Footer Top Button -->
+                        <div id="back-to-top" class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
 
                     <!--Footer-->
 <footer class="mdl-mini-footer" id="bottom">
@@ -1189,6 +1103,10 @@ It will not impact the appearance and can give developers a lot of support :)
 <!-- Import prettify js  -->
 
     
+        
+            <script>lsloader.load("prettify_js","/js/prettify.min.js?WN07fivHQSMKWy7BmHBB6w==", true)</script>
+        
+    
 
 
 
@@ -1201,6 +1119,11 @@ It will not impact the appearance and can give developers a lot of support :)
     });
 
     
+        
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+                })
         
     
     
