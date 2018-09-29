@@ -244,7 +244,7 @@
 
     
         <meta property="article:published_time" content="Thu Sep 20 2018 10:22:46 GMT+0800">
-        <meta property="article:modified_time" content="Thu Sep 20 2018 10:41:11 GMT+0800">
+        <meta property="article:modified_time" content="Sat Sep 29 2018 10:14:34 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -267,7 +267,7 @@
     "mainEntityOfPage": "http://alittlexyz.com/2018/09/20/12/index.html",
     "headline": "0x12 gdb调试",
     "datePublished": "Thu Sep 20 2018 10:22:46 GMT+0800",
-    "dateModified": "Thu Sep 20 2018 10:41:11 GMT+0800",
+    "dateModified": "Sat Sep 29 2018 10:14:34 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "张Mini",
@@ -351,7 +351,7 @@
     </button>
 
     <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
-        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#gdb调试"><span class="post-toc-number">1.</span> <span class="post-toc-text">gdb调试</span></a></li></ol>
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#gdb调试"><span class="post-toc-number">1.</span> <span class="post-toc-text">gdb调试</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#CGCTF——480小时精通C"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">CGCTF——480小时精通C++</span></a></li></ol></li></ol>
     </ul>
     
 
@@ -512,6 +512,14 @@
 <li>delete breakpoints：删除所有断点</li>
 <li>set args参数：指定运行时的参数</li>
 <li>print(p)</li>
+</ul>
+<h2 id="CGCTF——480小时精通C"><a href="#CGCTF——480小时精通C" class="headerlink" title="CGCTF——480小时精通C++"></a>CGCTF——480小时精通C++</h2><p>学习了一波后尝试可以用gdb调试来做这道题</p>
+<ul>
+<li>linux下运行发现输出了加密后的flag</li>
+<li>扔到ida下发现了StringEncryptFunction(unsigned <strong>int8 *a1, int a2)这个函数，里面有一大堆的加密函数，可是却没有找到引用此函数的地方，后来看见是把它们都nop掉了。。。。但是后来想到能不能尝试更改程序的流程使它运行StringEncryptFunction(unsigned </strong>int8 *a1, int a2)这一个函数。</li>
+<li>寄存器中有一个cs:ip，即代码段寄存器，所以我们可以修改指针指令寄存器（ip值）来更改程序的流程是我们运行这个加密函数，于是使用gdb调试器。</li>
+<li>设置断点:b* 0x424556，运行便可以查看到加密后的flag</li>
+<li>要想运行加密的函数，首先往这个函数里传递参数，分析了一下后发现$rsi存放了函数的第二个参数，也就是数据的长度，而$rdi则存放了数据的地址,于是设置参数：set $rdi=0x7fffffffde00,set $rsi=36；其次修改$rip的值使其跳转到这个函数：set $rip=0x4224f6，接着c执行，就可以在栈中看到flag了。</li>
 </ul>
 
         
