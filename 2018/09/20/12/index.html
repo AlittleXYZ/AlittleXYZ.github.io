@@ -244,7 +244,7 @@
 
     
         <meta property="article:published_time" content="Thu Sep 20 2018 10:22:46 GMT+0800">
-        <meta property="article:modified_time" content="Sat Sep 29 2018 10:14:34 GMT+0800">
+        <meta property="article:modified_time" content="Thu Nov 29 2018 23:54:01 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -267,7 +267,7 @@
     "mainEntityOfPage": "http://alittlexyz.com/2018/09/20/12/index.html",
     "headline": "0x12 gdb调试",
     "datePublished": "Thu Sep 20 2018 10:22:46 GMT+0800",
-    "dateModified": "Sat Sep 29 2018 10:14:34 GMT+0800",
+    "dateModified": "Thu Nov 29 2018 23:54:01 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "张Mini",
@@ -512,6 +512,19 @@
 <li>delete breakpoints：删除所有断点</li>
 <li>set args参数：指定运行时的参数</li>
 <li>print(p)</li>
+<li>x/wx address：查看address中的内容</li>
+</ul>
+<p>w可以换成b/h/g分别对应1/2/8 byte</p>
+<p>/后可以列出数字，表示一次列出几个</p>
+<p>第二个x可以换成u/d/s/is/i/以不同方式表示</p>
+<p>u：unsigned int</p>
+<p>d：十进制</p>
+<p>s：字符串</p>
+<p>i：指令</p>
+<ul>
+<li>info r：查看寄存器</li>
+<li>vmmap：查看每个address的权限</li>
+<li>find：在内存中查找信息，通常用来查找字符串</li>
 </ul>
 <h2 id="CGCTF——480小时精通C"><a href="#CGCTF——480小时精通C" class="headerlink" title="CGCTF——480小时精通C++"></a>CGCTF——480小时精通C++</h2><p>学习了一波后尝试可以用gdb调试来做这道题</p>
 <ul>
@@ -647,7 +660,7 @@
             </a>
             <ul class="dropdown-menu">
             <li>
-                <a class="sidebar_archives-link" href="/archives/2018/11/">November 2018<span class="sidebar_archives-count">5</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/09/">September 2018<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/05/">May 2018<span class="sidebar_archives-count">11</span></a>
+                <a class="sidebar_archives-link" href="/archives/2018/11/">November 2018<span class="sidebar_archives-count">6</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/09/">September 2018<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/05/">May 2018<span class="sidebar_archives-count">11</span></a>
             </ul>
         </li>
         
@@ -665,7 +678,7 @@
             </a>
             <ul class="dropdown-menu">
                 <li>
-                <a class="sidebar_archives-link" href="/categories/Re/">Re<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/categories/Web/">Web<span class="sidebar_archives-count">9</span></a></li><li><a class="sidebar_archives-link" href="/categories/ctf/">ctf<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/python/">python<span class="sidebar_archives-count">1</span></a>
+                <a class="sidebar_archives-link" href="/categories/Re/">Re<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/categories/Web/">Web<span class="sidebar_archives-count">9</span></a></li><li><a class="sidebar_archives-link" href="/categories/ctf/">ctf<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/pwn/">pwn<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/python/">python<span class="sidebar_archives-count">1</span></a>
             </ul>
         </li>
         
@@ -713,7 +726,7 @@
         <li>
             <a href="/archives">
                 Number of articles
-                <span class="sidebar-badge">17</span>
+                <span class="sidebar-badge">18</span>
             </a>
         </li>
         
