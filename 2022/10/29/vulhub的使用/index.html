@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="zhangMini"><title>vulhub的使用 · Mini's blog</title><meta name="description" content="运行靶场并启动
+1docker-compose up -d        # 安装并启动靶场环境也称创建容器
+
+若出现问题，或者更新了配置文件，需要手工来编译靶场环境
+1docker-compose build        # docker-compose up -d命令包含了docker-com"><meta name="keywords" content="Security, life"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 6.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Mini's blog</a></h3><div class="description"><p>Nothing lasts forever.</p></div></div></div><ul class="social-links"></ul><div class="footer"><a target="_blank" href="/"><span>Theme by </span></a><a target="_blank" rel="noopener" href="https://www.caicai.me"> CaiCai </a><span>&</span><a target="_blank" rel="noopener" href="https://github.com/Ben02/hexo-theme-Anatole"> Ben</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo&#65281;</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/about">关于</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">tags</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="/images/favicon.png"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>vulhub的使用</a></h3></div><div class="post-content"><h1 id="运行靶场并启动"><a href="#运行靶场并启动" class="headerlink" title="运行靶场并启动"></a>运行靶场并启动</h1><img src="/2022/10/29/vulhub%E7%9A%84%E4%BD%BF%E7%94%A8/cd.png" class="" title="cd到目录">
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d        # 安装并启动靶场环境也称创建容器</span><br></pre></td></tr></table></figure>
+
+<p>若出现问题，或者更新了配置文件，需要手工来编译靶场环境</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose build        # docker-compose up -d命令包含了docker-compose build</span><br></pre></td></tr></table></figure>
+
+<p>查看端口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker-compose ps</span><br><span class="line">docker ps</span><br></pre></td></tr></table></figure>
+<img src="/2022/10/29/vulhub%E7%9A%84%E4%BD%BF%E7%94%A8/ps.png" class="" title="ps">
+
+<p>在本虚拟机上可以使用 <strong>[本虚拟机ip]:[端口号]</strong> 来进行访问</p>
+<h1 id="物理机访问"><a href="#物理机访问" class="headerlink" title="物理机访问"></a>物理机访问</h1><p>若要在物理机中访问虚拟机docker环境</p>
+<p>首先，看看物理机能不能<strong>ping</strong>通虚拟机（同一个网段）</p>
+<ul>
+<li>物理机ip</li>
+</ul>
+<img src="/2022/10/29/vulhub%E7%9A%84%E4%BD%BF%E7%94%A8/phy-ip.png" class="" title="物理机ip">
+<ul>
+<li>虚拟机ip</li>
+</ul>
+<img src="/2022/10/29/vulhub%E7%9A%84%E4%BD%BF%E7%94%A8/vir-ip.png" class="" title="虚拟机ip">
+
+
+<p>在可以ping通虚拟机的前提下，设置静态路由</p>
+<p>首先，查看docker的ip</p>
+<img src="/2022/10/29/vulhub%E7%9A%84%E4%BD%BF%E7%94%A8/docker-ip.png" class="" title="docker ip">
+
+<p>可以看到，该容器的<strong>IPAddress</strong>为172.18.0.3</p>
+<p>那么在物理机上设置静态路由</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route add -p 172.18.0.0 mask 255.255.0.0 192.168.6.130</span><br></pre></td></tr></table></figure>
+<p>就可以在物理机上访问 <strong><a target="_blank" rel="noopener" href="http://172.18.0.3/">http://172.18.0.3:80</a></strong> 了</p>
+<ul>
+<li><p>删除永久路由</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route delete 172.18.0.0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打印路由表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route print</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="docker命令"><a href="#docker命令" class="headerlink" title="docker命令"></a>docker命令</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker-compose down         # 关闭靶场</span><br><span class="line">docker-images               # 查看下载的镜像</span><br><span class="line">docker rmi [IMAGE ID]       # 删除</span><br><span class="line"></span><br><span class="line">service docker status       # 查看docker状态</span><br><span class="line">service docker start        # 启动docker</span><br></pre></td></tr></table></figure></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2022-10-29</span><i class="fa fa-tag"></i><a class="tag" href="/tags/web/" title="web">web </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2022/10/29/vulhub的使用/,Mini's blog,vulhub的使用,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2022/10/31/SQL%E6%B3%A8%E5%85%A5%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E7%82%B9/" title="SQL注入中的一些点">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2022/10/26/XSS/" title="XSS">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
