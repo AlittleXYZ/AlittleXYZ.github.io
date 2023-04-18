@@ -1,0 +1,103 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="zhangMini"><title>Docker入门 · Mini's blog</title><meta name="description" content="一些资料安装、概念、操作
+官方仓库
+docker-compose 常用命令
+docker.io 和 docker-ce 的区别
+镜像基础常用命令
+获取镜像
+1234docker pull --helpdocker pull ubuntu:18.0.4# 如果命令没有给出Docker镜像仓库的地址，会"><meta name="keywords" content="Security, life"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 6.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Mini's blog</a></h3><div class="description"><p>Nothing lasts forever.</p></div></div></div><ul class="social-links"></ul><div class="footer"><a target="_blank" href="/"><span>Theme by </span></a><a target="_blank" rel="noopener" href="https://www.caicai.me"> CaiCai </a><span>&</span><a target="_blank" rel="noopener" href="https://github.com/Ben02/hexo-theme-Anatole"> Ben</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo&#65281;</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/about">关于</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">tags</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="/images/favicon.png"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>Docker入门</a></h3></div><div class="post-content"><h1 id="一些资料"><a href="#一些资料" class="headerlink" title="一些资料"></a>一些资料</h1><p><a target="_blank" rel="noopener" href="https://yeasy.gitbook.io/docker_practice/">安装、概念、操作</a></p>
+<p><a target="_blank" rel="noopener" href="https://hub.docker.com/">官方仓库</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/moxiaoan/p/9299404.html">docker-compose 常用命令</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/harryhare/article/details/106015022">docker.io 和 docker-ce 的区别</a></p>
+<h1 id="镜像基础"><a href="#镜像基础" class="headerlink" title="镜像基础"></a>镜像基础</h1><h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><ul>
+<li><p>获取镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker pull --<span class="built_in">help</span></span><br><span class="line">docker pull ubuntu:18.0.4</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果命令没有给出Docker镜像仓库的地址，会默认从DockerHub(docker.io)获取镜像</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --<span class="built_in">rm</span> ubuntu:18.0.4 bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># -i: 交互操作; -t: 终端</span></span><br><span class="line"><span class="comment"># --rm: 容器退出后随之将其删除，如果只是看看结果不需要排障和保留结果，这个命令可以避免浪费空间</span></span><br><span class="line"><span class="comment"># bash: 放在镜像后的是命令，这里希望有个交互式的Shell，因此使用bash</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>列出镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker image <span class="built_in">ls</span></span><br><span class="line">docker image <span class="built_in">ls</span> ubuntu</span><br><span class="line">docker image <span class="built_in">ls</span> ubuntu:18.04</span><br><span class="line">docker image <span class="built_in">ls</span> -f since=mongo:3.2</span><br><span class="line">docker image <span class="built_in">ls</span> --format <span class="string">&quot;&#123;&#123;.ID&#125;&#125;: &#123;&#123;.Repository&#125;&#125;&quot;</span> <span class="comment"># 只列出镜像ID和仓库名</span></span><br><span class="line">docker image <span class="built_in">ls</span> --format <span class="string">&quot;table &#123;&#123;.ID&#125;&#125;\t&#123;&#123;.Repository&#125;&#125;\t&#123;&#123;.Tag&#125;&#125;&quot;</span> <span class="comment"># 表格等距显示</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看镜像、容器、数据卷所占空间</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker system <span class="built_in">df</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker image <span class="built_in">rm</span> 501 <span class="comment"># 一般输入ID前3个字符以上就行</span></span><br><span class="line">docker image <span class="built_in">rm</span> centos</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="容器基础"><a href="#容器基础" class="headerlink" title="容器基础"></a>容器基础</h1><p>当使用<strong>docker run</strong>来创建容器时，Docker在后台运行的标准操作包括：</p>
+<ul>
+<li>检查本地是否存在指定的镜像，不存在就从 registry 下载</li>
+<li>利用镜像创建并启动一个容器</li>
+<li>分配一个文件系统，并在只读的镜像层外面挂载一层可读写层</li>
+<li>从宿主主机配置的网桥接口中桥接一个虚拟接口到容器中去</li>
+<li>从地址池配置一个 ip 地址给容器</li>
+<li>执行用户指定的应用程序</li>
+<li>执行完毕后容器被终止</li>
+</ul>
+<h2 id="常用命令-1"><a href="#常用命令-1" class="headerlink" title="常用命令"></a>常用命令</h2><ul>
+<li><p>新建并启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run ubuntu:18.0.4 /bin/echo <span class="string">&#x27;hello world&#x27;</span></span><br><span class="line"></span><br><span class="line">Hello world</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动一个bash终端，允许用户交互</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it ubuntu:18.0.4 /bin/bash</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>后台运行而不是把执行命令结果输出在当前宿主机下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker run -d ubuntu:18.04 /bin/sh -c <span class="string">&quot;while true; do echo hello world; sleep 1; done&quot;</span></span><br><span class="line"></span><br><span class="line">77b2dc01fe0f3f1265df143181e7b9af5e05279a884f4776ee75350ea9d8017a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出结果可以用docker logs查看</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看容器信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker container <span class="built_in">ls</span> -a</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看容器状态</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps -a</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取容器输出信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker container logs [container ID or NAMES]</span><br><span class="line"></span><br><span class="line">hello world</span><br><span class="line">hello world</span><br><span class="line">hello world</span><br><span class="line">...</span><br></pre></td></tr></table></figure></li>
+<li><p>终止运行中的容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker container stop [container ID or NAME]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动一个终止状态的容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker container start [container ID or NAME]</span><br><span class="line">docker container restart [container ID or NAME]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>进入一个容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker attach 243c</span><br><span class="line">docker <span class="built_in">exec</span> -it 69d1 bash   </span><br><span class="line"></span><br><span class="line"><span class="comment"># 推荐使用docker exec，原因在于attach命令如果exit的化，会导致容器停止，而exec的话不会停止容器</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>导出本地容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker container <span class="built_in">ls</span> -a</span><br><span class="line">CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                    PORTS               NAMES</span><br><span class="line">7691a814370e        ubuntu:18.04        <span class="string">&quot;/bin/bash&quot;</span>         36 hours ago        Exited (0) 21 hours ago                       <span class="built_in">test</span></span><br><span class="line"></span><br><span class="line">$ docker <span class="built_in">export</span> 7691a814370e &gt; ubuntu.tar</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>从容器快照文件中导入为镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> ubuntu.tar | docker import - <span class="built_in">test</span>/ubuntu:v1.0</span><br><span class="line"></span><br><span class="line">$ docker image <span class="built_in">ls</span></span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED              VIRTUAL SIZE</span><br><span class="line"><span class="built_in">test</span>/ubuntu         v1.0                9d37a6082e97        About a minute ago   171.3 MB</span><br></pre></td></tr></table></figure>
+<p>用户既可以使用<strong>docker load</strong>来导入镜像存储文件到本地镜像库，也可以使用<strong>docker import</strong>来导入一个容器快照到本地镜像库。这两者的区别在于容器快照文件将丢弃所有的历史记录和元数据信息（即仅保存容器当时的快照状态），而镜像存储文件将保存完整记录，体积也要大。此外，从容器快照文件导入时可以重新指定标签等元数据信息</p>
+</li>
+<li><p>删除容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker container <span class="built_in">rm</span> trusting_newton</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="Dockfile-定制镜像"><a href="#Dockfile-定制镜像" class="headerlink" title="Dockfile 定制镜像"></a>Dockfile 定制镜像</h1><p><strong>Dockerfile</strong> 是一个文本文件，其内包含了一条条的指令(Instruction)，每一条指令构建一层，因此每一条指令的内容，就是描述该层应当如何构建</p>
+<h2 id="FROM-指定基础镜像"><a href="#FROM-指定基础镜像" class="headerlink" title="FROM 指定基础镜像"></a>FROM 指定基础镜像</h2><p><strong>FROM</strong> 是一个Dockerfile中必备的第一条指令</p>
+<figure class="highlight docker"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> ubuntu:<span class="number">22.04</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="RUN-执行命令"><a href="#RUN-执行命令" class="headerlink" title="RUN 执行命令"></a>RUN 执行命令</h2><p><strong>RUN</strong> 指令用来执行命令行命令</p>
+<figure class="highlight docker"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">RUN</span><span class="language-bash"> wget https://github.com/Dreamacro/clash/releases/download/v1.13.0/clash-linux-arm64-v1.13.0.gz \</span></span><br><span class="line"><span class="language-bash">    &amp;&amp; gzip -d clash-linux-arm64-v1.13.0.gz \</span></span><br><span class="line"><span class="language-bash">    &amp;&amp; <span class="built_in">chmod</span> +x clash-linux-arm64-v1.13.0 \</span></span><br></pre></td></tr></table></figure>
+
+<p>由于Dockerfile中的每一个指令都会建立一层。每一个 <strong>RUN</strong> 的行为也会新建一层，然后再其上执行命令，在编写 <strong>Dockfile</strong> 文件的时候，应该注意不要建立太多层，这样会导致产生非常臃肿、非常多层的镜像，不仅仅增加了构建部署的时间，也很容易出错</p>
+<h2 id="COPY-复制文件"><a href="#COPY-复制文件" class="headerlink" title="COPY 复制文件"></a>COPY 复制文件</h2><figure class="highlight docker"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">COPY</span><span class="language-bash"> package.json /usr/src/app/</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 从构建上下文目录中 &lt;源路径&gt; 的文件/目录复制到新的一层的镜像内的 &lt;目标路径&gt; 位置</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>通配符指定源路径<figure class="highlight docker"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">COPY</span><span class="language-bash"> hom* /mydir/</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> hom?.txt /mydir/</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 通配符规则要满足 Go 的 filepath.Match 规则</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="CMD-容器启动命令"><a href="#CMD-容器启动命令" class="headerlink" title="CMD 容器启动命令"></a>CMD 容器启动命令</h2><p><strong>CMD</strong> 指令用于指定默认的容器主进程的启动命令</p>
+<figure class="highlight docker"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CMD</span><span class="language-bash"> <span class="built_in">echo</span> <span class="variable">$HOME</span>      <span class="comment"># shell格式</span></span></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> [ <span class="string">&quot;sh&quot;</span>, <span class="string">&quot;-c&quot;</span>, <span class="string">&quot;echo <span class="variable">$HOME</span>&quot;</span> ]        <span class="comment"># exec格式</span></span></span><br></pre></td></tr></table></figure>
+
+<h2 id="ENV-设置环境变量"><a href="#ENV-设置环境变量" class="headerlink" title="ENV 设置环境变量"></a>ENV 设置环境变量</h2><figure class="highlight docker"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ENV</span> VERSION=<span class="number">1.0</span> DEBUG=on \</span><br><span class="line">    NAME=<span class="string">&quot;Happy Feet&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ENV</span> NODE_VERSION <span class="number">7.2</span>.<span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Docker-Build"><a href="#Docker-Build" class="headerlink" title="Docker Build"></a>Docker Build</h2><figure class="highlight docker"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t tgbot:v1 .</span><br></pre></td></tr></table></figure>
+
+<p>使用上面的命令创建镜像，注意命令最后面有一个 <strong>.</strong> ，它表示当前目录</p>
+<ul>
+<li><p>直接用 Git repo 进行构建</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t hello-world https://github.com/docker-library/hello-world.git<span class="comment">#master:amd64/hello-world</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用给定的 tar 压缩包构建</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build http://server/context.tar.gz</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="。。。"><a href="#。。。" class="headerlink" title="。。。"></a>。。。</h1><p>目前用到的就这么多，后面需要的部分再补这学吧</p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2023-04-15</span><i class="fa fa-tag"></i><a class="tag" href="/tags/docker/" title="docker">docker </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2023/04/15/Docker/,Mini's blog,Docker入门,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="/2022/12/08/xss-n1book/" title="xss-n1book">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
