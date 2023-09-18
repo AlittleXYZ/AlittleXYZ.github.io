@@ -1,42 +1,114 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="zhangMini"><title>Solidity · Mini's blog</title><meta name="description" content="智能合约以太坊的智能合约是运行在 以太坊虚拟机（EVM, Ethereum Virtual Machine） 上的代码，EVM是智能合约的沙盒，合约存储在以太坊的区块链上，并被编译成 EVM字节码 。EVM字节码是一种低级的面向栈的语言，类似于汇编语言，EVM字节码可以通过以太坊虚拟机执行。
 Sol"><meta name="keywords" content="Security, life"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 6.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Mini's blog</a></h3><div class="description"><p>Nothing lasts forever.</p></div></div></div><ul class="social-links"></ul><div class="footer"><a target="_blank" href="/"><span>Theme by </span></a><a target="_blank" rel="noopener" href="https://www.caicai.me"> CaiCai </a><span>&</span><a target="_blank" rel="noopener" href="https://github.com/Ben02/hexo-theme-Anatole"> Ben</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo&#65281;</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/about">关于</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">tags</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="/images/favicon.png"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>Solidity</a></h3></div><div class="post-content"><h1 id="智能合约"><a href="#智能合约" class="headerlink" title="智能合约"></a>智能合约</h1><p>以太坊的智能合约是运行在 <strong>以太坊虚拟机（EVM, Ethereum Virtual Machine）</strong> 上的代码，EVM是智能合约的沙盒，合约存储在以太坊的区块链上，并被编译成 <strong>EVM字节码</strong> 。EVM字节码是一种低级的面向栈的语言，类似于汇编语言，EVM字节码可以通过以太坊虚拟机执行。</p>
-<h2 id="Solidity"><a href="#Solidity" class="headerlink" title="Solidity"></a>Solidity</h2><p><strong>Solidity</strong> 是一种面向合约的、为实现智能合约而创建的高级编程语言，它的语法类似于JavaScript和Python，可以编译成EVM字节码，然后在以太坊虚拟机上执行。</p>
+<h1 id="Solidity"><a href="#Solidity" class="headerlink" title="Solidity"></a>Solidity</h1><p><strong>Solidity</strong> 是一种面向合约的、为实现智能合约而创建的高级编程语言，它的语法类似于JavaScript和Python，可以编译成EVM字节码，然后在以太坊虚拟机上执行。</p>
 <p>下面的合约是一个最简单的加密货币合约</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^0.4.21;</span><br><span class="line"></span><br><span class="line">contract Coin &#123;</span><br><span class="line">    // 关键字“public”让这些变量可以从外部读取</span><br><span class="line">    address public minter;</span><br><span class="line">    mapping (address =&gt; uint) public balances;</span><br><span class="line"></span><br><span class="line">    // 轻客户端可以通过事件针对变化作出高效的反应</span><br><span class="line">    event Sent(address from, address to, uint amount);</span><br><span class="line"></span><br><span class="line">    // 这是构造函数，只有当合约创建时运行</span><br><span class="line">    function Coin() public &#123;</span><br><span class="line">        minter = msg.sender;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function mint(address receiver, uint amount) public &#123;</span><br><span class="line">        if (msg.sender != minter) return;</span><br><span class="line">        balances[receiver] += amount;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function send(address receiver, uint amount) public &#123;</span><br><span class="line">        if (balances[msg.sender] &lt; amount) return;</span><br><span class="line">        balances[msg.sender] -= amount;</span><br><span class="line">        balances[receiver] += amount;</span><br><span class="line">        emit Sent(msg.sender, receiver, amount);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<br>
+接下来对合约里面的一些代码进行解读
 
-<p>接下来对合约里面的一些代码进行解读</p>
 <hr>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">address public minter;</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>这一行声明了一个可以被公开访问的 <strong>address</strong> 类型的状态变量。这个类型适合存储合约地址或外部人员的密钥对。</p>
-<p>关键字 <strong>public</strong> 自动生成一个函数，可以让你在合约之外读取这个状态变量的当前值。由编译器生成的函数代码大致如下：</p>
+<p>这一行声明了一个可以被公开访问的 <strong><code>address</code></strong> 类型的状态变量。这个类型适合存储合约地址或外部人员的密钥对。</p>
+<p>关键字 <strong><code>public</code></strong> 自动生成一个函数，可以让你在合约之外读取这个状态变量的当前值。由编译器生成的函数代码大致如下：</p>
 </blockquote>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function minter() returns (address) &#123; return minter; &#125;</span><br></pre></td></tr></table></figure>
 
 <hr>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mapping (address =&gt; uint) public balances;</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>这一行创建一个公共状态变量，该类型将address映射为无符号整数。 <strong>Mappings</strong> 可以看作是一个哈希表，它会执行虚拟初始化，使所有可能存在的键都映射到一个字节表示全为零的值。</p>
-<p>但是，这种类比并不太恰当，因为它既不能获得映射的所有键的列表，也不能获得所有值的列表。 因此，要么记住你添加到mapping中的数据（使用列表或更高级的数据类型会更好），要么在不需要键列表或值列表的上下文中使用它，就如本例。</p>
-<p><strong>public</strong> 关键字创建的 <strong>getter</strong> 函数 <strong>getter function</strong> 大致如下，通过该函数可以轻松地查询到账户的余额：</p>
+<p>这一行创建一个公共状态变量，该类型将 <code>address</code> 映射为无符号整数。 <strong>Mappings</strong> 可以看作是一个哈希表，它会执行虚拟初始化，使所有可能存在的键都映射到一个字节表示全为零的值。</p>
+<p>但是，这种类比并不太恰当，因为它既不能获得映射的所有键的列表，也不能获得所有值的列表。 因此，要么记住你添加到 <code>mapping</code> 中的数据（使用列表或更高级的数据类型会更好），要么在不需要键列表或值列表的上下文中使用它，就如本例。</p>
+<p><strong><code>public</code></strong> 关键字创建的 <strong><code>getter</code></strong> 函数 <strong><code>getter function</code></strong> 大致如下，通过该函数可以轻松地查询到账户的余额：</p>
 </blockquote>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function balances(address _account) public view returns (uint) &#123;</span><br><span class="line">    return balances[_account];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <hr>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">event Sent(address from, address to, uint amount);</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>这一行声明了一个 <strong>event</strong> ，它会在函数 <strong>send</strong> 中被触发。客户端可以通过监听这些事件针对变化作出高效的反应，一旦它被发出，监听该事件的 <strong>lister</strong> 都将收到通知。</p>
+<p>这一行声明了一个 <strong><code>event</code></strong> ，它会在函数 <strong><code>send</code></strong> 中被触发。客户端可以通过监听这些事件针对变化作出高效的反应，一旦它被发出，监听该事件的 <strong>lister</strong> 都将收到通知。</p>
 <p>可以使用如下代码监听该事件：</p>
 </blockquote>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Coin.Sent().watch(&#123;&#125;, &#x27;&#x27;, function(error, result) &#123;</span><br><span class="line">    if (!error) &#123;</span><br><span class="line">        console.log(&quot;Coin transfer: &quot; + result.args.amount +</span><br><span class="line">            &quot; coins were sent from &quot; + result.args.from +</span><br><span class="line">            &quot; to &quot; + result.args.to + &quot;.&quot;);</span><br><span class="line">        console.log(&quot;Balances now:\n&quot; +</span><br><span class="line">            &quot;Sender: &quot; + Coin.balances.call(result.args.from) +</span><br><span class="line">            &quot;Receiver: &quot; + Coin.balances.call(result.args.to));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 <hr>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function Coin() public &#123;</span><br><span class="line">        minter = msg.sender;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>特殊函数 <strong>Coin</strong> 是合约的构造函数，只有当合约创建时运行。构造函数会在合约创建时执行，且只执行一次。构造函数的函数名必须与合约名相同，且不能有返回值。</p>
-<p>它永远存储创建合约的人的地址，全局变量 <strong>msg</strong> （以及 <strong>tx</strong> 和 <strong>block</strong>），包含一些允许访问区块链的属性。</p>
-<p><strong>msg.sender</strong> 始终指向当前函数的调用者的地址，而 <strong>tx.origin</strong> 始终指向事务的发起者。</p>
+<p>特殊函数 <strong><code>Coin</code></strong> 是合约的构造函数，只有当合约创建时运行。构造函数会在合约创建时执行，且只执行一次。构造函数的函数名必须与合约名相同，且不能有返回值。</p>
+<p>它永远存储创建合约的人的地址，全局变量 <strong><code>msg</code></strong> （以及 <strong><code>tx</code></strong> 和 **<code>block</code>**），包含一些允许访问区块链的属性。</p>
+<p><strong><code>msg.sender</code></strong> 始终指向当前函数的调用者的地址，而 <strong><code>tx.origin</code></strong> 始终指向事务的发起者。</p>
 </blockquote>
-<h3 id="Ethererum-IDE"><a href="#Ethererum-IDE" class="headerlink" title="Ethererum IDE"></a>Ethererum IDE</h3><p>在线IDE：<a target="_blank" rel="noopener" href="https://remix.ethereum.org/">Remix</a></p>
+<h2 id="可见性"><a href="#可见性" class="headerlink" title="可见性"></a>可见性</h2><p>Solidity有几种默认的变量或函数访问域关键字： <strong><code>private</code></strong> 、 <strong><code>public</code></strong> 、 <strong><code>external</code></strong> 、 <strong><code>private</code></strong> 。对合约实例方法来讲，默认可见状态为 <strong><code>public</code></strong> ，而合约实例变量的默认可见状态为 <strong><code>private</code></strong> 。</p>
+<ul>
+<li><strong><code>public</code></strong> ：表示该函数或状态变量可以从任何地方调用，包括合同内部、外部合同、外部用户。如果不显式指定函数或状态变量的可见性，它们将被视为public。</li>
+<li><strong><code>private</code></strong> ：表示函数或变量只能在本合约内部使用（代码层面）</li>
+<li><strong><code>external</code></strong> ：表示函数只能从外部访问，不能被合约里的函数直接调用，但可以使用 <strong><code>this.func()</code></strong> 外部调用的方式调用该函数</li>
+<li><strong><code>internal</code></strong> ：一般用在合约继承中，父合约中被标记成 internal 状态变量或函数可供子合约进行直接访问和调用（外部无法直接获取和调用）</li>
+</ul>
+<h2 id="底层调用方式"><a href="#底层调用方式" class="headerlink" title="底层调用方式"></a>底层调用方式</h2><p>Solidity有两种用于与其他合同进行交互的低级函数： <strong><code>call</code></strong> 、 <strong><code>delegatecall</code></strong></p>
+<p>它们的区别如下图所示：</p>
+<img src="/2023/09/16/Solidity/call.jpg" class="" title="call">
+
+<ul>
+<li><strong><code>call</code></strong> 方式会调用外部合约B的 <code>func()</code> 函数，在外部合约上下文执行完后继续返回本合约A上下文执行。 <strong><code>call</code></strong> 返回一个bool值来表明外部调用成功与否</li>
+<li><strong><code>delegatecall</code></strong> 方式相当于将外部合约B的 <code>func()</code> 代码复制到本合约的上下文空间中执行。 <strong><code>delegatecall</code></strong> 返回一个bool值来表明外部调用成功与否</li>
+</ul>
+<blockquote>
+<p>此外还有 <strong><code>callcode</code></strong> 函数，它是 <strong><code>delegatecall</code></strong> 之前的一个版本，现在已经弃用。它俩在 <strong><code>msg.sender</code></strong> 和 <strong><code>msg.value</code></strong> 的指向上有区别</p>
+</blockquote>
+<h2 id="接收函数-fallback"><a href="#接收函数-fallback" class="headerlink" title="接收函数 fallback()"></a>接收函数 <strong><code>fallback()</code></strong></h2><p><strong><code>fallback()</code></strong> 函数是一种特殊的函数，通常用于接收以太币或处理未知函数调用，具有以下特征：</p>
+<ul>
+<li>三无函数：一个合同只能有一个 <strong><code>fallback()</code></strong> 函数，且没有名字、没有参数、没有返回值</li>
+<li>替补函数：如果一个合同收到一个未知的函数调用，就会执行 <strong><code>fallback()</code></strong> 函数。这可用于实现一种默认行为或错误处理逻辑</li>
+<li>收币函数：当合同收到以太币时，会执行 <strong><code>fallback()</code></strong> 函数，以处理接收到的以太币</li>
+<li>如果合同需要接收以太币，且没有声明 <strong><code>receive()</code></strong> 函数，那么需要将 <strong><code>fallback()</code></strong> 函数声明为 <strong><code>payable</code></strong> ，否则会抛出异常</li>
+<li>在 <strong>Solidity 0.6.0</strong> 及更高版本中，无数据的以太币转账将触发合约的 <strong><code>receive()</code></strong> 函数（如果定义了的话），而不是 <strong><code>fallback()</code></strong> 函数。如果没有定义 <strong><code>receive()</code></strong> 函数，则会触发 <strong><code>fallback()</code></strong> 函数</li>
+</ul>
+<h2 id="交易函数"><a href="#交易函数" class="headerlink" title="交易函数"></a>交易函数</h2><p>发送Ether主要有以下几个函数： <strong><code>call.value()()</code></strong> 、 <strong><code>send()</code></strong> 、 <strong><code>transfer()</code></strong></p>
+<h3 id="call-value"><a href="#call-value" class="headerlink" title="call.value()()"></a><strong><code>call.value()()</code></strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">address.to.call.value(amountInWei)(data)</span><br><span class="line"></span><br><span class="line">// `address.to` 是要接收以太币的目标地址</span><br><span class="line">// `amountInWei` 是要发送的以太币数量，以wei为单位</span><br><span class="line">// `data` 是要传递给目标地址的调用数据，如果不发送数据，可以省略</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在合约中直接发起 <strong>TX</strong> 的函数之一，相当危险</p>
+</blockquote>
+<h3 id="send"><a href="#send" class="headerlink" title="send()"></a><strong><code>send()</code></strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">address.send(uint256 amount);</span><br><span class="line"></span><br><span class="line">// `address` 是接收以太币的目标地址</span><br><span class="line">// `amount` 是要发送的以太币数量，以wei为单位</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>通过该函数发送Ether失败时直接返回 <code>false</code></p>
+<p> <strong><code>send()</code></strong> 的目标如果是合约账户，则会尝试调用它的 <code>fallback()</code> 函数， <code>fallback()</code> 函数执行失败，会直接返回 <code>false</code> ，但只提供 2300 Gas 给 <code>fallback()</code> ，所以可以防止重入漏洞</p>
+</blockquote>
+<h3 id="transfer"><a href="#transfer" class="headerlink" title="transfer()"></a><strong><code>transfer()</code></strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">address.transfer(uint256 amount);</span><br><span class="line"></span><br><span class="line">// `address` 是接收以太币的目标地址</span><br><span class="line">// `amount` 是要发送的以太币数量，以wei为单位</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong><code>transfer()</code></strong> 是一个较为安全的转币函数，该函数调用没有返回值，当发送失败时（例如，由于 gas 不足或接收函数抛出异常）会自动回滚状态，抛出异常。如果目标是一个合约账户，它会尝试执行合约的接收函数（ <code>fallback()</code> 函数），并且只会传递 2300 Gas 用于 <code>fallback()</code> 函数执行，这可以防止因 gas 不足而导致的转账失败。</p>
+</blockquote>
+<h2 id="自定义修饰符"><a href="#自定义修饰符" class="headerlink" title="自定义修饰符"></a>自定义修饰符</h2><p>自定义修饰符（<strong>Modifiers</strong>）用于在函数执行前和&#x2F;或执行后修改函数的行为</p>
+<ul>
+<li>定义修饰符：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">modifier ModifierName(parameters) &#123;</span><br><span class="line">    // 在函数执行前的代码，如 `require(msg.sender == owner);` </span><br><span class="line">    _; // 占位符</span><br><span class="line">    // 在函数执行后的代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<blockquote>
+<p><strong><code>ModifierName</code></strong> 是修饰符的名称，可以自定义</p>
+<p><strong><code>parameters</code></strong> 可选，用于传递参数给修饰符，通常用于指定某些条件</p>
+<p><strong><code>_</code></strong> 是占位符，表示函数的实际逻辑将在此执行。如果修饰符通过了所有条件检查，那么 _ 中的代码将在函数执行之前和之后执行</p>
+</blockquote>
+<ul>
+<li>在函数中应用修饰符<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function functionName(parameters) public ModifierName(parameters) &#123;</span><br><span class="line">    // 函数的实际逻辑</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<blockquote>
+<p>只需要在函数声明之前加上修饰符名称，就可以将其应用于该函数</p>
+</blockquote>
+<h2 id="Solidity常见漏洞类型"><a href="#Solidity常见漏洞类型" class="headerlink" title="Solidity常见漏洞类型"></a>Solidity常见漏洞类型</h2><ul>
+<li>Reentrancy（重入攻击）</li>
+<li>Integer Overflow and Underflow（整数溢出和下溢）</li>
+<li>Access Contorl（访问控制）</li>
+<li>Unchecked Return Values For Low Level Calls（未严格判断不安全函数调用返回值）</li>
+<li>Denial of Service（拒绝服务）</li>
+<li>Bad Randomness（随机数不安全）</li>
+<li>Front Running（交易抢先）</li>
+<li>Time Manipulation（时间篡改）</li>
+<li>Short Address Attack（短地址攻击）</li>
+<li>…</li>
+</ul>
+<h2 id="Ethererum-IDE"><a href="#Ethererum-IDE" class="headerlink" title="Ethererum IDE"></a>Ethererum IDE</h2><p>在线IDE：<a target="_blank" rel="noopener" href="https://remix.ethereum.org/">Remix</a></p>
 <p>离线版Remix：<a target="_blank" rel="noopener" href="https://github.com/ethereum/remix-ide">Remix | github</a></p>
+<h1 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h1><ul>
+<li>整理学习Solidity常见漏洞类型</li>
+<li>学习 Remix-ide</li>
+</ul>
 </div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2023-09-16</span><i class="fa fa-tag"></i><a class="tag" href="/tags/web3/" title="web3">web3 </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2023/09/16/Solidity/,Mini's blog,Solidity,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="/2023/08/23/env-version/" title="MAC多环境管理">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
