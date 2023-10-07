@@ -56,7 +56,7 @@ Sol"><meta name="keywords" content="Security, life"><meta content="width=device-
 <blockquote>
 <p>此外还有 <strong><code>callcode</code></strong> 函数，它是 <strong><code>delegatecall</code></strong> 之前的一个版本，现在已经弃用。它俩在 <strong><code>msg.sender</code></strong> 和 <strong><code>msg.value</code></strong> 的指向上有区别</p>
 </blockquote>
-<h2 id="接收函数-fallback"><a href="#接收函数-fallback" class="headerlink" title="接收函数 fallback()"></a>接收函数 <strong><code>fallback()</code></strong></h2><p><strong><code>fallback()</code></strong> 函数是一种特殊的函数，通常用于接收以太币或处理未知函数调用，具有以下特征：</p>
+<h2 id="回退函数-fallback"><a href="#回退函数-fallback" class="headerlink" title="回退函数 fallback()"></a>回退函数 <strong><code>fallback()</code></strong></h2><p><strong><code>fallback()</code></strong> 函数是一种特殊的函数，通常用于接收以太币或处理未知函数调用，具有以下特征：</p>
 <ul>
 <li>三无函数：一个合同只能有一个 <strong><code>fallback()</code></strong> 函数，且没有名字、没有参数、没有返回值</li>
 <li>替补函数：如果一个合同收到一个未知的函数调用，就会执行 <strong><code>fallback()</code></strong> 函数。这可用于实现一种默认行为或错误处理逻辑</li>
@@ -93,18 +93,6 @@ Sol"><meta name="keywords" content="Security, life"><meta content="width=device-
 <blockquote>
 <p>只需要在函数声明之前加上修饰符名称，就可以将其应用于该函数</p>
 </blockquote>
-<h2 id="Solidity常见漏洞类型"><a href="#Solidity常见漏洞类型" class="headerlink" title="Solidity常见漏洞类型"></a>Solidity常见漏洞类型</h2><ul>
-<li>Reentrancy（重入攻击）</li>
-<li>Integer Overflow and Underflow（整数溢出和下溢）</li>
-<li>Access Contorl（访问控制）</li>
-<li>Unchecked Return Values For Low Level Calls（未严格判断不安全函数调用返回值）</li>
-<li>Denial of Service（拒绝服务）</li>
-<li>Bad Randomness（随机数不安全）</li>
-<li>Front Running（交易抢先）</li>
-<li>Time Manipulation（时间篡改）</li>
-<li>Short Address Attack（短地址攻击）</li>
-<li>…</li>
-</ul>
 <h2 id="Ethererum-IDE"><a href="#Ethererum-IDE" class="headerlink" title="Ethererum IDE"></a>Ethererum IDE</h2><p>在线IDE：<a target="_blank" rel="noopener" href="https://remix.ethereum.org/">Remix</a></p>
 <p>离线版Remix：<a target="_blank" rel="noopener" href="https://github.com/ethereum/remix-ide">Remix | github</a></p>
 <h1 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h1><ul>
