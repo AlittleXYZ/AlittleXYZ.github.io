@@ -39,20 +39,51 @@ Unchecked Return Values For Low Level Calls（未严格判"><meta name="keywords
 </li>
 <li>使用OpenZeppelin的ReentrancyGuard库</li>
 </ul>
-<h2 id="Flashload-attack"><a href="#Flashload-attack" class="headerlink" title="Flashload attack"></a>Flashload attack</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/360131349">闪电贷科普 | 知乎</a></p>
-<p>作为DeFi贷款类型之一，闪贷攻击是对特定平台智能合约安全性的滥用，攻击者通常会借入大量不需要抵押品的资金。然后，他们在一家交易所操纵加密资产的价格，并迅速在另一家交易所转售。过程很快，攻击者会多次重复这个过程，然后完成并消失得无影无踪。</p>
-<h3 id="以太坊实现闪电贷套利的流程"><a href="#以太坊实现闪电贷套利的流程" class="headerlink" title="以太坊实现闪电贷套利的流程"></a>以太坊实现闪电贷套利的流程</h3><ol>
-<li>用户将调用控制权交给闪电贷合约</li>
-<li>闪电贷合约调用来自外部的套利合约程序中的执行函数，将请求的借款金额发送给套利合约，套利合约进行套利操作</li>
-<li>套利合约完成套利，将借款归还给闪电贷合约，执行函数完成工作，控制权还给闪电贷合约</li>
-<li>闪电贷合约检查还款金额是否正确，正确则套利交易成功，否则失败</li>
+<h3 id="攻击示例"><a href="#攻击示例" class="headerlink" title="攻击示例"></a>攻击示例</h3><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/578411657">重入漏洞之基本原理和复现</a></p>
+<h2 id="Flashload-attack"><a href="#Flashload-attack" class="headerlink" title="Flashload attack"></a>Flashload attack</h2><p>一个常见的闪电贷操作逻辑有四步，必须在同一个区块中完成：</p>
+<ol>
+<li>发送交易请求，并上传智能合约</li>
+<li>向协议发送代币</li>
+<li>上传的智能合约使用代币交互</li>
+<li>归还代币给协议</li>
 </ol>
-<p>在上面这个过程中，相应的函数是动态调用的，闪电贷合约需要检查归还金额是否正确才会结束，因此控制权的转移过程是随时可以发生的，也就是可重入的。同时需要注意的事，以太坊账户资产是以数值余额的形式存在，重入会带来双花的可能，这也是存在漏洞的地方。调用外部合约的主要危险之一是它们可以接管控制，而这些来自外部的合约程序一旦有漏洞，攻击者可以通过反复调用实现攻击，即可重入攻击。在闪电贷攻击事件中，<strong>可重入</strong>是实现闪电贷的基础。</p>
-<img src="/2023/09/21/Blockchain-attacks/The_DAO.png" class="" title="The DAO 攻击流程">
+<h3 id="闪电贷平台"><a href="#闪电贷平台" class="headerlink" title="闪电贷平台"></a>闪电贷平台</h3><ul>
+<li>Aave：闪电贷的发明者和领导者</li>
+<li>Uniswap：DeFi 中最受欢迎的去中心化交易所之一，包含V2和V3两个版本，V2版本带来一个新的功能叫做Flashswap（闪电兑）</li>
+<li>Compound：一个去中心化的稳定币平台，支持 DAI 稳定币的发行和交易，提供闪电贷服务</li>
+<li>MakerDAO</li>
+<li>dYdX</li>
+<li>Nuo</li>
+<li>Fulcrum</li>
+<li>…</li>
+</ul>
+<h3 id="Uniswap-闪电贷"><a href="#Uniswap-闪电贷" class="headerlink" title="Uniswap 闪电贷"></a>Uniswap 闪电贷</h3><p>在使用智能合约进行两个代币（ <strong>token</strong> ）之间的兑换时，首先需要发送 <strong>token</strong> 用于支付，然后会调用一个 <code>swap()</code> 函数，它将发送刚刚购买的 <strong>token</strong></p>
+<img src="/2023/09/21/Blockchain-attacks/flashloan.png" class="" title="Flash Loan">
+
+<p>因为 Uniswap 的 <code>swap()</code> 函数模式是先转账再进行校验，所以第二步可以先将需要的代币借出后，第三步调用自己合约中的 <code>uniswapV2Call()</code> 函数进行其它操作，完成后第四步再将借的代币归还，完成闪电贷服务</p>
+<p>Uniswap V2 有一个新功能叫做 <strong>Flashswap</strong> ，是 Uniswap 对闪电贷的称呼，这一功能集成在了 <code>swap()</code> 函数当中</p>
+<img src="/2023/09/21/Blockchain-attacks/Uniswap-code.png" class="" title="Flash Loan Code">
 
 <blockquote>
-<p>就好比说，攻击者合约将资产抵押给A银行（项目A借款池）进行贷款，银行A在未完成记账结算之前就开始放款，而银行A完成记账结算流程意味着闪电贷交易要成功（原子性），这时候资产被A入库记账。但由于银行A和其他银行之间的信息不同步（合约函数之间的状态不同步），攻击者在A银行还未完成资产入库记账时（即被攻击合约贷款流程未结束时，这时候闪电贷工作流程还未结束，合约函数调用还可以进行），再次以该资产在B、C等其他银行进行抵押贷款（重入），待流程结束，攻击者已经完成闪电贷攻击并获利</p>
+<p>上图172行就是用户预先部署的合约，170-171两行有两个转账函数，它是“<strong>乐观转账</strong>”（即不校验用户合约的余额是否有足够的资产偿还借款就直接转账）。在最后部分，调用完用户的合约之后，才进行 <code>require</code> 支付金额，如果 <code>require</code> 声明失败，则整个交易回滚</p>
 </blockquote>
+<h3 id="AAVE-闪电贷"><a href="#AAVE-闪电贷" class="headerlink" title="AAVE 闪电贷"></a>AAVE 闪电贷</h3><p>AAVE 闪电贷功能是在 <code>LendingPool.sol</code> 合约中的 <code>Flashloan</code> 函数实现的</p>
+<img src="/2023/09/21/Blockchain-attacks/aave-code.png" class="" title="LedingPool source code">
+
+<blockquote>
+<p>通过调用 <code>Flashloan</code> 函数，传入借贷的金额、代币类型、借贷地址等参数，执行过程中将代币转给接收地址后会调用接收地址的 <code>executeOperation</code> 函数，移至用户的合约中继续执行</p>
+<p>用户的合约代码执行完毕，返回到 <code>LendingPool.sol</code> 合约中，该合约使用 <code>require</code> 语句检查用户合约返回的值，如果合约不能扣除其费用，则 <code>require</code> 声明失败，意味整个交易都将失败，也意味着“乐观转账”实际不会发生</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/Aave/flashloan-box">Truffle box</a> 可以使用Truffle模版快速创建自己的 flash-loan</p>
+<p><em>AAVE 和 Uniswap 的一些不同之处在于还款的流程。AAVE 闪电贷的还款，是在完成闪电贷过程后，由 AAVE 合约将借用的钱和手续费从借款地址中转回。而 Uniswap 的还款是由用户调用 <code>safeTransfer</code> 进行手动转账</em></p>
+<h3 id="闪电贷攻击"><a href="#闪电贷攻击" class="headerlink" title="闪电贷攻击"></a>闪电贷攻击</h3><p>闪电贷攻击的根本原因在于被攻击的项目的智能合约（尤其是价格预言机）存在漏洞，黑客利用了其中的漏洞完成攻击，而闪电贷只是提供了攻击的资金，降低了黑客攻击的成本</p>
+<h4 id="通过代币数量获取价格"><a href="#通过代币数量获取价格" class="headerlink" title="通过代币数量获取价格"></a>通过代币数量获取价格</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function get_price() view public returns(uint256) &#123;</span><br><span class="line">    uint256 price;</span><br><span class="line">    uint256 token_amount1 = IERC20(token1).balanceOf(address(pair));</span><br><span class="line">    uint256 token_amount2 = IERC20(token2).balanceOf(address(pair));</span><br><span class="line">    price = token_amount1*10**18 / token_amount2;</span><br><span class="line">    return price;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这段代码读取 <code>pair</code> 合约中的代币数量，将两者之商作为代币的价格</p>
+<p>如果没有闪电贷，两种代币的数量一定是一个减少另一个就增加。但是有了闪电贷之后，可能发生一个代币减少，而另一种代币没有增加的情况。如果借出了巨额闪电贷，这个差价将被拉大，形成巨大套利空间</p>
+</blockquote>
+<h4 id="发放奖励"><a href="#发放奖励" class="headerlink" title="发放奖励"></a>发放奖励</h4><h3 id="闪电贷攻击示例"><a href="#闪电贷攻击示例" class="headerlink" title="闪电贷攻击示例"></a>闪电贷攻击示例</h3><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/577306086">闪电贷攻击的基本示例</a></p>
 <h3 id="闪电贷创建者工具"><a href="#闪电贷创建者工具" class="headerlink" title="闪电贷创建者工具"></a>闪电贷创建者工具</h3><p>许多平台可以通过工具和API创建闪电贷</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://furucombo.app/">Furucomcombo.app</a></li>
