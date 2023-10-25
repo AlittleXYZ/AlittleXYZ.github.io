@@ -77,6 +77,12 @@ Unchecked Return Values For Low Level Calls（未严格判"><meta name="keywords
 <p><a target="_blank" rel="noopener" href="https://github.com/Aave/flashloan-box">Truffle box</a> 可以使用Truffle模版快速创建自己的 flash-loan</p>
 <p><em>AAVE 和 Uniswap 的一些不同之处在于还款的流程。AAVE 闪电贷的还款，是在完成闪电贷过程后，由 AAVE 合约将借用的钱和手续费从借款地址中转回。而 Uniswap 的还款是由用户调用 <code>safeTransfer</code> 进行手动转账</em></p>
 <h3 id="闪电贷攻击"><a href="#闪电贷攻击" class="headerlink" title="闪电贷攻击"></a>闪电贷攻击</h3><p>闪电贷攻击的根本原因在于被攻击的项目的智能合约（尤其是价格预言机）存在漏洞，黑客利用了其中的漏洞完成攻击，而闪电贷只是提供了攻击的资金，降低了黑客攻击的成本</p>
+<h4 id="攻击类型："><a href="#攻击类型：" class="headerlink" title="攻击类型："></a>攻击类型：</h4><ul>
+<li><strong>价格操控</strong>：攻击者可以使用闪电贷款通过人为地抬高或降低其价值来操纵加密货币的价格</li>
+<li><strong>套利</strong>：攻击者可以通过使用闪电贷款执行套利交易来利用去中心化交易所之间的价格差异。虽然这种攻击不一定是恶意的，但它仍然会给合法交易者造成损失</li>
+<li><strong>智能合约漏洞</strong>：攻击者可以使用闪贷来利用智能合约中的漏洞，例如重入错误或整数溢出错误。这可以让他们从协议中窃取资金或执行其他攻击</li>
+<li>…</li>
+</ul>
 <h4 id="通过代币数量获取价格"><a href="#通过代币数量获取价格" class="headerlink" title="通过代币数量获取价格"></a>通过代币数量获取价格</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function get_price() view public returns(uint256) &#123;</span><br><span class="line">    uint256 price;</span><br><span class="line">    uint256 token_amount1 = IERC20(token1).balanceOf(address(pair));</span><br><span class="line">    uint256 token_amount2 = IERC20(token2).balanceOf(address(pair));</span><br><span class="line">    price = token_amount1*10**18 / token_amount2;</span><br><span class="line">    return price;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <blockquote>
