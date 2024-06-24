@@ -1,0 +1,108 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="zhangMini"><title>DNS 在代理中的解析行为 · Mini's blog</title><meta name="description" content="DNS 在代理中的解析行为不使用代理情况下的 DNS 解析流程
+浏览器和操作系统都有DNS缓存机制
+
+
+浏览器从自身的 DNS 缓存机制寻找解析成果
+解析失败，则通过系统的 getaddrinfo 方法向操作系统寻找解析成果
+系统解析失败，则会根据系统设置的 DNS 地址向DNS服务器请求解析结果
+"><meta name="keywords" content="Security, life"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 6.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Mini's blog</a></h3><div class="description"><p>Nothing lasts forever.</p></div></div></div><ul class="social-links"></ul><div class="footer"><a target="_blank" href="/"><span>Theme by </span></a><a target="_blank" rel="noopener" href="https://www.caicai.me"> CaiCai </a><span>&</span><a target="_blank" rel="noopener" href="https://github.com/Ben02/hexo-theme-Anatole"> Ben</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo&#65281;</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/about">关于</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">tags</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="/images/favicon.png"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>DNS 在代理中的解析行为</a></h3></div><div class="post-content"><h1 id="DNS-在代理中的解析行为"><a href="#DNS-在代理中的解析行为" class="headerlink" title="DNS 在代理中的解析行为"></a>DNS 在代理中的解析行为</h1><h3 id="不使用代理情况下的-DNS-解析流程"><a href="#不使用代理情况下的-DNS-解析流程" class="headerlink" title="不使用代理情况下的 DNS 解析流程"></a>不使用代理情况下的 DNS 解析流程</h3><blockquote>
+<p>浏览器和操作系统都有DNS缓存机制</p>
+</blockquote>
+<ol>
+<li>浏览器从自身的 DNS 缓存机制寻找解析成果</li>
+<li>解析失败，则通过系统的 <strong>getaddrinfo</strong> 方法向操作系统寻找解析成果</li>
+<li>系统解析失败，则会根据系统设置的 DNS 地址向DNS服务器请求解析结果</li>
+</ol>
+<h3 id="设置代理并直连"><a href="#设置代理并直连" class="headerlink" title="设置代理并直连"></a>设置代理并直连</h3><p><em>场景</em>：浏览器设置了 SOCKS5 代理，但没有远端服务器存在，此时浏览器不再需要从自己的 DNS 缓存中寻找 IP </p>
+<ol>
+<li>浏览器直接将域名封装在 SOCKS5 协议中发往代理客户端</li>
+<li>代理客户端从 SOCKS 流量中抽出域名，并设法解析。此时，代理客户端即可以使用系统的 <strong>getaddrinfo</strong> 方法，也可以使用自己实现的DNS解析方法</li>
+</ol>
+<h3 id="设置代理并将流量转发到远端服务器"><a href="#设置代理并将流量转发到远端服务器" class="headerlink" title="设置代理并将流量转发到远端服务器"></a>设置代理并将流量转发到远端服务器</h3><p><em>场景</em>：在上一步的基础上，代理会使用<em>某种协议</em>与远端服务器通信</p>
+<ol>
+<li>浏览器直接将域名封装在 SOCKS5 协议中发往代理客户端</li>
+<li>代理客户端从 SOCKS 流量中抽出域名</li>
+<li>代理客户端使用<em>某种协议</em>将浏览器的 SOCKS 流量重组并发往远端服务器</li>
+<li>远端服务器使用相同的<em>某种协议</em>解析并获得域名</li>
+<li>远端服务器发起 DNS 解析请求解析域名（一般情况下使用系统的 DNS 解析方法）</li>
+</ol>
+<blockquote>
+<p>该场景下，浏览器和代理客户端都没有进行 DNS 解析，而是由远端服务器进行解析。</p>
+</blockquote>
+<h3 id="设置代理并使用-IP-规则进行分流"><a href="#设置代理并使用-IP-规则进行分流" class="headerlink" title="设置代理并使用 IP 规则进行分流"></a>设置代理并使用 IP 规则进行分流</h3><ol>
+<li>浏览器将带有域名的 HTTPS 请求封装在 SOCKS5 流量之中发往代理客户端</li>
+<li>代理客户端从 SOCKS 流量中抽出域名并进行 DNS 解析</li>
+<li>代理客户端根据域名解析结果和 IP 规则，决定解析的 IP 是否需要走代理</li>
+<li>如果不许要走代理，则执行 <strong><a href="#%E8%AE%BE%E7%BD%AE%E4%BB%A3%E7%90%86%E5%B9%B6%E7%9B%B4%E8%BF%9E">设置代理并直连</a></strong> 的剩余操作</li>
+<li>如果需要走代理，则进行 <strong><a href="#%E8%AE%BE%E7%BD%AE%E4%BB%A3%E7%90%86%E5%B9%B6%E5%B0%86%E6%B5%81%E9%87%8F%E8%BD%AC%E5%8F%91%E5%88%B0%E8%BF%9C%E7%AB%AF%E6%9C%8D%E5%8A%A1%E5%99%A8">设置代理并将流量转发到远端服务器</a></strong> 的剩余操作</li>
+</ol>
+<blockquote>
+<p>使⽤ IP 规则分流，前提⾸先你得有⼀个 IP 拿来⽐较，所以代理客户端必须先进⾏⼀次 DNS 解析</p>
+<p>只有在直连时，代理客户端才基本会复用这个 IP ；如果将流量交给远端服务器，那么远端服务器拿到的还是域名而不是 IP ，还需要再进行一次 DNS 解析。即 <strong>远端服务器连接的 IP 与代理客户端解析得到的 IP 毫⽆关系</strong></p>
+</blockquote>
+<h3 id="设置代理并使用域名规则进行分流"><a href="#设置代理并使用域名规则进行分流" class="headerlink" title="设置代理并使用域名规则进行分流"></a>设置代理并使用域名规则进行分流</h3><ol>
+<li>浏览器将带有域名的 HTTPS 请求封装在 SOCKS5 流量之中发往代理客户端</li>
+<li>代理客户端从 SOCKS 流量中抽出域名</li>
+<li>代理客户端将域名与规则列表开始比较，决定是否需要走代理</li>
+<li>如果不需要走代理，则执行 <strong><a href="#%E8%AE%BE%E7%BD%AE%E4%BB%A3%E7%90%86%E5%B9%B6%E7%9B%B4%E8%BF%9E">设置代理并直连</a></strong> 的剩余操作</li>
+<li>如果需要走代理，则进行 <strong><a href="#%E8%AE%BE%E7%BD%AE%E4%BB%A3%E7%90%86%E5%B9%B6%E5%B0%86%E6%B5%81%E9%87%8F%E8%BD%AC%E5%8F%91%E5%88%B0%E8%BF%9C%E7%AB%AF%E6%9C%8D%E5%8A%A1%E5%99%A8">设置代理并将流量转发到远端服务器</a></strong> 的剩余操作</li>
+</ol>
+<blockquote>
+<p>除非域名命中直连规则，否则代理客户端无需进行 DNS 解析</p>
+</blockquote>
+<h3 id="使用-redir-x2F-tun2socks-实现全局流量经过代理"><a href="#使用-redir-x2F-tun2socks-实现全局流量经过代理" class="headerlink" title="使用 redir&#x2F;tun2socks 实现全局流量经过代理"></a>使用 redir&#x2F;tun2socks 实现全局流量经过代理</h3><p><em>场景</em>：对于不⽀持设置 SOCKS&#x2F;HTTP(S) 代理的软件，Surge&#x2F;Clash 等软件⼀般选择通过 TUN&#x2F;TAP 或转发 redir 透明⽹关接管⽹络请求，从⽽拿到原始的 TCP&#x2F;IP 连接。⽤户不再主动为每个应⽤程序设置代理。此时应⽤程序是不会感知到代理客户端的存在，它们会正常的发起 TCP 连接。由于 TCP&#x2F;IP 协议，在拿到 DNS 解析结果之前，连接是不能建⽴的</p>
+<blockquote>
+<ul>
+<li><p><strong>redir</strong> ： 一个简单的 TCP 端口重定向工具。它可以将网络流量从一个端口重定向到另一个端口或 IP 地址</p>
+</li>
+<li><p><strong>tun2socks</strong> ：可以将 TUN 接口上的 IP 流量转发到 SOCKS5 代理服务器上</p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li><p><strong>TUN</strong> （网络隧道）接口：模拟一个三层（网络层）设备，即一个网络接口卡（NIC），它处理的是 IP 数据包。它的工作方式类似于一个虚拟的点对点设备，通常用于创建虚拟点对点连接</p>
+</li>
+<li><p><strong>TAP</strong> （网络 tap）接口：模拟一个二层（数据链路层）设备，即一个以太网设备，它处理的是以太网帧。TAP 接口工作方式类似于一个虚拟交换机端口，用于创建虚拟局域网</p>
+</li>
+</ul>
+</blockquote>
+<ol>
+<li>浏览器从自身的 DNS 缓存机制寻找解析成果</li>
+<li>解析失败，则通过系统的 <strong>getaddrinfo</strong> 方法向操作系统寻找解析成果。在系统的⽹络设置之中有设置上游 DNS 地址。代理客户端可能会修改系统设置中的 DNS 到 127.0.0.1 或者别的 IP ，也可能保留⽤户之前的设置。但不论如何，这个设置最终会使操作系统向代理客户端发起 DNS 请求</li>
+<li>操作系统发出的 DNS 解析请求经过代理客户端并最终被截获</li>
+<li>代理客户端可以将这个DNS解析请求原样发出去者使用⾃⼰实现的DNS解析方法，最终得到一个解析结果</li>
+<li>代理客户端返回解析结果，操作系统将这个解析结果返回给浏览器</li>
+<li>浏览器对这个解析结果的 IP 建⽴⼀个 TCP 连接并发送</li>
+<li>这个 TCP 连接被代理客户端截获。由于之前代理客户端进⾏的 DNS 解析请求这⼀动作，代理客户端可以找到这个 IP 的 原来的⽬标域名</li>
+<li>如果是⽀持 redir 的代理客户端，那么代理客户端就会直接将域名和 TCP 连接中的其它数<br>据封装成某种协议发给远端服务器；或者封装成 SOCKS5 后交给⽀持 SOCKS5 的代理<br>客户端</li>
+</ol>
+<blockquote>
+<p>在设置透明代理的情况下，浏览器无需将流量封装成SOCKS5，而是正常地发起 TCP 连接</p>
+<p>浏览器设置 SOCKS5 代理的话，可以不在代理客户端发起 DNS 解析请求就能将流量发送给远端服务器；⽽在透明代理模式下，不论是否需要 IP 规则分流都需要先进⾏⼀次 DNS 解析才能建⽴连接</p>
+</blockquote>
+<h4 id="TUN-x2F-TAP-接管DNS解析带来的问题"><a href="#TUN-x2F-TAP-接管DNS解析带来的问题" class="headerlink" title="TUN&#x2F;TAP 接管DNS解析带来的问题"></a>TUN&#x2F;TAP 接管DNS解析带来的问题</h4><ul>
+<li>DNS 污染：由于特殊的⽹络环境，通过你本机直接进⾏ DNS 解析得到的结果可能不可靠</li>
+<li>CDN 优化：如果要访问的⽬标⽹站使⽤了CDN，但却在本机进行DNS解析，则得到的IP可能并不是距离你的远端服务器最近的CDN节点</li>
+<li>如果软件决定将域名转发给远端代理服务器，那么本机解析的IP地址没有任何作用，造成了额外的一次解析时间</li>
+</ul>
+<h3 id="在-redir-x2F-tun2socks-中使用-Fake-IP"><a href="#在-redir-x2F-tun2socks-中使用-Fake-IP" class="headerlink" title="在 redir&#x2F;tun2socks 中使用 Fake IP"></a>在 redir&#x2F;tun2socks 中使用 <strong>Fake IP</strong></h3><p>使用 Fake IP，代理客户端可以省掉一次DNS解析。其原理是代理客户端先不执行查询动作，而是丢一个 <strong>Fake IP</strong> 给浏览器，让其可以立刻建立连接</p>
+<ol>
+<li>浏览器从自身的 DNS 缓存机制寻找解析成果</li>
+<li>解析失败，则通过系统的 <strong>getaddrinfo</strong> 方法向操作系统寻找解析成果</li>
+<li>在系统的⽹络设置之中有设置上游 DNS 地址。代理客户端可能会修改系统设置中的 DNS 到 127.0.0.1 或者别的 IP ，也可能保留⽤户之前的设置。不论如何，这个设置最终会使操作系统向代理客户端发起 DNS 请求</li>
+<li>操作系统发出的 DNS 解析请求会经过代理客户端并最终被截获</li>
+<li>代理客户端从解析请求中获得域名，从 Fake IP 池中选取⼀个 IP 建⽴映射</li>
+<li>代理客户端返回 Fake IP ，操作系统拿到了这个 Fake IP 并返回给浏览器</li>
+<li>浏览器以 Fake IP 为⽬标发起⽹络请求</li>
+<li>该 TCP 连接被代理客户端截获。代理客户端抽取出 Fake IP 并反查出这个 TCP 连接中对应的域名</li>
+<li>有了 TCP 连接和域名，代理客户端可以轻易地将其使⽤ SOSCKS5 或者 <em>某种协议</em> 进⾏封装</li>
+</ol>
+<h4 id="使用-Fake-IP-后本机仍会进行DNS解析的情形"><a href="#使用-Fake-IP-后本机仍会进行DNS解析的情形" class="headerlink" title="使用 Fake IP 后本机仍会进行DNS解析的情形"></a>使用 Fake IP 后本机仍会进行DNS解析的情形</h4><ul>
+<li>遇到了按照 IP 进⾏分流的规则时，代理客户端才需要进⾏⼀次解析拿到⼀个 IP ⽤于匹配分流</li>
+<li>目标域名命中直连策略，此时代理客户端需要得到真实的目标IP</li>
+</ul>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>[1]. <a target="_blank" rel="noopener" href="https://blog.skk.moe/post/what-happend-to-dns-in-proxy/">浅谈在代理环境中的 DNS 解析行为</a></p>
+<p>[2]. <a target="_blank" rel="noopener" href="https://blog.skk.moe/post/how-proxy-client-cause-netflix-unlock-to-fail/">简析代理客户端导致的远端服务器流媒体 DNS 解锁失效的可能原因</a></p>
+<p>[3]. <a target="_blank" rel="noopener" href="https://blog.skk.moe/post/i-have-my-unique-dns-setup/">我有特别的DNS配置和使用技巧</a></p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2024-06-24</span><i class="fa fa-tag"></i><a class="tag" href="/tags/dns/" title="dns">dns </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2024/06/24/SSH-in-agent/,Mini's blog,DNS 在代理中的解析行为,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="/2023/10/17/Flashloan-attack-event-analysis/" title="一次闪电贷攻击分析">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
