@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="zhangMini"><title>知识图谱学习及构建一个问答系统 - (上) · Mini's blog</title><meta name="description" content="该笔记为对 NebulaGraph 技术社区的《基于 Gemini 和 NebulaGraph 构建知识图谱问答系统》以及同门笔记的学习与复现
+其中，上半节主要为对知识图谱的入门学习理解
+知识图谱下图为知识图谱的技术体系概览：
+
+最底层为大量文本、结构化数据库、多媒体文件等数据来源
+通过知识抽取、知"><meta name="keywords" content="Security, life"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 6.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Mini's blog</a></h3><div class="description"><p>Nothing lasts forever.</p></div></div></div><ul class="social-links"></ul><div class="footer"><a target="_blank" href="/"><span>Theme by </span></a><a target="_blank" rel="noopener" href="https://www.caicai.me"> CaiCai </a><span>&</span><a target="_blank" rel="noopener" href="https://github.com/Ben02/hexo-theme-Anatole"> Ben</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo&#65281;</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/about">关于</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">tags</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="/images/favicon.png"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>知识图谱学习及构建一个问答系统 - (上)</a></h3></div><div class="post-content"><p>该笔记为对 NebulaGraph 技术社区的<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/1nFmt2TefHv4jCYMR32xGQ">《基于 Gemini 和 NebulaGraph 构建知识图谱问答系统》</a>以及同门笔记的学习与复现</p>
+<p>其中，上半节主要为对知识图谱的入门学习理解</p>
+<h1 id="知识图谱"><a href="#知识图谱" class="headerlink" title="知识图谱"></a>知识图谱</h1><p>下图为知识图谱的技术体系概览：</p>
+<ol>
+<li>最底层为<strong>大量文本</strong>、<strong>结构化数据库</strong>、<strong>多媒体文件</strong>等数据来源</li>
+<li>通过<strong>知识抽取</strong>、<strong>知识融合</strong>、<strong>知识众包</strong>等技术，获取需要的数据</li>
+<li>通过<strong>知识表示</strong>、<strong>知识推理</strong>、<strong>知识链接</strong>等技术，将知识规范有序的组织在一起并存储</li>
+<li>最终用于<strong>知识问答</strong>、<strong>语义搜索</strong>、<strong>可视化</strong>等方法。</li>
+</ol>
+<img src="/2024/06/28/knowledge-graph/KG-review.jpg" class="" title="Knowledge Graph Review">
+
+<h2 id="知识抽取"><a href="#知识抽取" class="headerlink" title="知识抽取"></a>知识抽取</h2><p>知识抽取技术指从非结构化、半结构化数据中提取出实体、关系、属性等知识元素的技术</p>
+<p>知识抽取技术主要包括<strong>实体识别</strong>、<strong>关系抽取</strong>、<strong>事件抽取</strong>、<strong>属性抽取</strong>等</p>
+<p>过程概述：</p>
+<ol>
+<li>从网络获取大量的非结构化文本数据，经过文本预处理得到干净的文本数据</li>
+<li>借助机器学习等技术对文本进行分词、词性标注、词法解析、依存分析等工作，此时词法及句法层次的分析结束 <em>(是否与命名实体识别有重叠)</em></li>
+<li>对文本进行 <strong>命名实体识别(Named Entity Recognition, NER)</strong> 和 <strong>实体链接(Entity Recognition, ER)</strong> 工作，为关系抽取和时间抽取做准备</li>
+<li>最终形成知识表示(Knowledge Representation)用的三元组、多元关系、模态知识等构成知识图谱</li>
+</ol>
+<blockquote>
+<p><strong>命名实体识别(NER)</strong> ：自然语言处理(NLP)中的一种技术，用于识别文本中具有特定意义的实体，并将其分类到预定义的类别中</p>
+<p><strong>实体链接(ER)</strong> ：一种自然语言处理技术，用于将文本中的命名实体与知识库中的相应实体条目进行关联。其主要目的是在<em>消解歧义</em>的同时，将文本中的实体与其在知识库中的表示相对应，从而实现更精准的信息理解和利用</p>
+</blockquote>
+<h2 id="知识融合"><a href="#知识融合" class="headerlink" title="知识融合"></a>知识融合</h2><p>由于知识图谱中的知识来源广泛，存在知识质量莠不齐、来自不同数据源的知识重复、知识间的关联不够明确等问题，所以必须要进行知识的融合</p>
+<p>知识融合是高层次的知识组织，使来自不同知识源的知识在同一框架规范下进行异构数据整合、消歧、加工、推理验证、更新等步骤，达到数据、信息、方法、经验以及人的思想的融合，形成高质量的知识库</p>
+<h2 id="知识众包"><a href="#知识众包" class="headerlink" title="知识众包"></a>知识众包</h2><h2 id="知识表示"><a href="#知识表示" class="headerlink" title="知识表示"></a>知识表示</h2><p>知识表示旨在通过形式化的方法来表示和存储知识，使计算机能够理解和推理。知识表示涉及如何将真实世界的知识结构化、符号化和形式化，便于计算机处理和利用</p>
+<p>知识表示形成的综合向量对知识库的构建、推理、融合以及应用均具有重要的意义</p>
+<h3 id="资源描述框架图-Resource-Description-Framework-RDF"><a href="#资源描述框架图-Resource-Description-Framework-RDF" class="headerlink" title="资源描述框架图(Resource Description Framework, RDF)"></a>资源描述框架图(Resource Description Framework, RDF)</h3><p>资源描述框架，用于描述实体&#x2F;资源的标准数据模型，该框架通过三元组（主体、谓语、客体）来表示知识</p>
+<p>在这个模型中，每个元素都通过统一资源标识符(URI)被赋予一个独一无二的标识符。这种机制确保主体、谓词和客体的机器可读性。此外，RDF 三元组存储采用了一种名为 SPARQL 的标准化查询语言，该语言支持从存储中检索数据。得益于数据表示和查询的标准化，RDF 三元组存储能够与其他遵循 RDF 框架的知识图谱实现互操作</p>
+<img src="/2024/06/28/knowledge-graph/RDF.jpg" class="" title="RDF">
+
+<h4 id="RDF-的优点："><a href="#RDF-的优点：" class="headerlink" title="RDF 的优点："></a>RDF 的优点：</h4><ul>
+<li>互操作性：RDF 是 W3C 的标准，意味着不同的系统可以理解并交换存储在 RDF 图中的数据。这使得它非常适合跨平台和应用程序之间的数据共享</li>
+<li>标准化：由于其标准化的格式，RDF 图支持标准查询语言 <strong>SPARQL</strong> 来探索和分析图中存储的数据</li>
+<li>推理与推导：RDF 图能够利用本体来进行数据推理。这使系统能够推导出图中没有直接表述的新信息</li>
+<li>灵活：RDF 图能够表述多种数据类型和关系，适合模拟复杂的领域和整合不同来源的数据</li>
+</ul>
+<h4 id="RDF-的缺点："><a href="#RDF-的缺点：" class="headerlink" title="RDF 的缺点："></a>RDF 的缺点：</h4><ul>
+<li>深度搜索复杂：在大型 RDF 图中进行深度搜索的计算成本可能很高</li>
+<li>结构严格：RDF 数据以三元组的形式存储，这种结构可能不如其他图模型那样灵活，后者允许对实体或关系本身添加属性</li>
+<li>学习曲线陡峭：理解和使用 RDF 需要良好地掌握其基本概念及 <strong>SPARQL</strong> 查询语言</li>
+</ul>
+<blockquote>
+<p>SPARQL 是 RDF 的查询语言，它基于 RDF 数据模型的图数据库支持</p>
+</blockquote>
+<h3 id="资源描述框架架构-RDF-Schema-RDFS"><a href="#资源描述框架架构-RDF-Schema-RDFS" class="headerlink" title="资源描述框架架构(RDF Schema, RDFS)"></a>资源描述框架架构(RDF Schema, RDFS)</h3><p> RDFS 是 W3C 推荐的用于描述 RDF 数据模型的扩展语言。RDFS 为 RDF 提供了一个基本的词汇表，用于描述资源及其关系。它扩展了 RDF 的表达能力，使得用户可以定义自己的类和属性以及它们之间的关系，从而构建更复杂和语义丰富的知识表示</p>
+<p>RDFS在RDF的基础上定义了一些固定的关键词如：Class，subClassOf，type，Property，subPropertyOf，Domain，Range 并且多了 Schema 层。</p>
+<p><em>如下所示，下面这个三元组表示用户自定义的元数据 Author 是 Dublin Core 的元数据 Creator 的子类</em></p>
+<img src="/2024/06/28/knowledge-graph/RDFS.jpg" class="" title="RDFS">
+
+<p>RDFS 支持推理功能， <em>如下所示：</em></p>
+<img src="/2024/06/28/knowledge-graph/RDFS-inference.jpg" class="">
+
+
+<h3 id="OWL-Web-Ontology-Language"><a href="#OWL-Web-Ontology-Language" class="headerlink" title="OWL(Web Ontology Language)"></a>OWL(Web Ontology Language)</h3><p>Web Ontology Language(OWL)是由 W3C 推荐的用于创建和共享本体的语言。OWL 在 RDF 的基础上扩充了 Schema 层，使它提供了强大的知识表示和推理能力</p>
+<h3 id="带标签的属性图-LPG"><a href="#带标签的属性图-LPG" class="headerlink" title="带标签的属性图(LPG)"></a>带标签的属性图(LPG)</h3><p>带标签的属性图(Labelled Property Graphs, LPG)是一种用于表现具有相互连接的服务及其关系的特殊图数据库模型</p>
+<ul>
+<li><strong>节点</strong> ：每个节点都具有独特的描述，并可被赋予一个或多个标签以表明其类型或大小（例如，“人物”、“产品”）</li>
+<li><strong>属性</strong> ：节点可能拥有键值对，用以存储关于该实体的额外信息。这些属性允许对图中的元素进行基本描述</li>
+<li><strong>边</strong> ：表示节点之间的联系，并展示实体间的关系。边与节点类似，可以用多种方式标记（例如，“认识”、“购买”），同时也可以拥有自己的属性</li>
+</ul>
+<h4 id="LPG-特性"><a href="#LPG-特性" class="headerlink" title="LPG 特性"></a>LPG 特性</h4><ul>
+<li>丰富的数据结构：节点和边都能拥有属性，与其他模型如 RDF 相比，允许更密集和信息量更大的数据表现</li>
+<li>高效的存储与查询：LPG 结构通常能带来高效的存储方式和更快速的图内连接遍历，便于进行查询</li>
+<li>灵活：LPG 由于没有预定义的模式，具备很高的灵活性，允许模拟多种数据关系</li>
+</ul>
+<h4 id="LPG-对比-RDF"><a href="#LPG-对比-RDF" class="headerlink" title="LPG 对比 RDF"></a>LPG 对比 RDF</h4><img src="/2024/06/28/knowledge-graph/RDFvsLPGs.jpg" class="" title="RDF vs LPGs">
+
+
+
+<h2 id="知识推理"><a href="#知识推理" class="headerlink" title="知识推理"></a>知识推理</h2><p>知识推理则是在已有的知识库基础上进一步挖掘隐含的知识，从而丰富、扩展知识库</p>
+<p>在推理的过程中，往往需要关联规则的支持。由于实体、实体属性以及关系的多样性，人们很难穷举所有的推理规则，一些较为复杂的推理规则往往是手动总结的。对于推理规则的挖掘，主要还是依赖于实体以及关系间的丰富情况。知识推理的对象可以是实体、实体的属性、实体间的关系、本体库中概念的层次结构等</p>
+<p>知识推理方法主要分为：基于逻辑的推理与基于图的推理两种类别</p>
+<ul>
+<li>按照解决方法分类可分为：基于描述逻辑的推理、基于规则挖掘的推理、基于概率逻辑的推理、基于表示学习与神经网络的推理</li>
+<li>按照推理类型分类可分为：缺省推理、连续变化推理、空间推理、因果关系推理等</li>
+</ul>
+<h2 id="知识问答"><a href="#知识问答" class="headerlink" title="知识问答"></a>知识问答</h2><p>知识问答(Knowledge-Based Question Answering, KBQA)是基于知识库的问题回答，其目标是从知识库中找到与问题相关的答案,它将构成下一代搜索引擎的基本形态</p>
+<p><em>如询问姚明的老婆多大实现流程可以如下所示：</em></p>
+<img src="/2024/06/28/knowledge-graph/KBQA.jpg" class="" title="KBQA">
+
+
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>[1]. <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/1nFmt2TefHv4jCYMR32xGQ">基于 Gemini 和 NebulaGraph 构建知识图谱问答系统</a></p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2024-06-28</span><i class="fa fa-tag"></i><a class="tag" href="/tags/llm/" title="llm">llm </a><a class="tag" href="/tags/Knowledge-Graph/" title="Knowledge Graph">Knowledge Graph </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2024/06/28/knowledge-graph/,Mini's blog,知识图谱学习及构建一个问答系统 - (上),;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="/2024/06/24/SSH-in-agent/" title="DNS 在代理中的解析行为">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
