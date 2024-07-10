@@ -37,7 +37,9 @@ include_once()
 
 require()
 req...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2022-10-08</span><i class="fa fa-tag"></i><a class="tag" href="/tags/web/" title="web">web </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2022/10/06/Command-Execution/">命令执行</a></h3></div><div class="post-content"><p>命令执行常用绕过方法过滤了指定字符串
-system(&quot;cat fl*g.php&quot;) : 使用通配符
-system(&quot;tac f???????&quot;) : 使用通配符
-system(&quot;tac fl*g.php&quot;) : 过滤 cat ,倒序输出文本
-system...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2022-10-06</span><i class="fa fa-tag"></i><a class="tag" href="/tags/web/" title="web">web </a></div></div></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/page/2/">上一页</a></li></ul></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
+cat fl*g.php&quot; : 使用通配符
+tac f???????&quot; : 使用通配符
+nl fl*g.php : 过滤 cat 、 tac 命令
+cp fl*g.php 1.txt | cat 1.txt : 间接访问 1.txt
+
+此外，当 cat 等...</p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2022-10-06</span><i class="fa fa-tag"></i><a class="tag" href="/tags/web/" title="web">web </a></div></div></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/page/2/">上一页</a></li></ul></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
