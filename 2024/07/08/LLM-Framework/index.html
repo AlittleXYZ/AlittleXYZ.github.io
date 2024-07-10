@@ -1,0 +1,91 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="zhangMini"><title>LLM 框架 · Mini's blog</title><meta name="description" content="LlamaIndex使用场景LlamaIndex 是一个上下文增强 LLM 应用的数据框架，帮助用户构建 LLM 应用程序，它包括：
+
+数据连接器(data connectors) ：用于引入现有数据源和数据格式，包括 APIs、PDFs、Docs、SQL等。LlamaHub 提供了数百种连接器
+数"><meta name="keywords" content="Security, life"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 6.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Mini's blog</a></h3><div class="description"><p>Nothing lasts forever.</p></div></div></div><ul class="social-links"></ul><div class="footer"><a target="_blank" href="/"><span>Theme by </span></a><a target="_blank" rel="noopener" href="https://www.caicai.me"> CaiCai </a><span>&</span><a target="_blank" rel="noopener" href="https://github.com/Ben02/hexo-theme-Anatole"> Ben</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo&#65281;</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/about">关于</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">tags</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="/images/favicon.png"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>LLM 框架</a></h3></div><div class="post-content"><h2 id="LlamaIndex"><a href="#LlamaIndex" class="headerlink" title="LlamaIndex"></a>LlamaIndex</h2><h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><p>LlamaIndex 是一个上下文增强 LLM 应用的数据框架，帮助用户构建 LLM 应用程序，它包括：</p>
+<ul>
+<li><strong>数据连接器(data connectors)</strong> ：用于引入现有数据源和数据格式，包括 APIs、PDFs、Docs、SQL等。LlamaHub 提供了数百种连接器</li>
+<li><strong>数据索引(Data indexes)</strong> ：以中间表示形式构建数据，以便与 LLMs 一起使用</li>
+<li><strong>引擎(Engines)</strong> ：提供数据的自然语言访问接口<ul>
+<li><strong>查询引擎(Query Engines)</strong> ：用于问答</li>
+<li><strong>聊天引擎(Chat Engines)</strong> ：与数据进行多消息来回交互对话</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>LLamaIndex 还支持与外部应用程序框架集成，如 Flask、LangChain、Docker、ChatGPT 等</p>
+</blockquote>
+<h3 id="阶段步骤"><a href="#阶段步骤" class="headerlink" title="阶段步骤"></a>阶段步骤</h3><h4 id="载入阶段"><a href="#载入阶段" class="headerlink" title="载入阶段"></a>载入阶段</h4><ul>
+<li><strong>Nodes&#x2F;Documents</strong> ：文档(Document) 是围绕任何数据源的容器，节点(Node) 是 LlamaIndex 中数据的原子数据单元，表示为源文档的块(chunk)。Nodes 具有元数据，这些元数据与它们所在的文档以及与其他节点相关联</li>
+<li><strong>Connectors</strong> ：数据连接器通常称为读取器(Reader)，它将来自不同数据源和数据格式的数据导入 Documents 和 Nodes 中</li>
+</ul>
+<h4 id="索引阶段"><a href="#索引阶段" class="headerlink" title="索引阶段"></a>索引阶段</h4><ul>
+<li><strong>Indexes</strong> ：加载数据后，LlamaIndex 将数据索引到易于检索的结构中，这个过程通常涉及生成 <strong>向量嵌入(vector embeddings)</strong> ，这些向量嵌入储存在称为 <strong>向量存储(vector store)</strong> 的数据库中</li>
+<li><strong>Embeddings</strong> ：在筛选数据相关性时，LlamaIndex 会将查询转换为嵌入，并在向量存储中找到与查询嵌入最相似的数据</li>
+</ul>
+<h4 id="查询阶段"><a href="#查询阶段" class="headerlink" title="查询阶段"></a>查询阶段</h4><ul>
+<li><strong>Retrievers</strong> ：检索器负责在给出查询时，如何有效地从索引中检索相关上下文，检索策略对所获取数据的相关性和执行效率至关重要</li>
+<li><strong>Routers</strong> ：路由器用于确定使用哪个检索器从知识库中获取相关上下文。具体来说，<strong>RouterRetriever</strong> 类负责选择一个或多个候选检索器来执行查询，检索器的选择根据候选元数据和查询来匹配最佳的选项</li>
+<li><strong>Node Postprocessors</strong> ：节点后处理器接收一组检索到的节点，并对它们转换、过滤或重新排序逻辑</li>
+<li><strong>Response Synthesizers</strong> ：响应合成器使用用户查询和获取的一组文本片段，从LLM生成回应</li>
+</ul>
+<h3 id="Python构建方法"><a href="#Python构建方法" class="headerlink" title="Python构建方法"></a>Python构建方法</h3><p>使用LlamaIndex进行构建通常涉及使用 <strong>LlamaIndex cor</strong> 和一系列的 <strong>插件</strong> 。Python 中有两种方法构建 LlamaIndex ：</p>
+<ul>
+<li><code>llama-index</code> : 一个包含 core LlamaIndex 和一系列集成的入门级Python包</li>
+<li><code>llama-index-core</code> : 在 <strong><a target="_blank" rel="noopener" href="https://llamahub.ai/">Llamahub</a></strong> 上安装 core  LlamaIndex 以及所需的集成包。LlamaHub 有超过300个与核心无缝工作的 LlamaIndex 集成包，允许自由定义 LLM 、嵌入和向量存储</li>
+</ul>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>[1]. <a target="_blank" rel="noopener" href="https://pypi.org/project/llama-index/">llama-index - PyPI</a></p>
+<p>[2]. <a target="_blank" rel="noopener" href="https://docs.llamaindex.ai/en/stable/">LlamaIndex</a></p>
+<p>[3]. <a target="_blank" rel="noopener" href="https://llamahub.ai/">LlamaHub</a></p>
+<h2 id="Langchain"><a href="#Langchain" class="headerlink" title="Langchain"></a>Langchain</h2><p>LangChain 是一个基于大型语言模型(LLM)开发应用程序的框架，它主要有两个能力：</p>
+<ol>
+<li>允许将 LLM 模型与外部数据源进行连接</li>
+<li>允许与 LLM 模型进行交互</li>
+</ol>
+<h3 id="框架组成"><a href="#框架组成" class="headerlink" title="框架组成"></a>框架组成</h3><ul>
+<li><code>langchain-core</code> : 核心库</li>
+<li><code>langchain-community</code> : 第三方集成，如 <code>langchain-openai</code>、<code>langchain-anthropic</code> 等</li>
+<li><code>langchain</code> : 构成应用程序认知架构的链(Chains)、代理(agents)和检索策略(retrieval strategies)<br></li>
+<li><a target="_blank" rel="noopener" href="https://langchain-ai.github.io/langgraph/"><code>LangGraph</code></a> : 集成 LangChain 中的建模图方法，非必需</li>
+<li><a target="_blank" rel="noopener" href="https://python.langchain.com/v0.2/docs/langserve/"><code>LangServe</code></a> : 将 LangCahin 链部署为 REST API</li>
+<li><a target="_blank" rel="noopener" href="https://docs.smith.langchain.com/"><code>LangSmith</code></a> : 开发人员平台，用于调试、测试、评估、监控 LLM 应用程序</li>
+</ul>
+<h3 id="概念构成"><a href="#概念构成" class="headerlink" title="概念构成"></a>概念构成</h3><h4 id="LLM-amp-ChatModel"><a href="#LLM-amp-ChatModel" class="headerlink" title="LLM &amp; ChatModel"></a>LLM &amp; ChatModel</h4><p>在 LangChain 中，ChatModel 和 LLM）都是用于处理自然语言输入的模型，但它们之间存在一些区别</p>
+<ol>
+<li>ChatModel 更擅长处理聊天对话场景，而 LLM 则具有更广泛的知识和语言理解能力</li>
+<li>LLM 能够处理更长的文本序列，并具有更高的语言理解能力</li>
+<li>ChatModel 适用于聊天机器人、对话系统等场景，而 LLM 可以应用于自然语言生成、文本分类、机器翻译等多个场景</li>
+</ol>
+<blockquote>
+<p>ChatModel 是一种特定于聊天对话的模型，而 LLM 是一种更通用的大型语言模型</p>
+</blockquote>
+<h4 id="Loader-加载器"><a href="#Loader-加载器" class="headerlink" title="Loader 加载器"></a>Loader 加载器</h4><p>从指定源进行加载数据，如：</p>
+<ul>
+<li><code>DirectoryLoader</code> : 文件夹</li>
+<li><code>CSVLoader</code> : CSV 文件</li>
+<li><code>EverNoteLoader</code> : EverNote 笔记</li>
+<li><code>UnstructuredHTMLLoader</code> : 任意网页</li>
+<li><code>PyPDFLoader</code> : PDF 文件</li>
+<li><code>YoutubeLoader</code> : Youtube</li>
+</ul>
+<h4 id="Document-文档"><a href="#Document-文档" class="headerlink" title="Document 文档"></a>Document 文档</h4><p>当使用loader加载器读取到数据源后，数据源需要转换成 Document 对象后，后续才能进行使用</p>
+<h4 id="Vectorstores-向量数据库"><a href="#Vectorstores-向量数据库" class="headerlink" title="Vectorstores 向量数据库"></a>Vectorstores 向量数据库</h4><p>数据相关性搜索是通过向量运算的，所以需要将加载进来的数据 Document 进行向量化，才能进行向量运算搜索。转换成向量也很简单，只需要把数据存储到对应的向量数据库中即可完成向量的转换</p>
+<p>LangChain Doc <a target="_blank" rel="noopener" href="https://python.langchain.com/v0.1/docs/modules/data_connection/vectorstores/">Vector Stores</a> 部分介绍了四种向量存储选项：</p>
+<ul>
+<li>Chroma</li>
+<li>Pinecone</li>
+<li>FAISS</li>
+<li>Lance</li>
+</ul>
+<h4 id="Chain-链"><a href="#Chain-链" class="headerlink" title="Chain 链"></a>Chain 链</h4><p>我们可以把 Chain 理解为任务。一个 Chain 就是一个任务，当然也可以像链条一样，一个一个的执行多个链</p>
+<h4 id="Agent-代理"><a href="#Agent-代理" class="headerlink" title="Agent 代理"></a>Agent 代理</h4><p>它可以动态的帮助选择和调用 chain 或者已有的工具</p>
+<h3 id="LangChain-表达式-LCEL"><a href="#LangChain-表达式-LCEL" class="headerlink" title="LangChain 表达式(LCEL)"></a>LangChain 表达式(LCEL)</h3><p>LangChain 表达式语言(LCEL)，是一种声明式的方式，可以轻松地将链条组合在一起</p>
+<p>如下代码所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">prompt = ChatPromptTemplate.from_template(<span class="string">&quot;tell me a short joke about &#123;topic&#125;&quot;</span>)</span><br><span class="line">model = ChatOpenAI(model=<span class="string">&quot;gpt-4&quot;</span>)</span><br><span class="line">output_parser = StrOutputParser()</span><br><span class="line"></span><br><span class="line">chain = prompt | model | output_parser</span><br><span class="line"></span><br><span class="line">chain.invoke(&#123;<span class="string">&quot;topic&quot;</span>: <span class="string">&quot;ice cream&quot;</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>其中</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chain = prompt | model | output_parser</span><br></pre></td></tr></table></figure>
+<p>这行代码使用 LCEL 将不同的表达式组合在一起，形成一个单一的链条， <code>|</code> 类似于 unix 管道符，它将不同的组件链接在一起，将一个组件的输出作为下一个组件的输入。</p>
+<p>在上例链条中，用户输入被传递给提示模板，然后提示模板的输出被传递给模型，然后模型的输出被传递给输出解析器。</p>
+<h3 id="参考-1"><a href="#参考-1" class="headerlink" title="参考"></a>参考</h3><p>[1]. <a target="_blank" rel="noopener" href="https://python.langchain.com.cn/docs/">LangChain 快速入门</a></p>
+<p>[2]. <a target="_blank" rel="noopener" href="https://python.langchain.com/v0.2/docs/introduction/">LangChain v0.2</a></p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2024-07-08</span><i class="fa fa-tag"></i><a class="tag" href="/tags/LLM/" title="LLM">LLM </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2024/07/08/LLM-Framework/,Mini's blog,LLM 框架,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="/2024/06/29/knowledge-graph-2/" title="知识图谱学习及构建一个问答系统 - (下)">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
