@@ -67,8 +67,11 @@
 <li><code>PyPDFLoader</code> : PDF 文件</li>
 <li><code>YoutubeLoader</code> : Youtube</li>
 </ul>
+<blockquote>
+<p>具体见 <a target="_blank" rel="noopener" href="https://python.langchain.com/v0.1/docs/modules/data_connection/document_loaders/">Document loaders</a></p>
+</blockquote>
 <h4 id="Document-文档"><a href="#Document-文档" class="headerlink" title="Document 文档"></a>Document 文档</h4><p>当使用loader加载器读取到数据源后，数据源需要转换成 Document 对象后，后续才能进行使用</p>
-<h4 id="Vectorstores-向量数据库"><a href="#Vectorstores-向量数据库" class="headerlink" title="Vectorstores 向量数据库"></a>Vectorstores 向量数据库</h4><p>数据相关性搜索是通过向量运算的，所以需要将加载进来的数据 Document 进行向量化，才能进行向量运算搜索。转换成向量也很简单，只需要把数据存储到对应的向量数据库中即可完成向量的转换</p>
+<h4 id="Vectorstores-向量存储"><a href="#Vectorstores-向量存储" class="headerlink" title="Vectorstores 向量存储"></a>Vectorstores 向量存储</h4><p>数据相关性搜索是通过向量运算的，所以需要将加载进来的数据 Document 进行向量化，才能进行向量运算搜索。转换成向量也很简单，只需要把数据存储到对应的向量数据库中即可完成向量的转换</p>
 <p>LangChain Doc <a target="_blank" rel="noopener" href="https://python.langchain.com/v0.1/docs/modules/data_connection/vectorstores/">Vector Stores</a> 部分介绍了四种向量存储选项：</p>
 <ul>
 <li>Chroma</li>
@@ -76,6 +79,17 @@
 <li>FAISS</li>
 <li>Lance</li>
 </ul>
+<blockquote>
+<p>向量存储无法直接集成到 LangChain 表达式语言链中</p>
+</blockquote>
+<blockquote>
+<p>ectorstores 实现了一个 <code>as_retriever</code> ，这将生成一个 <code>Retriever</code> 对象，可以集成到 LangChain 表达式语言链中</p>
+</blockquote>
+<h4 id="Retrievers-检索器"><a href="#Retrievers-检索器" class="headerlink" title="Retrievers 检索器"></a>Retrievers 检索器</h4><p>检索器用于返回给定非结构化查询的文档，它比向量存储更通用</p>
+<p>检索器不需要能够存储文档，只需返回（或检索）它们，向量存储可以作为检索器的主干</p>
+<blockquote>
+<p>Retrievers 可以集成到 LCEL 链中，具体见 <a target="_blank" rel="noopener" href="https://python.langchain.com/v0.2/docs/tutorials/retrievers/">Vector stores and retrievers</a></p>
+</blockquote>
 <h4 id="Chain-链"><a href="#Chain-链" class="headerlink" title="Chain 链"></a>Chain 链</h4><p>我们可以把 Chain 理解为任务。一个 Chain 就是一个任务，当然也可以像链条一样，一个一个的执行多个链</p>
 <h4 id="Agent-代理"><a href="#Agent-代理" class="headerlink" title="Agent 代理"></a>Agent 代理</h4><p>它可以动态的帮助选择和调用 chain 或者已有的工具</p>
 <h3 id="LangChain-表达式-LCEL"><a href="#LangChain-表达式-LCEL" class="headerlink" title="LangChain 表达式(LCEL)"></a>LangChain 表达式(LCEL)</h3><p>LangChain 表达式语言(LCEL)，是一种声明式的方式，可以轻松地将链条组合在一起</p>
