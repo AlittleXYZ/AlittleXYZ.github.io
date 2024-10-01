@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="zhangMini"><title>python 逆向 · Mini's blog</title><meta name="description" content="pyinstxtractor 解包 exe 文件1python pyinstxtractor.py pyexe.exe
+
+pyc 文件反编译pyc 文件格式可以通过 010Editor 打开 pyc 文件查看，pyc 文件的格式为：
+
+4 个字节的 magic number （小端形式）
+12个字节"><meta name="keywords" content="Security, life"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 6.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Mini's blog</a></h3><div class="description"><p>Nothing lasts forever.</p></div></div></div><ul class="social-links"></ul><div class="footer"><a target="_blank" href="/"><span>Theme by </span></a><a target="_blank" rel="noopener" href="https://www.caicai.me"> CaiCai </a><span>&</span><a target="_blank" rel="noopener" href="https://github.com/Ben02/hexo-theme-Anatole"> Ben</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo&#65281;</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/about">关于</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">tags</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="/images/favicon.png"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>python 逆向</a></h3></div><div class="post-content"><h2 id="pyinstxtractor-解包-exe-文件"><a href="#pyinstxtractor-解包-exe-文件" class="headerlink" title="pyinstxtractor 解包 exe 文件"></a>pyinstxtractor 解包 exe 文件</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python pyinstxtractor.py pyexe.exe</span><br></pre></td></tr></table></figure>
+
+<h2 id="pyc-文件反编译"><a href="#pyc-文件反编译" class="headerlink" title="pyc 文件反编译"></a>pyc 文件反编译</h2><h3 id="pyc-文件格式"><a href="#pyc-文件格式" class="headerlink" title="pyc 文件格式"></a>pyc 文件格式</h3><p>可以通过 010Editor 打开 pyc 文件查看，pyc 文件的格式为：</p>
+<ul>
+<li>4 个字节的 magic number （小端形式）</li>
+<li>12个字节的源代码文件信息（不同版本的 Python 包含的长度和信息都不一样）</li>
+<li>序列化之后的 PyCodeObject</li>
+</ul>
+<h4 id="Magic-Number"><a href="#Magic-Number" class="headerlink" title="Magic Number"></a>Magic Number</h4><p>pyc 文件头有一个 Magic Number，不同版本的 Python 生成的 pyc 文件的 magic number 都不相同，具体的可以见下表</p>
+<p>pyc 文件的前两个字节以<strong>小端</strong>的形式写入，然后加上 \r\n(0D 0A) 形成了四个字节的 pyc 文件的 magic number</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">MAGIC_1_0 = 0x00999902</span><br><span class="line">MAGIC_1_1 = 0x00999903 </span><br><span class="line">MAGIC_1_2 = 0x00999903 </span><br><span class="line">MAGIC_1_3 = 0x0A0D2E89</span><br><span class="line">MAGIC_1_4 = 0x0A0D1704</span><br><span class="line">MAGIC_1_5 = 0x0A0D4E99</span><br><span class="line">MAGIC_1_6 = 0x0A0DC4FC</span><br><span class="line"></span><br><span class="line">MAGIC_2_0 = 0x0A0DC687</span><br><span class="line">MAGIC_2_1 = 0x0A0DEB2A</span><br><span class="line">MAGIC_2_2 = 0x0A0DED2D</span><br><span class="line">MAGIC_2_3 = 0x0A0DF23B</span><br><span class="line">MAGIC_2_4 = 0x0A0DF26D</span><br><span class="line">MAGIC_2_5 = 0x0A0DF2B3</span><br><span class="line">MAGIC_2_6 = 0x0A0DF2D1</span><br><span class="line">MAGIC_2_7 = 0x0A0DF303</span><br><span class="line"></span><br><span class="line">MAGIC_3_0 = 0x0A0D0C3A</span><br><span class="line">MAGIC_3_1 = 0x0A0D0C4E</span><br><span class="line">MAGIC_3_2 = 0x0A0D0C6C</span><br><span class="line">MAGIC_3_3 = 0x0A0D0C9E</span><br><span class="line">MAGIC_3_4 = 0x0A0D0CEE</span><br><span class="line">MAGIC_3_5 = 0x0A0D0D16</span><br><span class="line">MAGIC_3_5_3 = 0x0A0D0D17</span><br><span class="line">MAGIC_3_6 = 0x0A0D0D33</span><br><span class="line">MAGIC_3_7 = 0x0A0D0D42</span><br><span class="line">MAGIC_3_8 = 0x0A0D0D55</span><br><span class="line">MAGIC_3_9 = 0x0A0D0D61</span><br><span class="line">MAGIC_3_11 = 0x0A0D0DA7</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在部分题目中，使用 pyinstaller 导出的 pyc 文件会将文件的 Magic Number 和时间戳信息抹去，反编译时工具会报错，于是需要手动添加 Magic Number 与时间戳，时间戳可以随便添加（全 0 也可以），但是每个版本 Python 编译的 pyc 文件 Magic Number 都不同，需要我们手动查找与填充</p>
+</blockquote>
+<h4 id="源代码文件信息"><a href="#源代码文件信息" class="headerlink" title="源代码文件信息"></a>源代码文件信息</h4><p>源代码文件信息在 Python 不同的版本之后差别较大</p>
+<ul>
+<li><p>在Python2的时候，这部分只有 4 个字节，为源代码文件的修改时间的 Unix timestamp（精确到秒）以小端法写入，如： <code>(1586087865).to_bytes(4, &#39;little&#39;).hex() -&gt; b9c7 895e</code></p>
+</li>
+<li><p>在 Python 3.5 之前的版本已经找不到了</p>
+</li>
+<li><p>Python 3.5 和 3.6 相对于 Python 2，源代码文件信息这部分，在时间后面增加了4个字节的源代码文件的大小，单位字节，以小端法写入。如源码文件大小为 57 个字节，那么文件信息部分就写入 5700 0000。加上前面的修改时间，就是 b9c7 895e 5700 0000</p>
+</li>
+<li><p>从 Python3.7 开始支持 hash-based pyc 文件，Python 不仅支持校验 timestrap 来判断文件是否修改过了，也支持校验 hash 值。Python 为了支持 hash 校验又使源代码文件信息这部分增加了4个字节，变为一共12个字节</p>
+<ul>
+<li>hash 校验默认是不启用，不启用时前4个字节为 0000 0000，后 8 个字节为 3.6 和 3.7 版本一样的源码文件的修改时间和大小；当启用时前 4 个字节变为 0100 0000 或者 0300 0000，后 8 个字节为源码文件的 hash 值</li>
+</ul>
+</li>
+</ul>
+<h3 id="反编译工具"><a href="#反编译工具" class="headerlink" title="反编译工具"></a>反编译工具</h3><ul>
+<li>uncompyle6</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uncompyle6 input.pyc &gt; output.py</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>pycdc</li>
+</ul>
+<blockquote>
+<p>工具在编译好的 build 文件夹里</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">反编译为 py 文件</span></span><br><span class="line">./pycdc xxx.pyc &gt; output.py</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">反编译为 python 字节码</span></span><br><span class="line">./pycdas xxx.pyc &gt; output.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>有时候，反编译失败的时候，需要得到 python 字节码，然后手动分析</p>
+</blockquote>
+<ul>
+<li>在线网站</li>
+</ul>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2024-09-17</span><i class="fa fa-tag"></i><a class="tag" href="/tags/re/" title="re">re </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2024/09/17/python-re/,Mini's blog,python 逆向,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2024/09/17/RE-Cryptographic-Algorithm/" title="RE 常见加密算法">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2024/09/10/EasySQL/" title="SQL 注入 WP">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>

