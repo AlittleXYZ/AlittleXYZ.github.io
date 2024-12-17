@@ -42,8 +42,9 @@
 
 <p>PHP 中序列化后的数据并没有像 Python 一样包含函数 <code>__construct</code> 和 <code>print</code> 的信息，而仅仅是<strong>类名</strong>和<strong>成员变量</strong>的信息。因此，在 <code>unserialize</code> 函数的参数可控的情况下，还需要代码中包含魔术方法才能利用反序列化漏洞</p>
 <blockquote>
-<p>注意：在序列化 private 声明的字段时候，类名和字段名前面都会加上 \0 的前缀，字符串长度也包括所加前缀的长度。这个在复制的时候是看不到的，需要手动改为 %00</p>
-<p>注意：在序列化 protected 声明的字段的时候，会出现乱码，可以删除乱码将受保护的对象转换为公共对象，如 <code>s:5:&quot; * op&quot;;i:2;</code> 更改为<br> <code>s:2:&quot;pop&quot;;i:2;</code></p>
+<p>注：在序列化 private 声明的字段时候，类名和字段名前面都会加上 \0 的前缀，字符串长度也包括所加前缀的长度。这个在复制的时候是看不到的，需要手动改为 %00</p>
+<p>注：在序列化 protected 声明的字段的时候，会出现乱码，可以删除乱码将受保护的对象转换为公共对象，如 <code>s:5:&quot; * op&quot;;i:2;</code> 更改为 <code>s:2:&quot;pop&quot;;i:2;</code></p>
+<p><strong>注：构造利用链时，可以将对象中的 <code>private</code>、<code>protected</code> 属性的变量都更改为 <code>public</code> 后再进行赋值构造，不会影响正常反序列化</strong> ，这和上一条注意事项原理一致，即改变成员变量属性不会影响正常的序列化和反序列化进程</p>
 </blockquote>
 <h3 id="PHP-魔术方法"><a href="#PHP-魔术方法" class="headerlink" title="PHP 魔术方法"></a>PHP 魔术方法</h3><ul>
 <li><code>__construct()</code>：当对象创建时自动调用(在 <code>unserialize()</code> 结束后调用)</li>
@@ -64,6 +65,8 @@
 <li><code>__call($function, $parameters)</code>：在对象中调用一个不可访问或不存在的方法时调用，其中，方法名会作为 <code>__call()</code> 的第一个参数传入（<code>$function</code>），而不存在方法的参数会被装进数组中作为第二个参数传入（<code>$parameters</code>）</li>
 <li><code>__invoke()</code>：当一个对象被当作函数调用时触发</li>
 <li><code>__unset()</code>：销毁一个不存在的属性时（如 <code>unset($this-&gt;handle-&gt;log)</code>），会自动调用</li>
+<li><code>__isset()</code>：当对不可访问属性调用 <code>isset()</code> 或 <code>empty()</code> 时调用</li>
+<li><code>__clone()</code>，当对象复制完成时调用</li>
 </ul>
 <h3 id="PHP-Session-反序列化"><a href="#PHP-Session-反序列化" class="headerlink" title="PHP Session 反序列化"></a>PHP Session 反序列化</h3><h4 id="PHP-Session-配置"><a href="#PHP-Session-配置" class="headerlink" title="PHP Session 配置"></a>PHP Session 配置</h4><p>在 php.ini 中以下几个配置项与 Session 存储配置有关：</p>
 <ul>

