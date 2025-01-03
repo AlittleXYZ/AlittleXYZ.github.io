@@ -41,6 +41,11 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd ..%26%26cd ..%26%26cd ..%26%26ls</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">%26 为 &amp; 的 URL 编码</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">cd</span> ..&amp;&amp;<span class="built_in">cd</span> ..&amp;&amp;<span class="built_in">cd</span> ..&amp;&amp;<span class="built_in">ls</span></span></span><br></pre></td></tr></table></figure>
 
 <h3 id="无字母命令执行"><a href="#无字母命令执行" class="headerlink" title="无字母命令执行"></a>无字母命令执行</h3><p>如果过滤了所有字母，想要执行命令，也可以使用 <code>$&#39;...&#39;</code> 语法定义包含转义序列的字符串<br>如 <code>ls</code> 变为 <code>$&#39;\154\163&#39;</code> ，<code>cat *</code> 变为 <code>$&#39;\143\141\164&#39;%20*</code></p>
+<p>此外，还有一个特殊的命令 <code>. ./*</code></p>
+<p>这个命令会尝试执行当前目录下所有脚本中的命令（包括以 .jpg、.png 命名后缀的脚本），可以配合文件上传使用</p>
+<p>如上传一个shell.jpg，内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">ls</span> /</span><br></pre></td></tr></table></figure>
+<p>然后执行 <code>. ./*</code> 命令，可以成功执行 <code>ls</code> 命令（有一个前提，就是要执行的 shell.jpg文件必须在目录排第一个否则通配符是无法识别的</p>
 <h3 id="无回显命令执行"><a href="#无回显命令执行" class="headerlink" title="无回显命令执行"></a>无回显命令执行</h3><p>可以使用 <code>tee</code> 命令将命令执行结果写入文件，然后通过读取文件的方式获取命令执行结果</p>
 <blockquote>
 <p><code>tee</code> 命令的常见用途是将命令的输出保存到文件中，同时将结果显示在终端上</p>

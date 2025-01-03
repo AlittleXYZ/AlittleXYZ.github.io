@@ -51,6 +51,9 @@
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SetHandler application/x-httpd-php .jpg</span><br><span class="line"></span><br><span class="line">AddHandler php5-script .php</span><br><span class="line"></span><br><span class="line">// AddHandler指令的作用是在文件扩展名与特定的处理器之间建立映射</span><br></pre></td></tr></table></figure>
 
+<blockquote>
+<p>mac 上传页面显示隐藏文件：<code>shift</code>+<code>command</code>+<code>.</code></p>
+</blockquote>
 <h3 id="4-3-上传-user-ini-绕过黑名单"><a href="#4-3-上传-user-ini-绕过黑名单" class="headerlink" title="4.3 上传 .user.ini 绕过黑名单"></a>4.3 上传 .user.ini 绕过黑名单</h3><p>PHP 5.3.0 起支持每个目录的INI文件配置，此类文件仅被 CGI&#x2F;FastCGI SAPI 处理，只要是以 fastcgi 运行的 php 都可以用这个方法，nginx 和 iis 下都可以。默认文件名为 <strong>.user.ini</strong> </p>
 <p>因此，利用 <strong>.user.ini</strong> 中的两个配置选项可以构造后门</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">auto_prepend_file = <span class="number">1</span>.php		<span class="comment"># 是在文件前插入</span></span><br><span class="line"><span class="comment"># or</span></span><br><span class="line">auto_apeend_file = <span class="number">1</span>.php		<span class="comment"># 文件最后才插入</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在访问该网站的php文件时，会自动先加载1.php</span></span><br></pre></td></tr></table></figure>
