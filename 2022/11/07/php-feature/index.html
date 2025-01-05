@@ -58,13 +58,21 @@ intval() 函数转换数组时，不关心"><meta name="keywords" content="Secur
 <blockquote>
 <p>去除普通空格、制表符(%09)、换行符(%0a)、回车符(%0d)、空字节符(%00)、垂直制表符（%0b），<strong>但不去除换页符（%0c）</strong></p>
 </blockquote>
-<h3 id="PHP-GET-x2F-POST-变量名特性"><a href="#PHP-GET-x2F-POST-变量名特性" class="headerlink" title="PHP GET&#x2F;POST 变量名特性"></a>PHP GET&#x2F;POST 变量名特性</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;CTF_SHOW.COM&#x27;</span>]))</span><br></pre></td></tr></table></figure>
+<h3 id="PHP-GET-x2F-POST-字符串解析特性"><a href="#PHP-GET-x2F-POST-字符串解析特性" class="headerlink" title="PHP GET&#x2F;POST 字符串解析特性"></a>PHP GET&#x2F;POST 字符串解析特性</h3><p>PHP在解析查询字符串时，需要将所有参数转换为有效的变量名，需要做两件事：</p>
+<ol>
+<li>删除空白符</li>
+<li>将某些字符转换为下划线（包括空格</li>
+</ol>
+<h4 id="添加空白符"><a href="#添加空白符" class="headerlink" title="添加空白符"></a>添加空白符</h4><p>有些 WAF 会不让 num 参数传入字母，但是又需要传入字母来构成我们的命令，那么可以在参数之前添加一个空格，这样在 PHP 的语言特性下会默认删除这个空格，但是 WAF 会因为这个空格导致检测不到 num 这个参数，最终导致 WAF 被绕过</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http://node4.buuoj.cn:25591/calc.php?num=a #被拦截</span><br><span class="line">http://node4.buuoj.cn:25591/calc.php? num=a #绕过WAF</span><br></pre></td></tr></table></figure>
+
+<h4 id="转换-为下划线"><a href="#转换-为下划线" class="headerlink" title="转换 [ 为下划线 _"></a>转换 <code>[</code> 为下划线 <code>_</code></h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;CTF_SHOW.COM&#x27;</span>]))</span><br></pre></td></tr></table></figure>
 
 <p>如上例所示，通常来说，由于 PHP 中变量名只有数字字母下划线，被 GET&#x2F;POST 传递的变量名中如果含有 <code>.</code> <code> </code> <code>+</code>  <code>[</code> 会被转换成 <code>_</code></p>
 <blockquote>
 <p>但 PHP 有个特性就是如果传入 <code>[</code>，他被转换为 <code>_</code> 之后，后面的字符会被保留下来不会被替换，所以可以构造如下 payload 生成 <code>CTF_SHOW.COM</code> 变量 </p>
 </blockquote>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CTF[SHOW.COM = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CTF[SHOW.COM = 1</span><br></pre></td></tr></table></figure>
 
 <h3 id="get-defined-vars"><a href="#get-defined-vars" class="headerlink" title="get_defined_vars"></a><code>get_defined_vars</code></h3><p>该函数会返回由所有已定义变量所组成的数组</p>
 <blockquote>

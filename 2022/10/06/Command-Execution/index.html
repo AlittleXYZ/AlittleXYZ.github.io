@@ -91,6 +91,9 @@
 <li><code>%0a</code> 是 url 回车符，因为空格被过滤，但在 eval() 函数中，会自动给字符串和变量间添加空格，因此可以不加</li>
 <li><code>?&gt;</code> php 定界符，用于绕过 <code>;</code> ，其原理是 php 遇到定界符会自动在末尾加上一个分号，简单来说就是 php 文件中最后一句在 <code>?&gt;</code> 前可以不加 <code>;</code></li>
 </ul>
+<h3 id="过滤-39-quot"><a href="#过滤-39-quot" class="headerlink" title="过滤 &#39; &quot;"></a>过滤 <code>&#39;</code> <code>&quot;</code></h3><p>将字符用 <code>chr()</code> 转义</p>
+<p>如 <code>var_dump(scandir(&quot;/&quot;))</code> &#x3D;&gt; <code>var_dump(scandir(chr(47)))</code></p>
+<p><code>var_dump(file_get_contents(/flag))</code> &#x3D;&gt; <code>var_dump(file_get_contents(chr(47).chr(102).chr(97).chr(108).chr(103))))</code></p>
 <h3 id="无参数读文件和命令执行"><a href="#无参数读文件和命令执行" class="headerlink" title="无参数读文件和命令执行"></a>无参数读文件和命令执行</h3><p>无参数指的是由于题目过滤限制，只能使用不带有参数的函数进行文件读取或命令执行</p>
 <h4 id="查看当前目录文件名"><a href="#查看当前目录文件名" class="headerlink" title="查看当前目录文件名"></a>查看当前目录文件名</h4><p><strong>查看当前目录文件名命令 - <code>print_r(scandir(&quot;.&quot;));</code> &amp; <code>var_dump(scandir(&#39;/&#39;));</code></strong></p>
 <p>此外打印函数还有：</p>
@@ -109,12 +112,10 @@
 <li><p><code>localeconv()</code> : 该函数返回一个包含本地数字及货币格式信息的数组，数组第一项就是 <code>&quot;.&quot;</code></p>
 </li>
 <li><p><code>current()</code> 函数返回数组中的单元，默认为第一个值。除了 <code>current()</code> 函数，还有：</p>
-<ul>
+</li>
 <li><p><code>pos()</code> 函数是 current 的别名</p>
 </li>
 <li><p><code>reset()</code> 该函数返回数组第一个单元的值，如果数组为空则返回 FALSE</p>
-</li>
-</ul>
 </li>
 </ul>
 <p>b).</p>
