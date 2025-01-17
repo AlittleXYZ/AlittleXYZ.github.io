@@ -32,7 +32,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">HMACSHA256(</span><br><span class="line">  base64UrlEncode(header) + &quot;.&quot; +</span><br><span class="line">  base64UrlEncode(payload),</span><br><span class="line">  secret)</span><br></pre></td></tr></table></figure>
 
 <p>算出签名以后，把 Header、Payload、Signature 三个部分拼成一个字符串，每个部分之间用 <code>.</code> 分隔，就可以返回给用户</p>
-<p>其中，<strong>Base64URL</strong> 算法是 Base64 的一种变体，具体规则为：base64 的三个字符 <code>=</code>、<code>+</code>、<code>/</code> 由于在 URL 里面有特殊含义，所以要被替换掉：<code>=</code> 被省略，<code>+</code> 替换为 <code>-</code>，<code>/</code> 替换为 <code>_</code></p>
+<p>其中，<strong>Base64URL</strong> 算法是 Base64 的一种变体。具体规则为：base64 的三个字符 <code>=</code>、<code>+</code>、<code>/</code> 由于在 URL 里面有特殊含义，所以要被替换掉：<code>=</code> 被省略，<code>+</code> 替换为 <code>-</code>，<code>/</code> 替换为 <code>_</code></p>
 <h3 id="使用-JWT"><a href="#使用-JWT" class="headerlink" title="使用 JWT"></a>使用 JWT</h3><p>客户端收到服务器返回的 JWT，可以储存在 Cookie 里面，也可以储存在 localStorage</p>
 <p>以后，客户端每次与服务器通信，都要带上这个 JWT，可以把它放在 Cookie 里面自动发送，但是这样不能跨域</p>
 <p>所以更好的做法是放在 HTTP 请求的头信息 <code>Authorization</code> 字段里面</p>

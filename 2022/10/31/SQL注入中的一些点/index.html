@@ -17,7 +17,20 @@
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">text<span class="string">&#x27; and updatexml(1,concat(0x7e,(database()),0x7e),1) and &#x27;</span><span class="number">1</span><span class="string">&#x27;=&#x27;</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
 <p>上面的语句才是正确的</p>
 <h2 id="2-和-注释问题"><a href="#2-和-注释问题" class="headerlink" title="2. --+和#注释问题"></a>2. --+和#注释问题</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/impulse-/p/13184023.html">SQL注入注释符(#、-- 、&#x2F;**&#x2F;)使用条件及其他注释方式的探索</a></p>
-<p>这个链接讲的挺详细</p>
+<ul>
+<li><p>GET提交方式</p>
+<ul>
+<li>– （后面有空格）</li>
+<li>%23</li>
+</ul>
+</li>
+<li><p>POST提交方式</p>
+<ul>
+<li>– （后面有空格）</li>
+<li><h1 id=""><a href="#" class="headerlink" title=""></a></h1></li>
+</ul>
+</li>
+</ul>
 <p>但是我在POST注入中使用--+, -- , 的注释方式时，注入是不起作用的，只用使用#注释才可以，还不知道为什么。。。</p>
 <p>GET注释注意要把#注释给url编码一下(%23)</p>
 <h2 id="3-双输入的注入"><a href="#3-双输入的注入" class="headerlink" title="3. 双输入的注入"></a>3. 双输入的注入</h2><p>对于如下双输入的注入</p>
