@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="zhangMini"><title>JavaWeb WEB-INF 信息泄漏 · Mini's blog</title><meta name="description" content="WEB-INF 目录结构
+WEB-INF 是 Java 的 web 应用的安全目录，正常情况下客户端无法访问，只有服务端可以访问
+
+
+&amp;#x2F;WEB-INF&amp;#x2F;web.xml
+  Web应用程序配置文件，描述了 servlet 和其他的应用组件配置及命名规则
+
+&amp;#x2F;WEB-INF"><meta name="keywords" content="Security, life"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 6.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Mini's blog</a></h3><div class="description"><p>Nothing lasts forever.</p></div></div></div><ul class="social-links"></ul><div class="footer"><a target="_blank" href="/"><span>Theme by </span></a><a target="_blank" rel="noopener" href="https://www.caicai.me"> CaiCai </a><span>&</span><a target="_blank" rel="noopener" href="https://github.com/Ben02/hexo-theme-Anatole"> Ben</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo&#65281;</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/about">关于</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">tags</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="/images/favicon.png"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>JavaWeb WEB-INF 信息泄漏</a></h3></div><div class="post-content"><h2 id="WEB-INF-目录结构"><a href="#WEB-INF-目录结构" class="headerlink" title="WEB-INF 目录结构"></a>WEB-INF 目录结构</h2><blockquote>
+<p>WEB-INF 是 Java 的 web 应用的安全目录，正常情况下客户端无法访问，只有服务端可以访问</p>
+</blockquote>
+<ul>
+<li><p>&#x2F;WEB-INF&#x2F;web.xml</p>
+<p>  Web应用程序配置文件，描述了 servlet 和其他的应用组件配置及命名规则</p>
+</li>
+<li><p>&#x2F;WEB-INF&#x2F;classes&#x2F;</p>
+<p>  包含所有的 Servlet 类和其他类文件，类文件所在的目录结构与他们的包名称匹配</p>
+</li>
+<li><p>&#x2F;WEB-INF&#x2F;lib&#x2F;</p>
+<p>  存放 web 应用需要的各种 jar 文件</p>
+</li>
+<li><p>&#x2F;WEB-INF&#x2F;src&#x2F;</p>
+<p>  源码目录，按照包名结构放置各个 java 文件</p>
+</li>
+<li><p>&#x2F;WEB-INF&#x2F;database.properties</p>
+<p>  数据库配置文件</p>
+</li>
+<li><p>&#x2F;WEB-INF&#x2F;tags&#x2F;</p>
+<p>  存放了自定义标签文件</p>
+</li>
+</ul>
+<h2 id="WEB-INF-信息泄漏"><a href="#WEB-INF-信息泄漏" class="headerlink" title="WEB-INF 信息泄漏"></a>WEB-INF 信息泄漏</h2><p>WEB-INF&#x2F;web.xml 泄露的起因是在使用网络架构的时候，对静态资源的目录或文件的映射配置不当，可能会引发一些的安全问题，导致 web.xml 等文件能够被读取</p>
+<p>读取的 web.xml 文件结构可能如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>FlagController<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>com.wm.ctf.FlagController<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>FlagController<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/Flag<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>&lt;servlet&gt;</code> 声明了一个 Servlet，其中</p>
+<ul>
+<li><p><code>FlagController</code> 是这个 Servlet 组件命名的标识符</p>
+</li>
+<li><p><code>com.vm.ctf.FlagController</code> 是这个 Servlet 的实现类（全限定名）</p>
+</li>
+</ul>
+</li>
+<li><p><code>&lt;servlet-mapping&gt;</code>定义了客户端请求 URL 和 Servlet 的映射关系，其中</p>
+<ul>
+<li><p><code>FlagController</code> 是之前定义的 Servlet 的引用，表示将请求用该 Servlet 处理</p>
+</li>
+<li><p><code>/Flag</code> 定义了客户端请求的路径，当客户端发送一个 HTTP 请求到  http:&#x2F;&#x2F;<server_address>&#x2F;Flag 时，这个请求会被 <code>FlagController</code> 处理</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>同样可以利用信息泄漏，读取该 Servlet 的类文件，形式如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?filename=WEB-INF/classes/com/vm/ctf/FlagController.class</span><br></pre></td></tr></table></figure>
+
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2025-02-01</span><i class="fa fa-tag"></i><a class="tag" href="/tags/java/" title="java">java </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2025/02/01/web-inf/,Mini's blog,JavaWeb WEB-INF 信息泄漏,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="/2025/01/26/password-spray/" title="密码喷洒">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
