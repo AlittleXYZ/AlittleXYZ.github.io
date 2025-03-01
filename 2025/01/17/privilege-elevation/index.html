@@ -60,6 +60,8 @@
 
 <h3 id="base64"><a href="#base64" class="headerlink" title="base64"></a><code>base64</code></h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">base64 &quot;/flag/flag01&quot; | base64 --decode</span><br></pre></td></tr></table></figure>
 
+<h3 id="diff"><a href="#diff" class="headerlink" title="diff"></a><code>diff</code></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">diff --line-format=%L /dev/null /home/flag/flag01.txt</span><br></pre></td></tr></table></figure>
+
 <h1 id="sudo-提权"><a href="#sudo-提权" class="headerlink" title="sudo 提权"></a><code>sudo</code> 提权</h1><p><code>sudo</code> 是临时提权的命令，使用这个命令可以让普通用户在执行系统命令时使用 root 的权限</p>
 <p>普通用户具备哪些执行系统命令的权限是由 <strong>&#x2F;etc&#x2F;sudoers</strong> 配置文件授权规则的</p>
 <p><strong>&#x2F;etc&#x2F;sudoers</strong> 文件权限配置语法：</p>
